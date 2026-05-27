@@ -39,7 +39,7 @@ public class AuthController {
          String result = authService.registerRecruiter(registerRequestDTO);
          return ResponseEntity.ok(result);
      }
-     @PostMapping("/register/company")
+         @PostMapping("/register/company")
     public ResponseEntity<String> registerCompany(@Valid @RequestBody RegisterRequestDTO registerRequestDTO) {
           String result = authService.registerCompany(registerRequestDTO);
           return ResponseEntity.ok(result);

@@ -36,6 +36,8 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(user.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpireTime))
+
                 // Sử dụng biến expirationTime động
                 .signWith(getSingingKey(), SignatureAlgorithm.HS256)
                 .compact();

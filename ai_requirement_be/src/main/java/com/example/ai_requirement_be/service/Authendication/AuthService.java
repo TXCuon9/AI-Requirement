@@ -57,7 +57,7 @@ public class AuthService {
         User user = new User();
         user.setEmail(dto.getEmail());
         user.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
-        user.setRole(UserRole.RECRUITER);
+        user.setRole(UserRole.COMPANY);
         user.setStatus(UserStatus.PENDING);
 
         userRepository.save(user);

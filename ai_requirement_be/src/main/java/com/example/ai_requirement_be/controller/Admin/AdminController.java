@@ -19,7 +19,7 @@ public class AdminController {
 
     @PutMapping("/approve/{id}")
     public ResponseEntity<String> approveCompany(@PathVariable Long id){
-        adminService.approveCompany(id);
+         adminService.approveCompany(id);
         return ResponseEntity.ok("Đã duyệt tài khoản thành công sang trạng thái ACTIVE!");
     }
 

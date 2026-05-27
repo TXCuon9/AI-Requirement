@@ -22,7 +22,7 @@ public class AdminService {
             throw new RuntimeException("Tài khoản này đã được kích hoạt hoặc không ở trạng thái chờ duyệt!");
         }
 
-        user.setStatus(UserStatus.PENDING);
+        user.setStatus(UserStatus.ACTIVE);
         userRepository.save(user);
     }
 
