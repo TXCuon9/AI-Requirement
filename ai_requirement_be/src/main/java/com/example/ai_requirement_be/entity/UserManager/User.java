@@ -1,4 +1,5 @@
 package com.example.ai_requirement_be.entity.UserManager;
+import com.example.ai_requirement_be.entity.CandidateManager.CandidateProfile;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
@@ -46,6 +47,9 @@ public class User implements UserDetails {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    private CandidateProfile candidateProfile;
 
 
 
@@ -164,4 +168,11 @@ public class User implements UserDetails {
         return this.status == UserStatus.ACTIVE; // Chỉ cho phép đăng nhập nếu trạng thái active
     }
 
+    public CandidateProfile getCandidateProfile() {
+        return candidateProfile;
+    }
+
+    public void setCandidateProfile(CandidateProfile candidateProfile) {
+        this.candidateProfile = candidateProfile;
+    }
 }

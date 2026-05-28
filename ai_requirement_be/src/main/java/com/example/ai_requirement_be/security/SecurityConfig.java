@@ -24,9 +24,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/error").permitAll()
                         .requestMatchers("/api/auth/register/recruiter").hasRole("COMPANY")
+                        .requestMatchers("/api/auth/**", "/error").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/candidate/**").hasRole("CANDIDATE")
                         .anyRequest().authenticated()
                 )
                 // Thêm JwtAuthenticationFilter vào trước UsernamePasswordAuthenticationFilter

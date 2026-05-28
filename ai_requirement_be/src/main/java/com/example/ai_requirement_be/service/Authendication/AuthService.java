@@ -1,10 +1,12 @@
 package com.example.ai_requirement_be.service.Authendication;
 
 import com.example.ai_requirement_be.dto.Auth.*;
+import com.example.ai_requirement_be.entity.CandidateManager.CandidateProfile;
 import com.example.ai_requirement_be.entity.UserManager.User;
 import com.example.ai_requirement_be.entity.UserManager.UserRole;
 import com.example.ai_requirement_be.entity.UserManager.UserStatus;
 import com.example.ai_requirement_be.repository.IUserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +25,7 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
+    @Transactional
     public String register(RegisterRequestDTO registerRequestDTO) {
         if (userRepository.existsByEmail(registerRequestDTO.getEmail())) {
             throw new RuntimeException("Email đã được sử dụng!");
@@ -32,6 +35,9 @@ public class AuthService {
                 passwordEncoder.encode(registerRequestDTO.getPassword()),
                 UserRole.CANDIDATE
         );
+        CandidateProfile candidateProfile = new CandidateProfile();
+        candidateProfile.setUser(user);
+        user.setCandidateProfile(candidateProfile);
         userRepository.save(user);
         return "Đăng ký tài khoản thành công";
     }
