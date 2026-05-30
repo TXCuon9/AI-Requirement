@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -35,8 +37,9 @@ public class AuthController {
      }
      // Tạo tài khoản cho Hr -> company
      @PostMapping("register/recruiter")
-     public ResponseEntity<String> registerRecruiter(@Valid @RequestBody RegisterRequestDTO registerRequestDTO) {
-         String result = authService.registerRecruiter(registerRequestDTO);
+     public ResponseEntity<String> registerRecruiter(Principal principal , @Valid @RequestBody RegisterRequestDTO registerRequestDTO) {
+         String companyUserEmail = principal.getName();
+         String result = authService.registerRecruiter(registerRequestDTO , companyUserEmail);
          return ResponseEntity.ok(result);
      }
          @PostMapping("/register/company")

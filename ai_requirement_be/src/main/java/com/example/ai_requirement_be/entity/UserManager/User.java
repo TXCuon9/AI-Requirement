@@ -1,5 +1,7 @@
 package com.example.ai_requirement_be.entity.UserManager;
 import com.example.ai_requirement_be.entity.CandidateManager.CandidateProfile;
+import com.example.ai_requirement_be.entity.CompaniesManager.Companies;
+import com.example.ai_requirement_be.entity.RecruiterManager.RecruiterProfile;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
@@ -50,6 +52,12 @@ public class User implements UserDetails {
 
     @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private CandidateProfile candidateProfile;
+
+    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    private Companies companies;
+
+    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    private RecruiterProfile recruiterProfile;
 
 
 
@@ -175,4 +183,22 @@ public class User implements UserDetails {
     public void setCandidateProfile(CandidateProfile candidateProfile) {
         this.candidateProfile = candidateProfile;
     }
+
+    public Companies getCompanies() {
+        return companies;
+    }
+
+    public void setCompanies(Companies companies) {
+        this.companies = companies;
+    }
+
+    public RecruiterProfile getRecruiterProfile() {
+        return recruiterProfile;
+    }
+
+    public void setRecruiterProfile(RecruiterProfile recruiterProfile) {
+        this.recruiterProfile = recruiterProfile;
+    }
+
+
 }

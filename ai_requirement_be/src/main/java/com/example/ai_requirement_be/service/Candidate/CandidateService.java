@@ -18,18 +18,14 @@ public class CandidateService {
         this.userRepository = userRepository;
         this.candidateRepository = candidateRepository;
     }
-
     @Transactional
     public void updateProfile(String email , UpdateCandidateProfileDTO updateCandidateProfileDTO) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
 
         CandidateProfile profile = user.getCandidateProfile();
-
         if(profile == null) {
             throw new RuntimeException("Hồ sơ ứng viên không tồn tại trong hệ thông");
         }
-
-
         profile.setFullName(updateCandidateProfileDTO.getFullName());
         profile.setPhone(updateCandidateProfileDTO.getPhone());
         profile.setAvatarUrl(updateCandidateProfileDTO.getAvatarUrl());
@@ -44,6 +40,5 @@ public class CandidateService {
         profile.setGithubUrl(updateCandidateProfileDTO.getGithubUrl());
         profile.setPortfolioUrl(updateCandidateProfileDTO.getPortfolioUrl());
         candidateRepository.save(profile);
-
     }
 }

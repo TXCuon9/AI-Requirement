@@ -16,7 +16,6 @@ public class UserPendingResponseDTO {
    public UserPendingResponseDTO() {
 
    }
-
     public UserPendingResponseDTO(String email, UserRole role, String provider, UserStatus status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.email = email;
         this.role = role;

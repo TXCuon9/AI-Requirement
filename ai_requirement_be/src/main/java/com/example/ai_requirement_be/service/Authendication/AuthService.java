@@ -1,28 +1,36 @@
 package com.example.ai_requirement_be.service.Authendication;
 
 import com.example.ai_requirement_be.dto.Auth.*;
+import com.example.ai_requirement_be.dto.RecruiterDto.RegisterProfileDTO;
 import com.example.ai_requirement_be.entity.CandidateManager.CandidateProfile;
+import com.example.ai_requirement_be.entity.CompaniesManager.Companies;
+import com.example.ai_requirement_be.entity.RecruiterManager.RecruiterProfile;
 import com.example.ai_requirement_be.entity.UserManager.User;
 import com.example.ai_requirement_be.entity.UserManager.UserRole;
 import com.example.ai_requirement_be.entity.UserManager.UserStatus;
+import com.example.ai_requirement_be.repository.ICompanyRepository;
 import com.example.ai_requirement_be.repository.IUserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
 @Service
 public class AuthService {
     private final IUserRepository userRepository;
+    private final ICompanyRepository companyRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
     @Autowired
-    public AuthService(IUserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
+    public AuthService(IUserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService , ICompanyRepository companyRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.companyRepository = companyRepository;
     }
 
     @Transactional
@@ -43,15 +51,35 @@ public class AuthService {
     }
 
     // Tạo tài khoản cho Hr
-    public String registerRecruiter(RegisterRequestDTO registerRequestDTO) {
+    @Transactional
+    public String registerRecruiter(RegisterRequestDTO registerRequestDTO , String companyUserEmail) {
         if (userRepository.existsByEmail(registerRequestDTO.getEmail())) {
             throw new RuntimeException("Email đã được sử dụng");
         }
+
+        // companyUserEmail -> ta lấy từ token Principal principal
+        // Sau khi lấy được email nếu tìm thấy thì lưu vào một đối tượng user.
+        User companyUser = userRepository.findByEmail(companyUserEmail)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản doanh nghiệp đang thao tác!"));
+
+        // Do có mối quan hệ hai chiều từ thằng User đó ta có thể get được công ty => mapped hai chiều
+        Companies currentCompany = companyUser.getCompanies();
+
+        if (currentCompany == null) {
+            throw new RuntimeException("Tài khoản của bạn chưa được liên kết với hồ sơ công ty nào!");
+        }
+
         User user = new User(
                 registerRequestDTO.getEmail(),
                 passwordEncoder.encode(registerRequestDTO.getPassword()),
                 UserRole.RECRUITER
         );
+        RecruiterProfile recruiterProfile = new RecruiterProfile();
+        recruiterProfile.setUser(user);
+        recruiterProfile.setCompany(currentCompany);
+        recruiterProfile.setPosition("HR Manager");
+        recruiterProfile.setCreatedAt(LocalDateTime.now());
+        user.setRecruiterProfile(recruiterProfile);
         userRepository.save(user);
         return "Bạn đã đăng ký tài khoản hr thành công";
     }
@@ -66,10 +94,13 @@ public class AuthService {
         user.setRole(UserRole.COMPANY);
         user.setStatus(UserStatus.PENDING);
 
+        Companies companies = new Companies();
+        companies.setUser(user);
+        companies.setName("Công ty mới đăng ký");
+        user.setCompanies(companies);
+
         userRepository.save(user);
-
         return "Vui lòng đợi Admin duyệt mới có thể đăng nhập";
-
     }
 
     public AuthResponseDTO login(LoginRequestDTO loginRequestDTO) {
@@ -124,7 +155,4 @@ public class AuthService {
         }
         throw new RuntimeException("Refresh Token không hợp lệ!");
     }
-
-
-
 }
