@@ -1,9 +1,12 @@
 package com.example.ai_requirement_be.entity.CompaniesManager;
 
+import com.example.ai_requirement_be.entity.RecruiterManager.JobDescription;
 import com.example.ai_requirement_be.entity.UserManager.User;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Entity
 @Table(name="companies")
 public class Companies {
@@ -41,6 +44,9 @@ public class Companies {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany( mappedBy = "company", fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    private List<JobDescription> jobDescriptions;
 
     @PrePersist
     public void OnCreate() {
@@ -137,5 +143,13 @@ public class Companies {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public List<JobDescription> getJobDescriptions() {
+        return jobDescriptions;
+    }
+
+    public void setJobDescriptions(List<JobDescription> jobDescriptions) {
+        this.jobDescriptions = jobDescriptions;
     }
 }

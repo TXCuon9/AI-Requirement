@@ -28,7 +28,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**", "/error").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/candidate/**").hasRole("CANDIDATE")
+                        .requestMatchers("/api/job/**").hasRole("CANDIDATE")
                         .requestMatchers("/api/company/**").hasRole("COMPANY")
+                        .requestMatchers("/api/recruiter/**").hasRole("RECRUITER")
                         .anyRequest().authenticated()
                 )
                 // Thêm JwtAuthenticationFilter vào trước UsernamePasswordAuthenticationFilter
