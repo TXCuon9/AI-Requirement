@@ -7,6 +7,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="candidate_profiles")
@@ -66,8 +67,28 @@ public class CandidateProfile {
         this.createdAt = LocalDateTime.now();
     }
 
+    @OneToMany(mappedBy = "candidateId" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties("candidateId")
+    private List<Resume> resumes;
+
     public CandidateProfile() {
 
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<Resume> getResumes() {
+        return resumes;
+    }
+
+    public void setResumes(List<Resume> resumes) {
+        this.resumes = resumes;
     }
 
     public User getUser() {

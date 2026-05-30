@@ -29,4 +29,6 @@ public class CandidateController {
         return ResponseEntity.ok("Cập nhật thông tin hồ sơ thành công");
     }
 
+
+
 }
