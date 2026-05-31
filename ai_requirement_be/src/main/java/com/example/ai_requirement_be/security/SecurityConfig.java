@@ -24,9 +24,15 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/error").permitAll()
                         .requestMatchers("/api/auth/register/recruiter").hasRole("COMPANY")
+                        .requestMatchers("/api/auth/**", "/error").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/candidate/**").hasRole("CANDIDATE")
+                        .requestMatchers("/api/job/**").hasRole("CANDIDATE")
+                        .requestMatchers("/api/company/**").hasRole("COMPANY")
+                        .requestMatchers("/api/recruiter/**").hasRole("RECRUITER")
+                        .requestMatchers("/api/resume/**").hasRole("CANDIDATE")
+                        .requestMatchers("/api/file/**").hasRole("CANDIDATE")
                         .anyRequest().authenticated()
                 )
                 // Thêm JwtAuthenticationFilter vào trước UsernamePasswordAuthenticationFilter
@@ -34,7 +40,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
