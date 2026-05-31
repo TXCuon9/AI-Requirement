@@ -13,17 +13,25 @@ class VectorBuilder:
             )
 
 
-        for edu in profile["education"]:
+        for edu in profile.get("education", []):
+            if isinstance(edu, dict):
+                text.append(edu.get("schoolName", "") + " " + edu.get("major", ""))
+            else:
+                text.append(str(edu))
 
-            text.append(
-                edu
-            )
+        for project in profile.get("projects", []):
+            if isinstance(project, dict):
+                text.append(project.get("projectName", "") + " " + project.get("role", ""))
+            else:
+                text.append(str(project))
 
+        for exp in profile.get("experience", []):
+            if isinstance(exp, dict):
+                text.append(exp.get("companyName", "") + " " + exp.get("position", ""))
+            else:
+                text.append(str(exp))
 
-        for project in profile["projects"]:
-
-            text.append(
-                project
-            )
+        # Filter out empty strings
+        text = [t for t in text if t and t.strip()]
 
         return " ".join(text)

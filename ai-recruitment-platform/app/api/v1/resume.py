@@ -1,6 +1,9 @@
 from fastapi import APIRouter, UploadFile
 from app.modules.resume_parser.parser_service import ParserService
 
+import os
+import tempfile
+
 router=APIRouter()
 
 
@@ -12,11 +15,13 @@ async def parse_resume(
 
     content=await file.read()
 
-    path=file.filename
-
-    with open(path,"wb") as f:
-        f.write(content)
-
-    result=await ParserService.parse(path)
-
-    return result
+    fd, path = tempfile.mkstemp(suffix=".pdf")
+    try:
+        with os.fdopen(fd, "wb") as f:
+            f.write(content)
+            
+        result = await ParserService.parse(path)
+        return result
+    finally:
+        if os.path.exists(path):
+            os.remove(path)
