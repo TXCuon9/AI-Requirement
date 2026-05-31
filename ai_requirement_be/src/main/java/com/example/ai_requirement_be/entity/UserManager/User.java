@@ -1,5 +1,6 @@
 package com.example.ai_requirement_be.entity.UserManager;
 import com.example.ai_requirement_be.entity.CandidateManager.CandidateProfile;
+import com.example.ai_requirement_be.entity.CandidateManager.FileUpload;
 import com.example.ai_requirement_be.entity.CompaniesManager.Companies;
 import com.example.ai_requirement_be.entity.RecruiterManager.RecruiterProfile;
 import jakarta.persistence.*;
@@ -58,6 +59,9 @@ public class User implements UserDetails {
 
     @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private RecruiterProfile recruiterProfile;
+
+    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    private List<FileUpload> fileUploads;
 
 
 
@@ -200,5 +204,11 @@ public class User implements UserDetails {
         this.recruiterProfile = recruiterProfile;
     }
 
+    public List<FileUpload> getFileUploads() {
+        return fileUploads;
+    }
 
+    public void setFileUploads(List<FileUpload> fileUploads) {
+        this.fileUploads = fileUploads;
+    }
 }

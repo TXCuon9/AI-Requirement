@@ -32,6 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/company/**").hasRole("COMPANY")
                         .requestMatchers("/api/recruiter/**").hasRole("RECRUITER")
                         .requestMatchers("/api/resume/**").hasRole("CANDIDATE")
+                        .requestMatchers("/api/file/**").hasRole("CANDIDATE")
                         .anyRequest().authenticated()
                 )
                 // Thêm JwtAuthenticationFilter vào trước UsernamePasswordAuthenticationFilter

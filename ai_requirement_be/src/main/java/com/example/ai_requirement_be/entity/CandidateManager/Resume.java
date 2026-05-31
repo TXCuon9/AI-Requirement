@@ -20,7 +20,6 @@ public class Resume {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="candidate_id" , nullable = false)
-    @com.fasterxml.jackson.annotation.JsonIgnoreProperties("resumes")
     private CandidateProfile candidateId;
 
 

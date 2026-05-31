@@ -19,7 +19,6 @@ public class RecruiterController {
      }
 
 
-    // API lấy toàn bộ danh sách công việc (Public ai cũng xem được)
 
 
 
