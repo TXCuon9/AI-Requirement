@@ -42,5 +42,10 @@ public class CompanyController {
            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi hệ thống: " + e.getMessage());
        }
    }
+   @PutMapping("/approve/{id}")
+    public ResponseEntity<String> approveCompany(@PathVariable Long id) {
+       companyService.approveRecruiter(id);
+       return ResponseEntity.ok("Đã banned tài khoản trên tài khoản này không sử dụng được");
+   }
 
 }

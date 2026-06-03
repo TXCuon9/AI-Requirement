@@ -6,6 +6,7 @@ import com.example.ai_requirement_be.entity.UserManager.UserStatus;
 import java.time.LocalDateTime;
 
 public class UserResponseDTO {
+    private Long userId;
     private String email;
     private UserRole role;
     private UserStatus  status;
@@ -15,8 +16,8 @@ public class UserResponseDTO {
     public UserResponseDTO() {
 
     }
-
-    public UserResponseDTO(String email, UserRole role , UserStatus status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public UserResponseDTO(Long userId , String email, UserRole role , UserStatus status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.userId = userId;
         this.email = email;
         this.role = role;
         this.status = status;

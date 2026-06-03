@@ -16,7 +16,6 @@ public class JobController {
     public JobController(JobService jobService) {
         this.jobService = jobService;
     }
-
     @GetMapping("/jobs")
     public ResponseEntity<List<JobResponseDTO>> getAllJobs() {
         List<JobResponseDTO> list = jobService.getAllJobs();

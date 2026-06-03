@@ -18,10 +18,6 @@ public class RecruiterController {
          this.jobService = jobService;
      }
 
-
-
-
-
      @PostMapping("/create")
     public ResponseEntity<String> createJob(Principal principal , @Valid @RequestBody SaveJobDTO saveJobDTO) {
          jobService.createJob(saveJobDTO , principal.getName());
@@ -30,8 +26,7 @@ public class RecruiterController {
          // principal.getName() lấy ra email từ token
      }
      @PutMapping("/{id}")
-    public ResponseEntity<String> updateJob(@PathVariable Long id, Principal principal,
-                                            @Valid @RequestBody SaveJobDTO dto) {
+    public ResponseEntity<String> updateJob(@PathVariable Long id, Principal principal, @Valid @RequestBody SaveJobDTO dto) {
          jobService.updateJob(id, dto, principal.getName());
          return ResponseEntity.ok("Cập nhật tin tuyển dụng thành công!");}
 }

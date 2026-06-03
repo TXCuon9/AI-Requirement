@@ -42,8 +42,6 @@ public class UserService {
                user.getUpdatedAt()
        )).collect(Collectors.toList());
     }
-
-
    @Transactional(readOnly = true)
     public List<UserResponseDTO> getRecruitersInSameCompany(String email) {
         //Tìm User đăng nhập (đóng vai trò là tài khoản đại diện công ty
@@ -58,15 +56,14 @@ public class UserService {
 
 
        // Tận dụng quan hệ song phương để lấy toàn bộ danh sách HR của công ty đó
-
-
        List<UserResponseDTO> dtoList = new ArrayList<>();
 
        for(RecruiterProfile recruiterProfile : recruiterProfiles){
            User hrUser = recruiterProfile.getUser(); // lấy thông tin tài khoản thằng hr
-
            if(hrUser != null) {
+               if(hrUser.getStatus() != UserStatus.ACTIVE) { continue; }
               UserResponseDTO dto = new UserResponseDTO(
+                      hrUser.getId(),
                       hrUser.getEmail(),
                       hrUser.getRole(),
                       hrUser.getStatus(),
@@ -75,11 +72,8 @@ public class UserService {
               );
                dtoList.add(dto);
            }
-
        }
-
        return dtoList;
-
    }
 
 

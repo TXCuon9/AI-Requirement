@@ -34,6 +34,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
 
                 .authorizeHttpRequests(auth -> auth
+
+
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/register/recruiter").hasRole("COMPANY")
                         .requestMatchers("/api/auth/**", "/error", "/api/files/view/**").permitAll()
