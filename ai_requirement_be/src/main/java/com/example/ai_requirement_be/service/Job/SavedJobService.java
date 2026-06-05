@@ -41,7 +41,7 @@ public class SavedJobService {
             throw new IllegalArgumentException("Từ chối thao tác! Bạn không phải tải khoản Ưng viên");
         }
          // Lấy ra hồ sơ CandidateProfile tương ứng thông qua UserId
-       CandidateProfile candidateProfile = candidateRepository.findByUserId(user.getId()).orElseThrow( () ->    new IllegalArgumentException("Hồ sơ ứng viên của bạn chưa được khởi tạo!"));
+       CandidateProfile candidateProfile = candidateRepository.findByUserId(user.getId()).orElseThrow( () -> new IllegalArgumentException("Hồ sơ ứng viên của bạn chưa được khởi tạo!"));
 
         // Kiểm tra bài đăng công việc Job gừi lên xem có tồn tại thực tế không
        JobDescription job = jobdepRepository.findById(jobId).orElseThrow(() -> new IllegalArgumentException("Bài đăng tuyển dụng không tồn tại hoặc đã bị xóa"));
@@ -62,6 +62,7 @@ public class SavedJobService {
        responseDTO.setId(savedRecord.getId());
        responseDTO.setJobId(job.getId());
        responseDTO.setJobTitle(job.getTitle());
+       responseDTO.setSavedAt(job.getCreatedAt());
 
        if(job.getCompany() != null) {
            responseDTO.setCompanyName(job.getCompany().getName());

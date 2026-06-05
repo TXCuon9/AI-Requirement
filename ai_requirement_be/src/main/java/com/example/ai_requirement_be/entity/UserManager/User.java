@@ -2,6 +2,7 @@ package com.example.ai_requirement_be.entity.UserManager;
 import com.example.ai_requirement_be.entity.CandidateManager.CandidateProfile;
 import com.example.ai_requirement_be.entity.CandidateManager.FileUpload;
 import com.example.ai_requirement_be.entity.CompaniesManager.Companies;
+import com.example.ai_requirement_be.entity.Job.JobView;
 import com.example.ai_requirement_be.entity.RecruiterManager.RecruiterProfile;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -62,6 +64,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<FileUpload> fileUploads;
+
+    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    private List<JobView> jobViews = new ArrayList<>();
 
 
 
@@ -218,5 +223,13 @@ public class User implements UserDetails {
 
     public void setFileUploads(List<FileUpload> fileUploads) {
         this.fileUploads = fileUploads;
+    }
+
+    public List<JobView> getJobViews() {
+        return jobViews;
+    }
+
+    public void setJobViews(List<JobView> jobViews) {
+        this.jobViews = jobViews;
     }
 }

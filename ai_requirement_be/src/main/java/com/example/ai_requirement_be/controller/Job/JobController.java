@@ -1,7 +1,9 @@
 package com.example.ai_requirement_be.controller.Job;
 
+import com.example.ai_requirement_be.dto.Job.JobviewResponseDTO;
 import com.example.ai_requirement_be.dto.Job.SavedJobResponseDTO;
 import com.example.ai_requirement_be.dto.RecruiterDto.JobResponseDTO;
+import com.example.ai_requirement_be.service.Job.JobViewService;
 import com.example.ai_requirement_be.service.Job.SavedJobService;
 import com.example.ai_requirement_be.service.Recruiter.JobService;
 import org.springframework.http.HttpStatus;
@@ -16,14 +18,33 @@ import java.util.List;
 public class JobController {
     private final JobService jobService;
     private final SavedJobService savedJobService;
-    public JobController(JobService jobService , SavedJobService savedJobService) {
+    private final JobViewService jobViewService;
+    public JobController(JobService jobService , SavedJobService savedJobService ,  JobViewService jobViewService) {
         this.jobService = jobService;
         this.savedJobService = savedJobService;
+        this.jobViewService = jobViewService;
     }
     @GetMapping("/jobs")
     public ResponseEntity<List<JobResponseDTO>> getAllJobs() {
         List<JobResponseDTO> list = jobService.getAllJobs();
         return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/detail/{jobId}")
+    public ResponseEntity<?> getJobDetail(@PathVariable Long jobId , Principal principal) {
+        try {
+            if(principal == null) {
+                return ResponseEntity.status(401).body("Vui lòng đăng nhập để xem chi tiết công việc!");
+            }
+            String email = principal.getName();
+
+            JobviewResponseDTO jobviewResponseDTO = jobViewService.getJobDetailsAndRecordView(jobId ,email);
+            return ResponseEntity.ok(jobviewResponseDTO);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Lỗi hệ thống: " + e.getMessage());
+        }
     }
 
     @PostMapping("/saveJob/{jobId}")

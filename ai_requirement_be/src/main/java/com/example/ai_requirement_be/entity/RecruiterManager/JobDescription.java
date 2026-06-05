@@ -1,12 +1,15 @@
 package com.example.ai_requirement_be.entity.RecruiterManager;
 
 import com.example.ai_requirement_be.entity.CompaniesManager.Companies;
+import com.example.ai_requirement_be.entity.Job.JobView;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="jobs_depcription")
@@ -18,6 +21,9 @@ public class JobDescription {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="company_id" , referencedColumnName = "id" , nullable = false)
     private Companies company;
+
+    @OneToMany(mappedBy = "jobDescription" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    private List<JobView> jobViews = new ArrayList<>();
 
     @Column(name = "title", nullable = false , length = 255)
     private String title;
@@ -68,6 +74,8 @@ public class JobDescription {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+
+
 
     public Long getId() {
         return id;
@@ -187,5 +195,13 @@ public class JobDescription {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public List<JobView> getJobViews() {
+        return jobViews;
+    }
+
+    public void setJobViews(List<JobView> jobViews) {
+        this.jobViews = jobViews;
     }
 }
