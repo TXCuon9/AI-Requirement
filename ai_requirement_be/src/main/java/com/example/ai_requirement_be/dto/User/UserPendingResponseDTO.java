@@ -1,6 +1,6 @@
 package com.example.ai_requirement_be.dto.User;
 
-import com.example.ai_requirement_be.entity.UserManager.UserRole;
+import  com.example.ai_requirement_be.entity.UserManager.UserRole;
 import com.example.ai_requirement_be.entity.UserManager.UserStatus;
 
 import java.time.LocalDateTime;

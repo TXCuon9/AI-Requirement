@@ -41,7 +41,6 @@ public class ResumeController {
         resumeService.updateResume(id , resumeDTO , principal.getName());
         return ResponseEntity.ok("Cập nhật thông tin CV thành công!");
     }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteResume(@PathVariable Long id, Principal principal) {
         resumeService.deleteResume(id , principal.getName());

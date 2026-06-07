@@ -1,5 +1,6 @@
 package com.example.ai_requirement_be.entity.CandidateManager;
 
+import com.example.ai_requirement_be.entity.Job.JobApplication;
 import com.example.ai_requirement_be.entity.UserManager.User;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -7,6 +8,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,6 +22,11 @@ public class CandidateProfile {
     @JoinColumn(name="user_id" , referencedColumnName = "id" , nullable = false , unique = true)
     @com.fasterxml.jackson.annotation.JsonIgnore
     private User user;
+
+    @OneToMany(mappedBy = "candidate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<JobApplication> jobApplications = new ArrayList<>();
+
+// Thêm Getter/Setter cho jobApplications...
 
     @Column(name = "full_name" , length=255)
     private String fullName;

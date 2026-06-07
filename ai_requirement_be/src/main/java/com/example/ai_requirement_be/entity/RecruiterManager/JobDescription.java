@@ -1,6 +1,8 @@
 package com.example.ai_requirement_be.entity.RecruiterManager;
 
 import com.example.ai_requirement_be.entity.CompaniesManager.Companies;
+import com.example.ai_requirement_be.entity.Job.JobApplication;
+import com.example.ai_requirement_be.entity.Job.JobSkill;
 import com.example.ai_requirement_be.entity.Job.JobView;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -22,8 +24,16 @@ public class JobDescription {
     @JoinColumn(name ="company_id" , referencedColumnName = "id" , nullable = false)
     private Companies company;
 
+    @OneToMany(mappedBy = "jobDescription", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<JobApplication> applications = new ArrayList<>();
+
+// Thêm Getter/Setter cho applications...
+
     @OneToMany(mappedBy = "jobDescription" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private List<JobView> jobViews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "jobDescription", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<JobSkill> jobSkills = new ArrayList<>();
 
     @Column(name = "title", nullable = false , length = 255)
     private String title;
@@ -74,7 +84,6 @@ public class JobDescription {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
-
 
 
     public Long getId() {
@@ -203,5 +212,13 @@ public class JobDescription {
 
     public void setJobViews(List<JobView> jobViews) {
         this.jobViews = jobViews;
+    }
+
+    public List<JobSkill> getJobSkills() {
+        return jobSkills;
+    }
+
+    public void setJobSkills(List<JobSkill> jobSkills) {
+        this.jobSkills = jobSkills;
     }
 }

@@ -41,6 +41,7 @@ public class JobViewService {
         jobviewResponseDTO.setTitle(jobDescription.getTitle());
         jobviewResponseDTO.setDescription(jobDescription.getDescription());
         jobviewResponseDTO.setResponsibilities(jobDescription.getResponsibilities());
+        jobviewResponseDTO.setLocation(jobDescription.getLocation());
         jobviewResponseDTO.setSalaryMax(jobDescription.getSalaryMax());
         jobviewResponseDTO.setSalaryMin(jobDescription.getSalaryMin());
         jobviewResponseDTO.setRemote(jobDescription.getRemote());
