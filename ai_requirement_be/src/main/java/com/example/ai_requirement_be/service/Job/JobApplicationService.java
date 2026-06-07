@@ -122,6 +122,9 @@ public class JobApplicationService {
         if (updatedApp.getCandidate() != null) {
             responseDTO.setCandidateId(updatedApp.getCandidate().getId());
             responseDTO.setCandidateName(updatedApp.getCandidate().getFullName());
+            if(updatedApp.getCandidate().getUser() != null) {
+                responseDTO.setCandidateEmail(updatedApp.getCandidate().getUser().getEmail());
+            }
         }
         if (updatedApp.getResume() != null) {
             responseDTO.setResumeId(updatedApp.getResume().getId());
@@ -132,6 +135,7 @@ public class JobApplicationService {
 
     }
 
+    // Xem CV của các ứng viên đã apply
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public List<RecruiterCandidateManagementDTO> getJobApplications(String recruiterEmail) {
         User currentUser = userRepository.findByEmail(recruiterEmail)
