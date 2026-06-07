@@ -5,6 +5,10 @@ import com.example.ai_requirement_be.dto.Job.JobApplicationResponseDTO;
 import com.example.ai_requirement_be.dto.Job.JobviewResponseDTO;
 import com.example.ai_requirement_be.dto.Job.SavedJobResponseDTO;
 import com.example.ai_requirement_be.dto.RecruiterDto.JobResponseDTO;
+import com.example.ai_requirement_be.dto.RecruiterDto.RecruiterCandidateManagementDTO;
+import com.example.ai_requirement_be.entity.Job.JobApplication;
+import com.example.ai_requirement_be.repository.IJobApplicationRepository;
+import com.example.ai_requirement_be.service.Email.EmailService;
 import com.example.ai_requirement_be.service.Job.JobApplicationService;
 import com.example.ai_requirement_be.service.Job.JobViewService;
 import com.example.ai_requirement_be.service.Job.SavedJobService;
@@ -23,11 +27,15 @@ public class JobController {
     private final SavedJobService savedJobService;
     private final JobViewService jobViewService;
     private final JobApplicationService  jobApplicationService;
-    public JobController(JobService jobService , SavedJobService savedJobService ,  JobViewService jobViewService ,  JobApplicationService jobApplicationService) {
+    private final IJobApplicationRepository  jobApplicationRepository;
+    private final EmailService emailService;
+    public JobController(JobService jobService , SavedJobService savedJobService ,  JobViewService jobViewService ,  JobApplicationService jobApplicationService , IJobApplicationRepository jobApplicationRepository ,  EmailService emailService) {
         this.jobService = jobService;
         this.savedJobService = savedJobService;
         this.jobViewService = jobViewService;
         this.jobApplicationService = jobApplicationService;
+        this.jobApplicationRepository = jobApplicationRepository;
+        this.emailService = emailService;
     }
     @GetMapping("/jobs")
     public ResponseEntity<List<JobResponseDTO>> getAllJobs() {
@@ -93,10 +101,51 @@ public class JobController {
             String recruiterEmail = principal.getName();
             JobApplicationResponseDTO result =
                     jobApplicationService.changeToInterviewStatus(applicationId, recruiterEmail);
+
+            try {
+              JobApplication jobApplicationService1  = jobApplicationRepository.findById(applicationId).orElse(null);
+              if(jobApplicationService1 != null){
+                  String candidateEmail = jobApplicationService1.getCandidate().getUser().getEmail();
+                  String companyName = jobApplicationService1.getJobDescription().getCompany().getName();
+                  emailService.sendInterviewInvitationEmail(candidateEmail, result.getCandidateName(), companyName);
+
+              }
+            }catch (Exception mailEx){
+                System.out.println(
+                        "Cập nhật thành công nhưng gửi mail thất bại: "
+                                + mailEx.getMessage()
+                );
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Đã cập nhật trạng thái phỏng vấn nhưng gửi mail thất bại. Vui lòng kiểm tra lại cấu hình Email! Lỗi: " + mailEx.getMessage());
+            }
+
             return ResponseEntity.ok(result);
+
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi hệ thống: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllCandidateApplications(Principal principal) {
+        try {
+            if (principal == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Vui lòng đăng nhập hệ thống!");
+            }
+
+            String recruiterEmail = principal.getName();
+
+            // Lấy ra list danh sách thu gọn đặc biệt về Resume
+            List<RecruiterCandidateManagementDTO> applicationList =
+                    jobApplicationService.getJobApplications(recruiterEmail);
+
+            return ResponseEntity.ok(applicationList);
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi hệ thống: " + e.getMessage());
         }
     }
