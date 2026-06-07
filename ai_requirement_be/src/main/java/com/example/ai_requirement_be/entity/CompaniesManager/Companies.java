@@ -1,6 +1,7 @@
 package com.example.ai_requirement_be.entity.CompaniesManager;
 
 import com.example.ai_requirement_be.entity.RecruiterManager.JobDescription;
+import com.example.ai_requirement_be.entity.RecruiterManager.RecruiterProfile;
 import com.example.ai_requirement_be.entity.UserManager.User;
 import jakarta.persistence.*;
 
@@ -47,6 +48,9 @@ public class Companies {
 
     @OneToMany( mappedBy = "company", fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private List<JobDescription> jobDescriptions;
+
+    @OneToMany(mappedBy = "company" ,  fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    private List<RecruiterProfile> recruiterProfiles;
 
     @PrePersist
     public void OnCreate() {
@@ -151,5 +155,13 @@ public class Companies {
 
     public void setJobDescriptions(List<JobDescription> jobDescriptions) {
         this.jobDescriptions = jobDescriptions;
+    }
+
+    public List<RecruiterProfile> getRecruiterProfiles() {
+        return recruiterProfiles;
+    }
+
+    public void setRecruiterProfiles(List<RecruiterProfile> recruiterProfiles) {
+        this.recruiterProfiles = recruiterProfiles;
     }
 }

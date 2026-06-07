@@ -21,9 +21,6 @@ public class JobService {
         this.jobdepRepository = jobdepRepository;
         this.userRepository = userRepository;
     }
-
-
-
     public List<JobResponseDTO> getAllJobs() {
         // 1. Lấy toàn bộ thực thể dưới DB lên
         List<JobDescription> jobs = jobdepRepository.findAll();
@@ -82,5 +79,7 @@ public class JobService {
         job.setExperienceLevel(dto.getExperienceLevel());
         job.setExpiredAt(dto.getExpiredAt());
     }
+
+
 
 }

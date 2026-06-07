@@ -3,12 +3,14 @@ package com.example.ai_requirement_be.entity.CandidateManager;
 import com.example.ai_requirement_be.dto.Candidate.EducationItemDTO;
 import com.example.ai_requirement_be.dto.Candidate.ExperienceItemDTO;
 import com.example.ai_requirement_be.dto.Candidate.ProjectItemDTO;
+import com.example.ai_requirement_be.entity.Job.JobApplication;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,6 +26,10 @@ public class Resume {
     @com.fasterxml.jackson.annotation.JsonIgnore
     private CandidateProfile candidateId;
 
+    @OneToMany(mappedBy = "resume", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<JobApplication> jobApplications = new ArrayList<>();
+
+// Thêm Getter/Setter cho jobApplications...
 
     @Column(name="file_url" , nullable = false , columnDefinition = "TEXT")
     private String fileUrl;

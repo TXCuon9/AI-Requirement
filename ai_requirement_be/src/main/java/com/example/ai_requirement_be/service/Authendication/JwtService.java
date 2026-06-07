@@ -67,7 +67,6 @@ public class JwtService {
         return (extractedEmail.equals(email) && !isTokenExpired(token));
 
     }
-
     // 5. Kiểm tra token đã hết hạn hay chưa
     public boolean isTokenExpired(String token) {
         Date expiration = Jwts.parserBuilder()

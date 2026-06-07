@@ -46,7 +46,6 @@ public class CandidateService {
         
         candidateRepository.save(profile);
     }
-
     public CandidateProfile getProfile(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         CandidateProfile profile = user.getCandidateProfile();
