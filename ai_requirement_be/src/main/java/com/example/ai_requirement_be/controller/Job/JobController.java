@@ -83,4 +83,21 @@ public class JobController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi hệ thống: " + e.getMessage());
         }
     }
+
+    @PutMapping("/interview/{applicationId}")
+    public ResponseEntity<?> inviteToInterview(@PathVariable Long applicationId , Principal principal) {
+        try {
+            if (principal == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Vui lòng đăng nhập tài khoản Nhà tuyển dụng!");
+            }
+            String recruiterEmail = principal.getName();
+            JobApplicationResponseDTO result =
+                    jobApplicationService.changeToInterviewStatus(applicationId, recruiterEmail);
+            return ResponseEntity.ok(result);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi hệ thống: " + e.getMessage());
+        }
+    }
 }
