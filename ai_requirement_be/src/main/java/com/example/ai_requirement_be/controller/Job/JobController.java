@@ -5,6 +5,7 @@ import com.example.ai_requirement_be.dto.Job.JobApplicationResponseDTO;
 import com.example.ai_requirement_be.dto.Job.JobviewResponseDTO;
 import com.example.ai_requirement_be.dto.Job.SavedJobResponseDTO;
 import com.example.ai_requirement_be.dto.RecruiterDto.JobResponseDTO;
+import com.example.ai_requirement_be.dto.RecruiterDto.RecruiterCandidateManagementDTO;
 import com.example.ai_requirement_be.service.Job.JobApplicationService;
 import com.example.ai_requirement_be.service.Job.JobViewService;
 import com.example.ai_requirement_be.service.Job.SavedJobService;
@@ -97,6 +98,28 @@ public class JobController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi hệ thống: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllCandidateApplications(Principal principal) {
+        try {
+            if (principal == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Vui lòng đăng nhập hệ thống!");
+            }
+
+            String recruiterEmail = principal.getName();
+
+            // Lấy ra list danh sách thu gọn đặc biệt về Resume
+            List<RecruiterCandidateManagementDTO> applicationList =
+                    jobApplicationService.getJobApplications(recruiterEmail);
+
+            return ResponseEntity.ok(applicationList);
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi hệ thống: " + e.getMessage());
         }
     }

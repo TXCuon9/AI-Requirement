@@ -2,6 +2,7 @@ package com.example.ai_requirement_be.service.Job;
 
 import com.example.ai_requirement_be.dto.Job.JobApplicationRequestDTO;
 import com.example.ai_requirement_be.dto.Job.JobApplicationResponseDTO;
+import com.example.ai_requirement_be.dto.RecruiterDto.RecruiterCandidateManagementDTO;
 import com.example.ai_requirement_be.entity.CandidateManager.CandidateProfile;
 import com.example.ai_requirement_be.entity.CandidateManager.Resume;
 import com.example.ai_requirement_be.entity.Job.JobApplication;
@@ -14,6 +15,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class JobApplicationService {
@@ -24,7 +27,7 @@ public class JobApplicationService {
     private final IResumeRepository resumeRepository;
     private final IRecruiterProfileRepository recruiterProfileRepository;
 
-    public JobApplicationService(  IJobApplicationRepository jobApplicationRepository, IJobdepRepository jobdepRepository, IUserRepository userRepository, ICandidateRepository candidateRepository, IResumeRepository resumeRepository ,  IRecruiterProfileRepository recruiterProfileRepository) {
+    public JobApplicationService(IJobApplicationRepository jobApplicationRepository, IJobdepRepository jobdepRepository, IUserRepository userRepository, ICandidateRepository candidateRepository, IResumeRepository resumeRepository, IRecruiterProfileRepository recruiterProfileRepository) {
         this.jobApplicationRepository = jobApplicationRepository;
         this.jobdepRepository = jobdepRepository;
         this.userRepository = userRepository;
@@ -32,9 +35,10 @@ public class JobApplicationService {
         this.resumeRepository = resumeRepository;
         this.recruiterProfileRepository = recruiterProfileRepository;
     }
+
     // Apply Cv
     @Transactional
-    public JobApplicationResponseDTO applyJob(Long jobId , JobApplicationRequestDTO requestDTO , String candidateEmail) {
+    public JobApplicationResponseDTO applyJob(Long jobId, JobApplicationRequestDTO requestDTO, String candidateEmail) {
         User user = userRepository.findByEmail(candidateEmail).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tài khoản người dùng!"));
 
         CandidateProfile candidateProfile = candidateRepository.findByUserId(user.getId()).orElseThrow(() -> new IllegalArgumentException("Hồ sơ ứng viên của bạn chưa được khởi tạo!"));
@@ -44,11 +48,11 @@ public class JobApplicationService {
         Resume resume = resumeRepository.findById(requestDTO.getResumeId())
                 .orElseThrow(() -> new IllegalArgumentException("Bản CV lựa chọn không tồn tại!"));
 
-        if(!resume.getCandidateId().getId().equals(candidateProfile.getId())){
+        if (!resume.getCandidateId().getId().equals(candidateProfile.getId())) {
             throw new IllegalArgumentException("Thao tác gian lận! Bạn không thể sử dụng CV của người khác.");
         }
 
-        if(jobApplicationRepository.existsByCandidateIdAndJobDescriptionId(candidateProfile.getId(),jobId)){
+        if (jobApplicationRepository.existsByCandidateIdAndJobDescriptionId(candidateProfile.getId(), jobId)) {
             throw new IllegalArgumentException("Bạn đã nộp đơn ứng tuyển vào công việc này rồi! Vui lòng chờ phản hồi.");
         }
 
@@ -74,59 +78,100 @@ public class JobApplicationService {
     }
 
     // Duyệt và quản lí Cv của hr
-     @Transactional
-     public JobApplicationResponseDTO changeToInterviewStatus(Long applicationId , String recruiterEmail) {
+    @Transactional
+    public JobApplicationResponseDTO changeToInterviewStatus(Long applicationId, String recruiterEmail) {
         User currentUser = userRepository.findByEmail(recruiterEmail).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tài khoản Nhà tuyển dụng!"));
 
-         RecruiterProfile recruiterProfile = recruiterProfileRepository.findByUserId(currentUser.getId()).orElseThrow(() -> new IllegalArgumentException("Hồ sơ nhà tuyển dụng của bạn chưa được khởi tạo!"));
+        RecruiterProfile recruiterProfile = recruiterProfileRepository.findByUserId(currentUser.getId()).orElseThrow(() -> new IllegalArgumentException("Hồ sơ nhà tuyển dụng của bạn chưa được khởi tạo!"));
 
-         if(recruiterProfile.getCompany() == null) {
-             throw new IllegalArgumentException("Tài khoản của bạn chưa liên kết với công ty nào để duyệt CV!");
-         }
+        if (recruiterProfile.getCompany() == null) {
+            throw new IllegalArgumentException("Tài khoản của bạn chưa liên kết với công ty nào để duyệt CV!");
+        }
 
-         Long recruiterCompanyId = recruiterProfile.getCompany().getId();
+        Long recruiterCompanyId = recruiterProfile.getCompany().getId();
 
-         JobApplication jobApplication = jobApplicationRepository.findById(applicationId).orElseThrow(() -> new IllegalArgumentException("Đơn ứng tuyển không tồn tại"));
+        JobApplication jobApplication = jobApplicationRepository.findById(applicationId).orElseThrow(() -> new IllegalArgumentException("Đơn ứng tuyển không tồn tại"));
 
-         if(jobApplication.getJobDescription() == null || jobApplication.getJobDescription().getCompany() == null) {
-             throw new IllegalArgumentException("Dữ liệu đơn tuyển dụng bị lỗi hệ thống (Không tìm thấy công ty sở hữu bài đăng)!");
-         }
-         Long jobCompanyId = jobApplication.getJobDescription().getCompany().getId();
+        if (jobApplication.getJobDescription() == null || jobApplication.getJobDescription().getCompany() == null) {
+            throw new IllegalArgumentException("Dữ liệu đơn tuyển dụng bị lỗi hệ thống (Không tìm thấy công ty sở hữu bài đăng)!");
+        }
+        Long jobCompanyId = jobApplication.getJobDescription().getCompany().getId();
 
-         if(!recruiterProfile.getCompany().getId().equals(jobCompanyId)) {
-             throw new IllegalArgumentException("Từ chối thao tác! Bạn không có quyền mời phỏng vấn hồ sơ nộp vào công ty khác.");
-         }
-
-
-         if(jobApplication.getStatus() == JobApplicationStatusEnum.INTERVIEW) {
-             throw new IllegalArgumentException("Đơn ứng tuyển này đã ở trạng thái phỏng vấn! Không thể thao tác thêm.");
-         }
-         if(jobApplication.getStatus() == JobApplicationStatusEnum.REJECTED) {
-                  throw new IllegalArgumentException("Khong the moi phong van vi don ung tuyen nay da bi tu choi truoc do!");
-         }
+        if (!recruiterProfile.getCompany().getId().equals(jobCompanyId)) {
+            throw new IllegalArgumentException("Từ chối thao tác! Bạn không có quyền mời phỏng vấn hồ sơ nộp vào công ty khác.");
+        }
 
 
+        if (jobApplication.getStatus() == JobApplicationStatusEnum.INTERVIEW) {
+            throw new IllegalArgumentException("Đơn ứng tuyển này đã ở trạng thái phỏng vấn! Không thể thao tác thêm.");
+        }
+        if (jobApplication.getStatus() == JobApplicationStatusEnum.REJECTED) {
+            throw new IllegalArgumentException("Khong the moi phong van vi don ung tuyen nay da bi tu choi truoc do!");
+        }
 
 
-         jobApplication.setStatus(JobApplicationStatusEnum.INTERVIEW);
+        jobApplication.setStatus(JobApplicationStatusEnum.INTERVIEW);
 
-         JobApplication updatedApp = jobApplicationRepository.save(jobApplication);
+        JobApplication updatedApp = jobApplicationRepository.save(jobApplication);
 
-         JobApplicationResponseDTO responseDTO = new JobApplicationResponseDTO();
-         responseDTO.setApplicationId(updatedApp.getId());
-         responseDTO.setStatus(updatedApp.getStatus().name()); // Sẽ hiển thị là "INTERVIEW"
-         responseDTO.setAppliedAt(updatedApp.getAppliedAt());
+        JobApplicationResponseDTO responseDTO = new JobApplicationResponseDTO();
+        responseDTO.setApplicationId(updatedApp.getId());
+        responseDTO.setStatus(updatedApp.getStatus().name()); // Sẽ hiển thị là "INTERVIEW"
+        responseDTO.setAppliedAt(updatedApp.getAppliedAt());
 
-         if (updatedApp.getCandidate() != null) {
-             responseDTO.setCandidateId(updatedApp.getCandidate().getId());
-             responseDTO.setCandidateName(updatedApp.getCandidate().getFullName());
-         }
-         if (updatedApp.getResume() != null) {
-             responseDTO.setResumeId(updatedApp.getResume().getId());
-             responseDTO.setResumeUrl(updatedApp.getResume().getFileUrl());
-         }
+        if (updatedApp.getCandidate() != null) {
+            responseDTO.setCandidateId(updatedApp.getCandidate().getId());
+            responseDTO.setCandidateName(updatedApp.getCandidate().getFullName());
+        }
+        if (updatedApp.getResume() != null) {
+            responseDTO.setResumeId(updatedApp.getResume().getId());
+            responseDTO.setResumeUrl(updatedApp.getResume().getFileUrl());
+        }
 
-         return responseDTO;
+        return responseDTO;
 
-     }
+    }
+
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    public List<RecruiterCandidateManagementDTO> getJobApplications(String recruiterEmail) {
+        User currentUser = userRepository.findByEmail(recruiterEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tài khoản Nhà tuyển dụng!"));
+
+        RecruiterProfile recruiterProfile = recruiterProfileRepository.findByUserId(currentUser.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Hồ sơ nhà tuyển dụng của bạn chưa được khởi tạo!"));
+
+        if (recruiterProfile.getCompany() == null) {
+            throw new IllegalArgumentException("Tài khoản của bạn chưa được liên kết với bất kỳ công ty nào!");
+        }
+        Long recruiterCompanyId = recruiterProfile.getCompany().getId();
+
+        List<JobApplication> applications = jobApplicationRepository.findAllApplicationsByCompanyId(recruiterCompanyId);
+
+        List<RecruiterCandidateManagementDTO> dtoList = new ArrayList<>();
+
+        for (JobApplication app : applications) {
+            RecruiterCandidateManagementDTO dto = new RecruiterCandidateManagementDTO();
+            dto.setApplicationId(app.getId());
+            dto.setStatus(app.getStatus().name());
+            dto.setAppliedAt(app.getAppliedAt());
+
+            // Thông tin cơ bản Ứng viên
+            if (app.getCandidate() != null) {
+                dto.setCandidateId(app.getCandidate().getId());
+                dto.setCandidateName(app.getCandidate().getFullName());
+                if (app.getCandidate().getUser() != null) {
+                    dto.setCandidateEmail(app.getCandidate().getUser().getEmail());
+                }
+            }
+
+            if (app.getResume() != null) {
+                dto.setResumeId(app.getResume().getId());
+                dto.setResumeUrl(app.getResume().getFileUrl());
+            }
+
+            dtoList.add(dto);
+        }
+        return dtoList;
+    }
+
 }
