@@ -22,14 +22,6 @@ class SkillNormalizer:
 
 
     @classmethod
-    def normalize(
-        cls,
-        skill:str
-    ):
-
+    def normalize(cls,skill:str):
         skill = skill.lower().strip()
-
-        return cls.skill_map.get(
-            skill,
-            skill
-        )
+        return cls.skill_map.get(skill,skill)

@@ -6,6 +6,7 @@ import com.example.ai_requirement_be.entity.UserManager.UserStatus;
 import java.time.LocalDateTime;
 
 public class UserPendingResponseDTO {
+    private Long id;
     private String email;
     private UserRole role;
     private String provider;
@@ -16,13 +17,22 @@ public class UserPendingResponseDTO {
    public UserPendingResponseDTO() {
 
    }
-    public UserPendingResponseDTO(String email, UserRole role, String provider, UserStatus status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public UserPendingResponseDTO(Long id, String email, UserRole role, String provider, UserStatus status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
         this.email = email;
         this.role = role;
         this.provider = provider;
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEmail() {

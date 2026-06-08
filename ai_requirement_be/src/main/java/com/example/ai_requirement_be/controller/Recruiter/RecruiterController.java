@@ -17,6 +17,11 @@ public class RecruiterController {
      public RecruiterController(JobService jobService) {
          this.jobService = jobService;
      }
+     @GetMapping("/jobs")
+     public ResponseEntity<List<JobResponseDTO>> getMyJobs(Principal principal) {
+         return ResponseEntity.ok(jobService.getJobsByRecruiterEmail(principal.getName()));
+     }
+
      @PostMapping("/create")
     public ResponseEntity<String> createJob(Principal principal , @Valid @RequestBody SaveJobDTO saveJobDTO) {
          jobService.createJob(saveJobDTO , principal.getName());

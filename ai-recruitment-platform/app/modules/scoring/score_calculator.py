@@ -2,7 +2,6 @@ class ScoreCalculator:
 
     @staticmethod
     def calculate(
-
         skill_score,
         experience_score=70,
         education_score=70,
@@ -10,15 +9,10 @@ class ScoreCalculator:
     ):
 
         overall=(
-
             skill_score*0.5+
             experience_score*0.3+
             education_score*0.1+
             project_score*0.1
-
         )
 
-        return round(
-            overall,
-            2
-        )
+        return round(overall,2)

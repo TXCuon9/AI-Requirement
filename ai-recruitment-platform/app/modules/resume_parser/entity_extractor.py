@@ -6,39 +6,34 @@ class EntityExtractor:
 
     provider = LocalProvider()
 
-    async def extract(
-        self,
-        text:str
-    ):
+    async def extract(self,text:str):
 
         short_text = text[:1000]
 
         prompt=f"""
-Return VALID JSON only.
+                Return VALID JSON only.
 
-No explanation.
-No markdown.
-No extra text.
+                No explanation.
+                No markdown.
+                No extra text.
 
-Extract:
+                Extract:
 
-skills
-experience
-education
-projects
-certificates
-languages
-hobbies
+                skills
+                experience
+                education
+                projects
+                certificates
+                languages
+                hobbies
 
-CV:
+                CV:
 
-{short_text}
+                {short_text}
 
-"""
+                """
 
-        result = await self.provider.generate(
-            prompt
-        )
+        result = await self.provider.generate(prompt)
 
         try:
 

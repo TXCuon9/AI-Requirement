@@ -33,6 +33,7 @@ public class UserService {
        List<User> pendingUsers = userRepository.findByStatus(UserStatus.PENDING);
 
        return pendingUsers.stream().map(user -> new UserPendingResponseDTO(
+               user.getId(),
                user.getEmail(),
                user.getRole(),
                user.getProvider(),

@@ -26,27 +26,35 @@ public class JobViewService {
 
     @Transactional
     public JobviewResponseDTO getJobDetailsAndRecordView(Long jobId , String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tài khoản người dùng!"));
-
         JobDescription jobDescription = jobdepRepository.findById(jobId).orElseThrow(() -> new IllegalArgumentException("Bài đăng tuyển dụng không tồn tại hoặc bị xóa!"));
 
-        JobView jobView = new JobView();
-        jobView.setJobDescription(jobDescription);
-        jobView.setUser(user);
-        jobView.setViewedAt(LocalDateTime.now());
-        jobviewRepository.save(jobView);
+        if (email != null) {
+            User user = userRepository.findByEmail(email).orElse(null);
+            if (user != null) {
+                JobView jobView = new JobView();
+                jobView.setJobDescription(jobDescription);
+                jobView.setUser(user);
+                jobView.setViewedAt(LocalDateTime.now());
+                jobviewRepository.save(jobView);
+            }
+        }
 
         // Trích xuất dữ liệu từ thực thể 'job' vừa tìm được để tạo JSON sạch
         JobviewResponseDTO jobviewResponseDTO = new JobviewResponseDTO();
+        jobviewResponseDTO.setId(jobDescription.getId());
+        if (jobDescription.getCompany() != null) {
+            jobviewResponseDTO.setCompanyName(jobDescription.getCompany().getName());
+        }
         jobviewResponseDTO.setTitle(jobDescription.getTitle());
         jobviewResponseDTO.setDescription(jobDescription.getDescription());
+        jobviewResponseDTO.setRequirements(jobDescription.getRequirements());
         jobviewResponseDTO.setResponsibilities(jobDescription.getResponsibilities());
         jobviewResponseDTO.setLocation(jobDescription.getLocation());
         jobviewResponseDTO.setSalaryMax(jobDescription.getSalaryMax());
         jobviewResponseDTO.setSalaryMin(jobDescription.getSalaryMin());
         jobviewResponseDTO.setRemote(jobDescription.getRemote());
-        jobviewResponseDTO.setJobType(jobDescription.getJobType().name());
-        jobviewResponseDTO.setExperienceLevel(jobDescription.getExperienceLevel().name());
+        jobviewResponseDTO.setJobType(jobDescription.getJobType() != null ? jobDescription.getJobType().name() : null);
+        jobviewResponseDTO.setExperienceLevel(jobDescription.getExperienceLevel() != null ? jobDescription.getExperienceLevel().name() : null);
 
         return jobviewResponseDTO;
     }

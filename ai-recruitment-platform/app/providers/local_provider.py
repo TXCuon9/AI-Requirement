@@ -4,12 +4,9 @@ from app.providers.base_provider import BaseProvider
 
 class LocalProvider(BaseProvider):
 
-    async def generate(
-        self,
-        prompt: str
-    ):
+    async def generate(self,prompt: str):
 
-        print("===== ĐANG GỌI OLLAMA =====")
+        print("ĐANG GỌI OLLAMA")
 
         response = ollama.chat(
             model="qwen3:latest",
@@ -20,7 +17,5 @@ class LocalProvider(BaseProvider):
                 }
             ]
         )
-
-        print("===== OLLAMA ĐÃ TRẢ KẾT QUẢ =====")
-
+        print("OLLAMA ĐÃ TRẢ KẾT QUẢ")
         return response["message"]["content"]

@@ -46,10 +46,7 @@ public class JobController {
     @GetMapping("/detail/{jobId}")
     public ResponseEntity<?> getJobDetail(@PathVariable Long jobId , Principal principal) {
         try {
-            if(principal == null) {
-                return ResponseEntity.status(401).body("Vui lòng đăng nhập để xem chi tiết công việc!");
-            }
-            String email = principal.getName();
+            String email = principal != null ? principal.getName() : null;
 
             JobviewResponseDTO jobviewResponseDTO = jobViewService.getJobDetailsAndRecordView(jobId ,email);
             return ResponseEntity.ok(jobviewResponseDTO);

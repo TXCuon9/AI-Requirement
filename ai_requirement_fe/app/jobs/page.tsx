@@ -1,23 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, MapPin, BriefcaseBusiness, Filter, Heart, Building2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, MapPin, BriefcaseBusiness, Filter, Heart, Building2, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import Navbar from "../../components/Navbar";
+import { fetchApi } from "../../lib/api";
+import { JobResponse } from "../../lib/types/job";
 
 export default function JobsPage() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
 
-  const dummyJobs = Array(8).fill(null).map((_, i) => ({
-    id: i,
-    title: ["Senior React Developer", "Java Backend Engineer", "Product Designer", "Data Analyst"][i % 4],
-    company: "Tech Company " + (i + 1),
-    salary: ["20 - 40 triệu", "Up to 2500 USD", "Thỏa thuận", "15 - 25 triệu"][i % 4],
-    location: ["Hà Nội", "TP. Hồ Chí Minh", "Đà Nẵng", "Remote"][i % 4],
-    updated: "2 giờ trước",
-    tags: ["React", "TypeScript", "NodeJS"]
-  }));
+  const [jobs, setJobs] = useState<JobResponse[]>([]);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    fetchApi("/jobs")
+      .then((data) => setJobs(data))
+      .catch((err) => console.error("Failed to fetch jobs:", err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const formatSalary = (min: number | null, max: number | null) => {
+    if (!min && !max) return "Thỏa thuận";
+    if (min && max) return `${min} - ${max} triệu`;
+    if (min) return `Từ ${min} triệu`;
+    return `Đến ${max} triệu`;
+  };
+
+  const filteredJobs = jobs.filter(job => {
+    const matchSearch = searchTerm === "" || 
+                        job.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                        (job.companyName && job.companyName.toLowerCase().includes(searchTerm.toLowerCase()));
+    
+    // For Location: match if no location selected, or if job.location contains any of the selected locations
+    const matchLocation = selectedLocations.length === 0 || selectedLocations.some(loc => job.location && job.location.toLowerCase().includes(loc.toLowerCase()));
+
+    return matchSearch && matchLocation;
+  });
+
+  const handleLocationChange = (loc: string) => {
+    setSelectedLocations(prev => 
+      prev.includes(loc) ? prev.filter(l => l !== loc) : [...prev, loc]
+    );
+  };
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 font-sans text-slate-900">
       <Navbar />
@@ -58,7 +84,12 @@ export default function JobsPage() {
               <div className="space-y-2">
                 {["Hà Nội", "Hồ Chí Minh", "Đà Nẵng", "Cần Thơ"].map((loc) => (
                   <label key={loc} className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" className="size-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
+                    <input 
+                      type="checkbox" 
+                      className="size-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500" 
+                      checked={selectedLocations.includes(loc)}
+                      onChange={() => handleLocationChange(loc)}
+                    />
                     <span className="text-sm text-slate-700">{loc}</span>
                   </label>
                 ))}
@@ -101,7 +132,7 @@ export default function JobsPage() {
         <div className="flex-1 min-w-0">
           <div className="mb-4 flex items-center justify-between">
             <h1 className="text-xl font-bold">
-              Tìm thấy <span className="text-blue-600">3,456</span> việc làm phù hợp
+              Tìm thấy <span className="text-blue-600">{filteredJobs.length}</span> việc làm phù hợp
             </h1>
             <div className="flex items-center gap-2 text-sm">
               <span className="text-slate-500">Sắp xếp theo:</span>
@@ -114,56 +145,65 @@ export default function JobsPage() {
           </div>
 
           <div className="space-y-4">
-            {dummyJobs.map((job) => (
-              <div key={job.id} className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-900/5 transition-all group flex flex-col sm:flex-row gap-5 cursor-pointer relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-1 h-full bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                
-                <div className="size-20 sm:size-24 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 p-2">
-                  <Building2 className="size-10 text-slate-300" />
-                </div>
-                
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0">
-                      <Link href={`/jobs/${job.id}`}>
-                        <h2 className="font-bold text-slate-900 text-lg truncate group-hover:text-blue-600 transition-colors" title={job.title}>
-                          {job.title}
-                        </h2>
-                      </Link>
-                      <Link href={`/companies/${job.id}`} className="text-slate-600 text-sm truncate mt-1 hover:underline hover:text-blue-600 block">
-                        {job.company}
-                      </Link>
-                    </div>
-                    <span className="inline-flex items-center justify-center shrink-0 px-3 py-1 bg-red-50 text-red-600 text-sm font-semibold rounded-lg whitespace-nowrap">
-                      {job.salary}
-                    </span>
+            {loading ? (
+              <div className="flex justify-center items-center py-20 text-blue-600">
+                <Loader2 className="size-8 animate-spin" />
+              </div>
+            ) : filteredJobs.length === 0 ? (
+              <div className="text-center py-20 text-slate-500">
+                Không có việc làm nào phù hợp.
+              </div>
+            ) : (
+              filteredJobs.map((job) => (
+                <div key={job.id} className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-900/5 transition-all group flex flex-col sm:flex-row gap-5 cursor-pointer relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  
+                  <div className="size-20 sm:size-24 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 p-2">
+                    <Building2 className="size-10 text-slate-300" />
                   </div>
                   
-                  <div className="mt-4 flex flex-wrap items-center gap-3">
-                    <div className="flex items-center gap-1 bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md text-xs font-medium">
-                      <MapPin className="size-3.5" /> {job.location}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <Link href={`/jobs/${job.id}`}>
+                          <h2 className="font-bold text-slate-900 text-lg truncate group-hover:text-blue-600 transition-colors" title={job.title}>
+                            {job.title}
+                          </h2>
+                        </Link>
+                        <Link href={`/companies/${job.id}`} className="text-slate-600 text-sm truncate mt-1 hover:underline hover:text-blue-600 block">
+                          {job.companyName || "Công ty bảo mật"}
+                        </Link>
+                      </div>
+                      <span className="inline-flex items-center justify-center shrink-0 px-3 py-1 bg-red-50 text-red-600 text-sm font-semibold rounded-lg whitespace-nowrap">
+                        {formatSalary(job.salaryMin, job.salaryMax)}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-1 bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md text-xs font-medium">
-                      <BriefcaseBusiness className="size-3.5" /> 1-3 năm
+                    
+                    <div className="mt-4 flex flex-wrap items-center gap-3">
+                      <div className="flex items-center gap-1 bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md text-xs font-medium">
+                        <MapPin className="size-3.5" /> {job.location || "Nhiều địa điểm"}
+                      </div>
+                      <div className="flex items-center gap-1 bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md text-xs font-medium">
+                        <BriefcaseBusiness className="size-3.5" /> {job.experienceLevel === "ENTRY_LEVEL" ? "Chưa có kinh nghiệm" : job.experienceLevel === "JUNIOR" ? "Dưới 1 năm" : job.experienceLevel === "MID_LEVEL" ? "1-3 năm" : job.experienceLevel === "SENIOR" ? "3-5 năm" : "Trên 5 năm"}
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
-                    <div className="flex gap-2 hidden sm:flex">
-                      {job.tags.map(tag => (
-                        <span key={tag} className="text-xs text-slate-500 bg-white border border-slate-200 px-2 py-0.5 rounded-full">{tag}</span>
-                      ))}
-                    </div>
-                    <div className="flex items-center gap-4 text-xs text-slate-400">
-                      <span>Cập nhật {job.updated}</span>
-                      <button className="text-slate-400 hover:text-blue-500 transition-colors p-1.5 rounded-full hover:bg-blue-50">
-                        <Heart className="size-5" />
-                      </button>
+                    <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
+                      <div className="flex gap-2 hidden sm:flex">
+                        <span className="text-xs text-slate-500 bg-white border border-slate-200 px-2 py-0.5 rounded-full">{job.jobType === "FULL_TIME" ? "Toàn thời gian" : job.jobType === "PART_TIME" ? "Bán thời gian" : job.jobType === "INTERNSHIP" ? "Thực tập" : job.jobType}</span>
+                        {job.remote && <span className="text-xs text-slate-500 bg-white border border-slate-200 px-2 py-0.5 rounded-full">Remote</span>}
+                      </div>
+                      <div className="flex items-center gap-4 text-xs text-slate-400">
+                        <span>Cập nhật gần đây</span>
+                        <button className="text-slate-400 hover:text-blue-500 transition-colors p-1.5 rounded-full hover:bg-blue-50" onClick={(e) => { e.preventDefault(); /* TODO: Save Job */ }}>
+                          <Heart className="size-5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           {/* Pagination */}

@@ -9,13 +9,6 @@ class EmbeddingService:
 
 
     @classmethod
-    def generate(
-        cls,
-        text:str
-    ):
-
-        vector=cls.model.encode(
-            text
-        )
-
+    def generate(cls,text:str):
+        vector=cls.model.encode(text)
         return vector.tolist()

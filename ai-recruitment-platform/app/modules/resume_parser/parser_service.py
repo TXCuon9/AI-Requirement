@@ -16,57 +16,53 @@ import uuid
 class ParserService:
 
     @staticmethod
-    async def parse(
-        file_path: str
-    ):
+    async def parse(file_path: str):
 
-        text = PDFExtractor.extract(
-            file_path
-        )
+        text = PDFExtractor.extract(file_path)
 
         prompt = f"""Bạn là một chuyên gia phân tích CV. Trích xuất thông tin từ văn bản CV sau và TRẢ VỀ ĐÚNG MỘT KHỐI JSON HỢP LỆ (không thêm giải thích):
 {{
-    "personal_info": {{
-        "name": "",
-        "email": "",
-        "phone": "",
-        "address": "",
-        "targetPosition": "",
-        "summary": ""
-    }},
-    "skills": ["kỹ năng 1", "kỹ năng 2"],
-    "education": [
-        {{
-            "schoolName": "",
-            "major": "",
-            "startDate": "",
-            "endDate": "",
-            "description": ""
+            "personal_info": {{
+                "name": "",
+                "email": "",
+                "phone": "",
+                "address": "",
+                "targetPosition": "",
+                "summary": ""
+            }},
+            "skills": ["kỹ năng 1", "kỹ năng 2"],
+            "education": [
+                {{
+                    "schoolName": "",
+                    "major": "",
+                    "startDate": "",
+                    "endDate": "",
+                    "description": ""
+                }}
+            ],
+            "experience": [
+                {{
+                    "companyName": "",
+                    "position": "",
+                    "startDate": "",
+                    "endDate": "",
+                    "description": ""
+                }}
+            ],
+            "projects": [
+                {{
+                    "projectName": "",
+                    "role": "",
+                    "startDate": "",
+                    "endDate": "",
+                    "description": ""
+                }}
+            ]
         }}
-    ],
-    "experience": [
-        {{
-            "companyName": "",
-            "position": "",
-            "startDate": "",
-            "endDate": "",
-            "description": ""
-        }}
-    ],
-    "projects": [
-        {{
-            "projectName": "",
-            "role": "",
-            "startDate": "",
-            "endDate": "",
-            "description": ""
-        }}
-    ]
-}}
 
-VĂN BẢN CV:
-{text}
-"""
+        VĂN BẢN CV:
+        {text}
+        """
         provider = LocalProvider()
         llm_response = await provider.generate(prompt)
         
@@ -90,32 +86,20 @@ VĂN BẢN CV:
             "experience": profile_data.get("experience", []),
         }
 
-        embedding_text = VectorBuilder.build(
-            profile
-        )
+        embedding_text = VectorBuilder.build(profile)
 
-        vector = EmbeddingService.generate(
-            embedding_text
-        )
+        vector = EmbeddingService.generate(embedding_text)
 
-        candidate_id = str(
-            uuid.uuid4()
-        )
+        candidate_id = str(uuid.uuid4())
 
         ChromaService.save(
-
             candidate_id=candidate_id,
-
             vector=vector,
-
             metadata={
-
                 "skills": ",".join(
-
                     x["normalized"]
 
                     for x in normalized_skills
-
                 )
 
             }
