@@ -11,4 +11,5 @@ import java.util.List;
 public interface IJobdepRepository extends JpaRepository<JobDescription, Long> {
     List<JobDescription> findByJobType(JobType jobType);
     List<JobDescription> findByExperienceLevel(String experienceLevel);
+    List<JobDescription> findByCompany_Id(Long companyId);
 }

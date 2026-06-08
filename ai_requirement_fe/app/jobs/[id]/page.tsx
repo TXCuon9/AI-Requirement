@@ -1,13 +1,136 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { MapPin, BriefcaseBusiness, Heart, Building2, Send, Clock, DollarSign, Users, ChevronRight, Share2, AlertCircle } from "lucide-react";
+import { MapPin, BriefcaseBusiness, Heart, Building2, Send, DollarSign, Users, ChevronRight, AlertCircle, Loader2 } from "lucide-react";
 import Navbar from "../../../components/Navbar";
 import { useParams } from "next/navigation";
+import { fetchApi } from "../../../lib/api";
+import { JobDetailResponse } from "../../../lib/types/job";
 
 export default function JobDetailPage() {
   const params = useParams();
-  const jobId = params.id; // Just for demo
+  const jobId = params.id as string;
+
+  const [job, setJob] = useState<JobDetailResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  
+  // Apply & Save states
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [resumes, setResumes] = useState<any[]>([]);
+  const [loadingResumes, setLoadingResumes] = useState(false);
+  const [selectedResumeId, setSelectedResumeId] = useState<number | null>(null);
+  const [isApplying, setIsApplying] = useState(false);
+  const [applyMessage, setApplyMessage] = useState("");
+
+  useEffect(() => {
+    if (jobId) {
+      fetchApi(`/detail/${jobId}`)
+        .then((data) => setJob(data))
+        .catch((err) => console.error("Failed to fetch job detail:", err))
+        .finally(() => setLoading(false));
+    }
+  }, [jobId]);
+
+  const handleSaveJob = async () => {
+    setIsSaving(true);
+    try {
+      await fetchApi(`/saveJob/${jobId}`, { method: "POST" });
+      setSaveSuccess(true);
+      alert("Đã lưu việc làm thành công!");
+    } catch (error: any) {
+      alert(error.message || "Có lỗi xảy ra khi lưu việc làm");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleOpenApplyModal = async () => {
+    setShowApplyModal(true);
+    setLoadingResumes(true);
+    setApplyMessage("");
+    try {
+      const data = await fetchApi("/resume");
+      setResumes(data || []);
+      if (data && data.length > 0) {
+        // Auto select primary resume or first one
+        const primary = data.find((r: any) => r.isPrimary);
+        if (primary) setSelectedResumeId(primary.id);
+        else setSelectedResumeId(data[0].id);
+      }
+    } catch (error) {
+      console.error("Failed to load resumes", error);
+    } finally {
+      setLoadingResumes(false);
+    }
+  };
+
+  const handleApplyJob = async () => {
+    if (!selectedResumeId) {
+      setApplyMessage("Vui lòng chọn một CV để ứng tuyển!");
+      return;
+    }
+    setIsApplying(true);
+    setApplyMessage("");
+    try {
+      await fetchApi(`/apply/${jobId}`, {
+        method: "POST",
+        body: JSON.stringify({ resumeId: selectedResumeId })
+      });
+      setApplyMessage("Ứng tuyển thành công!");
+      setTimeout(() => setShowApplyModal(false), 2000);
+    } catch (error: any) {
+      setApplyMessage(error.message || "Ứng tuyển thất bại");
+    } finally {
+      setIsApplying(false);
+    }
+  };
+
+  const formatSalary = (min: number | null, max: number | null) => {
+    if (!min && !max) return "Thỏa thuận";
+    if (min && max) return `${min} - ${max} triệu`;
+    if (min) return `Từ ${min} triệu`;
+    return `Đến ${max} triệu`;
+  };
+
+  if (loading) {
+    return (
+      <div className="flex flex-col min-h-screen bg-slate-50">
+        <Navbar />
+        <div className="flex-1 flex justify-center items-center">
+          <Loader2 className="size-10 animate-spin text-blue-600" />
+        </div>
+      </div>
+    );
+  }
+
+  if (!job) {
+    return (
+      <div className="flex flex-col min-h-screen bg-slate-50">
+        <Navbar />
+        <div className="flex-1 flex justify-center items-center text-slate-500">
+          Không tìm thấy thông tin việc làm.
+        </div>
+      </div>
+    );
+  }
+
+  const expLevelMap: Record<string, string> = {
+    "ENTRY_LEVEL": "Chưa có kinh nghiệm",
+    "JUNIOR": "Dưới 1 năm",
+    "MID_LEVEL": "1-3 năm",
+    "SENIOR": "3-5 năm",
+    "EXPERT": "Trên 5 năm"
+  };
+
+  const jobTypeMap: Record<string, string> = {
+    "FULL_TIME": "Toàn thời gian",
+    "PART_TIME": "Bán thời gian",
+    "INTERNSHIP": "Thực tập",
+    "CONTRACT": "Hợp đồng"
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 font-sans text-slate-900 pb-20 md:pb-0">
@@ -20,7 +143,7 @@ export default function JobDetailPage() {
           <ChevronRight className="size-4 mx-1" />
           <Link href="/jobs" className="hover:text-blue-600">Việc làm IT</Link>
           <ChevronRight className="size-4 mx-1" />
-          <span className="text-slate-900 font-medium truncate">Senior React Developer</span>
+          <span className="text-slate-900 font-medium truncate">{job.title}</span>
         </div>
       </div>
 
@@ -37,9 +160,9 @@ export default function JobDetailPage() {
             </div>
 
             <div className="flex-1">
-              <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">Senior React Developer (Typescript / Next.js)</h1>
-              <Link href={`/companies/1`} className="text-lg text-slate-600 hover:text-blue-600 transition-colors font-medium">
-                Tech Company {jobId || 1}
+              <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">{job.title}</h1>
+              <Link href={`/companies/${jobId}`} className="text-lg text-slate-600 hover:text-blue-600 transition-colors font-medium">
+                {job.companyName || "Công ty bảo mật"}
               </Link>
               
               <div className="flex flex-wrap items-center gap-4 mt-4">
@@ -49,7 +172,7 @@ export default function JobDetailPage() {
                   </div>
                   <div>
                     <div className="text-xs text-slate-500 font-medium">Mức lương</div>
-                    <div className="font-semibold text-slate-900">20 - 40 triệu</div>
+                    <div className="font-semibold text-slate-900">{formatSalary(job.salaryMin, job.salaryMax)}</div>
                   </div>
                 </div>
                 <div className="w-px h-10 bg-slate-200 hidden md:block"></div>
@@ -60,7 +183,7 @@ export default function JobDetailPage() {
                   </div>
                   <div>
                     <div className="text-xs text-slate-500 font-medium">Địa điểm</div>
-                    <div className="font-semibold text-slate-900">Hà Nội</div>
+                    <div className="font-semibold text-slate-900">{job.location || "Nhiều địa điểm"}</div>
                   </div>
                 </div>
                 <div className="w-px h-10 bg-slate-200 hidden md:block"></div>
@@ -71,7 +194,7 @@ export default function JobDetailPage() {
                   </div>
                   <div>
                     <div className="text-xs text-slate-500 font-medium">Kinh nghiệm</div>
-                    <div className="font-semibold text-slate-900">2 năm</div>
+                    <div className="font-semibold text-slate-900">{expLevelMap[job.experienceLevel] || job.experienceLevel}</div>
                   </div>
                 </div>
               </div>
@@ -79,11 +202,17 @@ export default function JobDetailPage() {
 
             {/* Actions Desktop */}
             <div className="hidden md:flex flex-col gap-3 shrink-0 w-48">
-              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2">
+              <button 
+                onClick={handleOpenApplyModal}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2">
                 <Send className="size-4" /> Ứng tuyển ngay
               </button>
-              <button className="w-full bg-white border-2 border-slate-200 hover:border-blue-600 text-slate-700 hover:text-blue-600 font-semibold py-2.5 px-4 rounded-xl transition-colors flex items-center justify-center gap-2">
-                <Heart className="size-4" /> Lưu việc làm
+              <button 
+                onClick={handleSaveJob}
+                disabled={isSaving || saveSuccess}
+                className={`w-full border-2 font-semibold py-2.5 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 ${saveSuccess ? 'bg-blue-50 text-blue-600 border-blue-200' : 'bg-white border-slate-200 hover:border-blue-600 text-slate-700 hover:text-blue-600'}`}>
+                {isSaving ? <Loader2 className="size-4 animate-spin" /> : <Heart className={`size-4 ${saveSuccess ? 'fill-blue-600' : ''}`} />} 
+                {saveSuccess ? 'Đã lưu' : 'Lưu việc làm'}
               </button>
             </div>
           </div>
@@ -99,35 +228,26 @@ export default function JobDetailPage() {
               <h2 className="text-xl font-bold text-slate-900 mb-6 border-l-4 border-blue-600 pl-3">Chi tiết công việc</h2>
               
               <div className="space-y-6 text-slate-700 leading-relaxed">
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">Mô tả công việc</h3>
-                  <ul className="list-disc pl-5 space-y-1">
-                    <li>Tham gia thiết kế và phát triển các ứng dụng Web sử dụng ReactJS / Next.js.</li>
-                    <li>Phối hợp với đội ngũ UI/UX Designer, Backend, QA để hoàn thiện sản phẩm.</li>
-                    <li>Tối ưu hóa performance, đảm bảo code chuẩn SEO và responsive.</li>
-                    <li>Nghiên cứu và áp dụng các công nghệ mới vào dự án thực tế.</li>
-                  </ul>
-                </div>
+                {job.description && (
+                  <div>
+                    <h3 className="text-lg font-semibold text-slate-900 mb-2">Mô tả công việc</h3>
+                    <div className="whitespace-pre-line">{job.description}</div>
+                  </div>
+                )}
                 
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">Yêu cầu ứng viên</h3>
-                  <ul className="list-disc pl-5 space-y-1">
-                    <li>Có ít nhất 2 năm kinh nghiệm làm việc với ReactJS, Javascript/Typescript.</li>
-                    <li>Am hiểu về State Management (Redux, Zustand, Context API...).</li>
-                    <li>Có kinh nghiệm với Next.js (App Router), Server Side Rendering (SSR) là một lợi thế cực lớn.</li>
-                    <li>Hiểu biết về RESTful API, GraphQL.</li>
-                  </ul>
-                </div>
+                {job.requirements && (
+                  <div>
+                    <h3 className="text-lg font-semibold text-slate-900 mb-2">Yêu cầu ứng viên</h3>
+                    <div className="whitespace-pre-line">{job.requirements}</div>
+                  </div>
+                )}
                 
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">Quyền lợi</h3>
-                  <ul className="list-disc pl-5 space-y-1">
-                    <li>Lương cứng 20 - 40 triệu (tùy năng lực) + Thưởng dự án.</li>
-                    <li>Môi trường làm việc trẻ trung, năng động, Agile/Scrum.</li>
-                    <li>Được cung cấp Macbook Pro M2 / M3.</li>
-                    <li>Review lương 2 lần/năm. Bảo hiểm sức khỏe PVI.</li>
-                  </ul>
-                </div>
+                {job.responsibilities && (
+                  <div>
+                    <h3 className="text-lg font-semibold text-slate-900 mb-2">Trách nhiệm / Quyền lợi</h3>
+                    <div className="whitespace-pre-line">{job.responsibilities}</div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -148,28 +268,21 @@ export default function JobDetailPage() {
                 <div className="size-16 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
                   <Building2 className="size-8 text-blue-200" />
                 </div>
-                <h2 className="text-lg font-bold text-slate-900 leading-tight">Tech Company {jobId || 1}</h2>
+                <h2 className="text-lg font-bold text-slate-900 leading-tight">{job.companyName || "Công ty bảo mật"}</h2>
               </div>
               
               <div className="space-y-4">
                 <div className="flex gap-3 text-slate-700">
-                  <Users className="size-5 text-slate-400 shrink-0" />
-                  <div>
-                    <div className="text-xs text-slate-500 font-medium">Quy mô</div>
-                    <div className="text-sm font-medium">50 - 150 nhân viên</div>
-                  </div>
-                </div>
-                <div className="flex gap-3 text-slate-700">
                   <MapPin className="size-5 text-slate-400 shrink-0 mt-0.5" />
                   <div>
                     <div className="text-xs text-slate-500 font-medium">Địa điểm</div>
-                    <div className="text-sm font-medium">Tầng 12, Tòa nhà Keangnam, Phạm Hùng, Nam Từ Liêm, Hà Nội</div>
+                    <div className="text-sm font-medium">{job.location || "Nhiều địa điểm"}</div>
                   </div>
                 </div>
               </div>
               
               <div className="mt-6 pt-4 border-t border-slate-100">
-                <Link href={`/companies/1`} className="text-blue-600 font-medium hover:underline text-sm flex items-center justify-center">
+                <Link href={`/companies/${jobId}`} className="text-blue-600 font-medium hover:underline text-sm flex items-center justify-center">
                   Xem trang công ty <ChevronRight className="size-4 ml-1" />
                 </Link>
               </div>
@@ -181,16 +294,18 @@ export default function JobDetailPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between border-b border-slate-50 pb-3">
                   <span className="text-slate-500 text-sm">Cấp bậc</span>
-                  <span className="font-medium text-sm">Nhân viên / Chuyên viên</span>
+                  <span className="font-medium text-sm">{expLevelMap[job.experienceLevel] || job.experienceLevel}</span>
                 </div>
                 <div className="flex items-center justify-between border-b border-slate-50 pb-3">
                   <span className="text-slate-500 text-sm">Hình thức</span>
-                  <span className="font-medium text-sm">Nhân viên chính thức</span>
+                  <span className="font-medium text-sm">{jobTypeMap[job.jobType] || job.jobType}</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-500 text-sm">Thời gian làm việc</span>
-                  <span className="font-medium text-sm">Thứ 2 - Thứ 6</span>
-                </div>
+                {job.remote && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-500 text-sm">Remote</span>
+                    <span className="font-medium text-sm">Có hỗ trợ Remote</span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -200,13 +315,81 @@ export default function JobDetailPage() {
 
       {/* Mobile Fixed Action Bar */}
       <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-slate-200 p-4 flex gap-3 z-50">
-        <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md">
+        <button onClick={handleOpenApplyModal} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md">
           Ứng tuyển ngay
         </button>
-        <button className="size-12 flex items-center justify-center shrink-0 bg-white border-2 border-slate-200 text-slate-600 rounded-xl">
-          <Heart className="size-6" />
+        <button onClick={handleSaveJob} className="size-12 flex items-center justify-center shrink-0 bg-white border-2 border-slate-200 text-slate-600 rounded-xl">
+          <Heart className={`size-6 ${saveSuccess ? 'fill-blue-600 text-blue-600' : ''}`} />
         </button>
       </div>
+
+      {/* Apply Modal */}
+      {showApplyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
+            <h2 className="text-xl font-bold mb-4">Ứng tuyển {job.title}</h2>
+            
+            {loadingResumes ? (
+              <div className="flex justify-center py-8"><Loader2 className="size-8 animate-spin text-blue-600" /></div>
+            ) : resumes.length === 0 ? (
+              <div className="text-center py-6 text-slate-600">
+                Bạn chưa có CV nào trên hệ thống. 
+                <br /><br />
+                <Link href="/cv" className="text-blue-600 font-semibold underline">Đi tới trang quản lý CV</Link>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <p className="text-sm text-slate-600">Chọn CV để ứng tuyển:</p>
+                <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
+                  {resumes.map(r => (
+                    <label key={r.id} className={`flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-colors ${selectedResumeId === r.id ? 'border-blue-500 bg-blue-50' : 'border-slate-200 hover:bg-slate-50'}`}>
+                      <input 
+                        type="radio" 
+                        name="resumeId" 
+                        value={r.id} 
+                        checked={selectedResumeId === r.id} 
+                        onChange={() => setSelectedResumeId(r.id)}
+                        className="size-4 text-blue-600 focus:ring-blue-500"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-slate-900 truncate">{r.title || `CV #${r.id}`}</div>
+                        <div className="text-xs text-slate-500">Cập nhật lúc: {new Date(r.updatedAt || r.createdAt).toLocaleDateString()}</div>
+                      </div>
+                      {r.isPrimary && <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">Mặc định</span>}
+                    </label>
+                  ))}
+                </div>
+                
+                {applyMessage && (
+                  <div className={`p-3 rounded-lg text-sm ${applyMessage.includes('thành công') ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                    {applyMessage}
+                  </div>
+                )}
+                
+                <div className="flex gap-3 mt-6">
+                  <button 
+                    onClick={() => setShowApplyModal(false)}
+                    className="flex-1 py-2.5 rounded-xl font-semibold border border-slate-200 text-slate-700 hover:bg-slate-50">
+                    Hủy
+                  </button>
+                  <button 
+                    onClick={handleApplyJob}
+                    disabled={isApplying}
+                    className="flex-1 py-2.5 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 flex items-center justify-center gap-2">
+                    {isApplying ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />} Gửi CV
+                  </button>
+                </div>
+              </div>
+            )}
+            
+            {resumes.length === 0 && (
+              <div className="mt-6 flex justify-end">
+                <button onClick={() => setShowApplyModal(false)} className="px-4 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg">Đóng</button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

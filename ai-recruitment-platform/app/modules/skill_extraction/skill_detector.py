@@ -11,25 +11,17 @@ class SkillDetector:
 
         for skill in skills:
 
-            normalized=SkillNormalizer.normalize(
-                skill
-            )
+            normalized=SkillNormalizer.normalize(skill)
 
-            confidence=ConfidenceEngine.calculate(
-                normalized
-            )
+            confidence=ConfidenceEngine.calculate(normalized)
 
-            result.append(
-
-                {
-
+            result.append({
                     "original":skill,
 
                     "normalized":normalized,
 
                     "confidence":confidence
                 }
-
             )
 
         return result

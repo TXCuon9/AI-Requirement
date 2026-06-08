@@ -10,29 +10,18 @@ class ScoringService:
 
     @staticmethod
     def score(
-
-
         candidate_profile,
-
         job_data
-
     ):
 
 
         skill_result=RulesEngine.skill_match_score(
-
             candidate_profile["skills"],
-
             job_data["required_skills"]
-
         )
 
 
-        overall=ScoreCalculator.calculate(
-
-            skill_result["score"]
-
-        )
+        overall=ScoreCalculator.calculate(skill_result["score"])
 
 
         return {

@@ -1,7 +1,4 @@
 class BaseProvider:
 
-    async def generate(
-        self,
-        prompt:str
-    ):
+    async def generate(self,prompt:str):
         pass

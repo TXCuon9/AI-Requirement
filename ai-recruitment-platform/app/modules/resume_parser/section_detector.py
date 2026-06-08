@@ -24,7 +24,6 @@ class SectionDetector:
         }
 
         for key, pattern in patterns.items():
-
             match = re.search(
                 pattern,
                 text,

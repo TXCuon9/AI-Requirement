@@ -7,11 +7,7 @@ class VectorBuilder:
 
 
         for skill in profile["skills"]:
-
-            text.append(
-                skill["normalized"]
-            )
-
+            text.append(skill["normalized"])
 
         for edu in profile.get("education", []):
             if isinstance(edu, dict):
@@ -33,5 +29,4 @@ class VectorBuilder:
 
         # Filter out empty strings
         text = [t for t in text if t and t.strip()]
-
         return " ".join(text)

@@ -9,9 +9,7 @@ router=APIRouter()
 
 @router.post("/parse")
 
-async def parse_resume(
-    file:UploadFile
-):
+async def parse_resume(file:UploadFile):
 
     content=await file.read()
 

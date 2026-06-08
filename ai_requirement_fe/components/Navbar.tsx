@@ -118,12 +118,21 @@ export default function Navbar() {
                 </div>
                 <span className="text-sm font-medium">{user?.email}</span>
               </div>
-              <Link
-                href="/dashboard"
-                className="text-sm font-semibold bg-blue-50 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors"
-              >
-                Dashboard
-              </Link>
+              {user?.role === "ADMIN" ? (
+                <Link
+                  href="/admin"
+                  className="text-sm font-semibold bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors shadow-md"
+                >
+                  Admin Panel
+                </Link>
+              ) : (
+                <Link
+                  href="/dashboard"
+                  className="text-sm font-semibold bg-blue-50 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors"
+                >
+                  Bảng điều khiển
+                </Link>
+              )}
               <button
                 onClick={logout}
                 className="text-sm font-medium text-slate-500 hover:text-red-500 transition-colors"

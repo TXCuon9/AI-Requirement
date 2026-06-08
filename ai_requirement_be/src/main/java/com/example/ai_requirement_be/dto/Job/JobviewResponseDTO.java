@@ -4,8 +4,11 @@ package com.example.ai_requirement_be.dto.Job;
 import java.math.BigDecimal;
 
 public class JobviewResponseDTO {
+    private Long id;
+    private String companyName;
     private String title;
     private String description;
+    private String requirements;
     private String responsibilities;
     private BigDecimal salaryMin;
     private BigDecimal salaryMax;
@@ -18,9 +21,12 @@ public class JobviewResponseDTO {
 
     }
 
-    public JobviewResponseDTO(String title, String description, String responsibilities, BigDecimal salaryMin, BigDecimal salaryMax, String location, boolean remote, String jobType, String experienceLevel) {
+    public JobviewResponseDTO(Long id, String companyName, String title, String description, String requirements, String responsibilities, BigDecimal salaryMin, BigDecimal salaryMax, String location, boolean remote, String jobType, String experienceLevel) {
+        this.id = id;
+        this.companyName = companyName;
         this.title = title;
         this.description = description;
+        this.requirements = requirements;
         this.responsibilities = responsibilities;
         this.salaryMin = salaryMin;
         this.salaryMax = salaryMax;
@@ -28,6 +34,22 @@ public class JobviewResponseDTO {
         this.remote = remote;
         this.jobType = jobType;
         this.experienceLevel = experienceLevel;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public String getTitle() {
@@ -44,6 +66,14 @@ public class JobviewResponseDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getRequirements() {
+        return requirements;
+    }
+
+    public void setRequirements(String requirements) {
+        this.requirements = requirements;
     }
 
     public String getResponsibilities() {
@@ -101,5 +131,4 @@ public class JobviewResponseDTO {
     public void setExperienceLevel(String experienceLevel) {
         this.experienceLevel = experienceLevel;
     }
-
 }

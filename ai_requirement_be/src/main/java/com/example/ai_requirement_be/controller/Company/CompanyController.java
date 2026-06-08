@@ -21,6 +21,11 @@ public class CompanyController {
        this.companyService = companyService;
        this.userService = userService;
    }
+   @GetMapping("/profile")
+   public ResponseEntity<UpdateCompanyDTO> getProfile(Principal principal) {
+       return ResponseEntity.ok(companyService.getCompanyProfile(principal.getName()));
+   }
+
    @PutMapping("/profile")
     public ResponseEntity<String> updateProfile(Principal principal , @Valid @RequestBody UpdateCompanyDTO updateCompanyDTO) {
        String email = principal.getName();

@@ -1,10 +1,7 @@
 class RulesEngine:
 
     @staticmethod
-    def skill_match_score(
-        candidate_skills,
-        required_skills
-    ):
+    def skill_match_score(candidate_skills, required_skills):
 
         candidate = {
 
@@ -14,34 +11,15 @@ class RulesEngine:
         }
 
 
-        required = {
-
-            x.lower()
-
-            for x in required_skills
-        }
+        required = {x.lower() for x in required_skills}
 
 
-        matched = candidate.intersection(
-            required
-        )
+        matched = candidate.intersection(required)
 
 
-        score = (
+        score = (len(matched) / len(required)) * 100
 
-            len(matched)
-
-            /
-
-            len(required)
-
-        ) * 100
-
-
-        missing = list(
-
-            required-candidate
-        )
+        missing = list(required-candidate)
 
 
         return {

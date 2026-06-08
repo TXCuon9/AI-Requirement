@@ -30,6 +30,15 @@ public class JobService {
                 .toList();
     }
 
+    public List<JobResponseDTO> getJobsByRecruiterEmail(String recruiterEmail) {
+        Companies companies = getCompanyByRecruiterEmail(recruiterEmail);
+        List<JobDescription> jobs = jobdepRepository.findByCompany_Id(companies.getId());
+        
+        return jobs.stream()
+                .map(job -> new JobResponseDTO(job))
+                .toList();
+    }
+
     @Transactional
     public void createJob(SaveJobDTO saveJobDTO , String recruiterEmail) {
         Companies companies = getCompanyByRecruiterEmail(recruiterEmail);

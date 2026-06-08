@@ -36,8 +36,24 @@ public class CompanyService {
      companies.setCompanySize(updateCompanyDTO.getCompanySize());
      companies.setWebsite(updateCompanyDTO.getWebsite());
      companies.setLogoUrl(updateCompanyDTO.getLogoUrl());
-     companies.setLogoUrl(updateCompanyDTO.getLogoUrl());
      companies.setLocation(updateCompanyDTO.getLocation());
+ }
+
+ public UpdateCompanyDTO getCompanyProfile(String email) {
+     User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản doanh nghiệp!"));
+     Companies companies = user.getCompanies();
+     if(companies == null) {
+         throw new RuntimeException("Hồ sơ doanh nghiệp không tồn tại trên hệ thống!");
+     }
+     UpdateCompanyDTO dto = new UpdateCompanyDTO();
+     dto.setName(companies.getName());
+     dto.setDescription(companies.getDescription());
+     dto.setIndustry(companies.getIndustry());
+     dto.setCompanySize(companies.getCompanySize());
+     dto.setWebsite(companies.getWebsite());
+     dto.setLogoUrl(companies.getLogoUrl());
+     dto.setLocation(companies.getLocation());
+     return dto;
  }
   public void approveRecruiter(Long userId) {
      User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản yêu cầu"));

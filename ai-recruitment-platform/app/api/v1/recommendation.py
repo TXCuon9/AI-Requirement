@@ -6,12 +6,6 @@ router=APIRouter()
 
 @router.post("/similar")
 
-async def similar(
-    vector:list[float]
-):
-
-    result=ChromaService.search(
-        vector
-    )
-
+async def similar(vector:list[float]):
+    result=ChromaService.search(vector)
     return result
