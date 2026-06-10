@@ -6,7 +6,6 @@ import com.example.ai_requirement_be.service.Recruiter.JobService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
 import java.util.List;
 

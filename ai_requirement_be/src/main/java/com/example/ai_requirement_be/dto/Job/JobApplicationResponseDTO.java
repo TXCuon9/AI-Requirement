@@ -11,13 +11,14 @@ public class JobApplicationResponseDTO {
     private String resumeUrl; // Đường dẫn file CV của ứng viên
     private String status;    // Trạng thái (APPLIED, REVIEWING...)
     private LocalDateTime appliedAt;
+    private String companyName;
 
     public JobApplicationResponseDTO() {
     }
 
     public JobApplicationResponseDTO(Long applicationId, Long candidateId, String candidateName,
                                      String candidateEmail, Long resumeId, String resumeUrl,
-                                     String status, LocalDateTime appliedAt) {
+                                     String status, LocalDateTime appliedAt, String companyName) {
         this.applicationId = applicationId;
         this.candidateId = candidateId;
         this.candidateName = candidateName;
@@ -26,6 +27,7 @@ public class JobApplicationResponseDTO {
         this.resumeUrl = resumeUrl;
         this.status = status;
         this.appliedAt = appliedAt;
+        this.companyName = companyName;
     }
 
     public Long getApplicationId() { return applicationId; }
@@ -51,4 +53,7 @@ public class JobApplicationResponseDTO {
 
     public LocalDateTime getAppliedAt() { return appliedAt; }
     public void setAppliedAt(LocalDateTime appliedAt) { this.appliedAt = appliedAt; }
+
+    public String getCompanyName() { return companyName; }
+    public void setCompanyName(String companyName) { this.companyName = companyName; }
 }

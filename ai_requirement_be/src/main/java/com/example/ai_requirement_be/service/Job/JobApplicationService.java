@@ -126,13 +126,62 @@ public class JobApplicationService {
                 responseDTO.setCandidateEmail(updatedApp.getCandidate().getUser().getEmail());
             }
         }
+        if (updatedApp.getJobDescription() != null && updatedApp.getJobDescription().getCompany() != null) {
+            responseDTO.setCompanyName(updatedApp.getJobDescription().getCompany().getName());
+        }
         if (updatedApp.getResume() != null) {
             responseDTO.setResumeId(updatedApp.getResume().getId());
             responseDTO.setResumeUrl(updatedApp.getResume().getFileUrl());
         }
 
         return responseDTO;
+    }
 
+    @Transactional
+    public JobApplicationResponseDTO changeToRejectedStatus(Long applicationId, String recruiterEmail) {
+        User currentUser = userRepository.findByEmail(recruiterEmail).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tài khoản Nhà tuyển dụng!"));
+        RecruiterProfile recruiterProfile = recruiterProfileRepository.findByUserId(currentUser.getId()).orElseThrow(() -> new IllegalArgumentException("Hồ sơ nhà tuyển dụng của bạn chưa được khởi tạo!"));
+        if (recruiterProfile.getCompany() == null) {
+            throw new IllegalArgumentException("Tài khoản của bạn chưa liên kết với công ty nào để duyệt CV!");
+        }
+        Long recruiterCompanyId = recruiterProfile.getCompany().getId();
+        JobApplication jobApplication = jobApplicationRepository.findById(applicationId).orElseThrow(() -> new IllegalArgumentException("Đơn ứng tuyển không tồn tại"));
+        if (jobApplication.getJobDescription() == null || jobApplication.getJobDescription().getCompany() == null) {
+            throw new IllegalArgumentException("Dữ liệu đơn tuyển dụng bị lỗi hệ thống (Không tìm thấy công ty sở hữu bài đăng)!");
+        }
+        Long jobCompanyId = jobApplication.getJobDescription().getCompany().getId();
+
+        if (!recruiterProfile.getCompany().getId().equals(jobCompanyId)) {
+            throw new IllegalArgumentException("Từ chối thao tác! Bạn không có quyền từ chối hồ sơ nộp vào công ty khác.");
+        }
+        if (jobApplication.getStatus() == JobApplicationStatusEnum.REJECTED) {
+            throw new IllegalArgumentException("Đơn ứng tuyển này đã ở trạng thái từ chối! Không thể thao tác thêm.");
+        }
+        if (jobApplication.getStatus() == JobApplicationStatusEnum.INTERVIEW) {
+            throw new IllegalArgumentException("Không thể từ chối vì đơn ứng tuyển này đã được mời phỏng vấn trước đó!");
+        }
+        jobApplication.setStatus(JobApplicationStatusEnum.REJECTED);
+        JobApplication updatedApp = jobApplicationRepository.save(jobApplication);
+
+        JobApplicationResponseDTO responseDTO = new JobApplicationResponseDTO();
+        responseDTO.setApplicationId(updatedApp.getId());
+        responseDTO.setStatus(updatedApp.getStatus().name()); // Sẽ hiển thị là "REJECTED"
+        responseDTO.setAppliedAt(updatedApp.getAppliedAt());
+        if (updatedApp.getCandidate() != null) {
+            responseDTO.setCandidateId(updatedApp.getCandidate().getId());
+            responseDTO.setCandidateName(updatedApp.getCandidate().getFullName());
+            if(updatedApp.getCandidate().getUser() != null) {
+                responseDTO.setCandidateEmail(updatedApp.getCandidate().getUser().getEmail());
+            }
+        }
+        if (updatedApp.getJobDescription() != null && updatedApp.getJobDescription().getCompany() != null) {
+            responseDTO.setCompanyName(updatedApp.getJobDescription().getCompany().getName());
+        }
+        if (updatedApp.getResume() != null) {
+            responseDTO.setResumeId(updatedApp.getResume().getId());
+            responseDTO.setResumeUrl(updatedApp.getResume().getFileUrl());
+        }
+        return responseDTO;
     }
 
     // Xem CV của các ứng viên đã apply

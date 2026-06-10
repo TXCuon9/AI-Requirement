@@ -33,4 +33,29 @@ public class EmailService {
         );
         mailSender.send(message);
     }
+
+    public void sendInterviewRejectionEmail(
+            String toEmail,
+            String candidateName,
+            String companyName
+    ) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(toEmail);
+        message.setSubject("Thông báo kết quả phỏng vấn" + companyName);
+        message.setText(
+                "Chào " + candidateName + ",\n\n"
+                        + "Cảm ơn bạn đã quan tâm và dành thời gian ứng tuyển, cũng như tham gia phỏng vấn tại "
+                        + companyName + ".\n\n"
+                        + "Chúng tôi đánh giá rất cao năng lực và kinh nghiệm của bạn. Tuy nhiên, sau khi cân nhắc kỹ lưỡng, "
+                        + "chúng tôi rất tiếc phải thông báo rằng ở thời điểm hiện tại, chúng tôi đã quyết định chọn một ứng viên khác "
+                        + "phù hợp hơn với định hướng của vị trí này.\n\n"
+                        + "Chúng tôi sẽ tiếp tục lưu trữ hồ sơ của bạn trong hệ thống và rất mong có cơ hội được hợp tác "
+                        + "với bạn ở những cơ hội nghề nghiệp khác trong tương lai.\n\n"
+                        + "Chúc bạn nhiều sức khỏe và luôn thành công trên con đường sự nghiệp.\n\n"
+                        + "Trân trọng,\n"
+                        + companyName
+        );
+        mailSender.send(message);
+    }
+
 }

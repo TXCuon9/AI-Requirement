@@ -30,7 +30,7 @@ public class DataSeeder {
             } catch (Exception e) {
             }
 
-            String adminEmail = "admin@gmail.com";
+            String adminEmail = "admin2@gmail.com";
             if (!userRepository.existsByEmail(adminEmail)) {
                 User admin = new User(
                         adminEmail,
