@@ -162,7 +162,21 @@ public class JobApplicationService {
             // Thông tin cơ bản Ứng viên
             if (app.getCandidate() != null) {
                 dto.setCandidateId(app.getCandidate().getId());
-                dto.setCandidateName(app.getCandidate().getFullName());
+                
+                String name = app.getCandidate().getFullName();
+                if ((name == null || name.trim().isEmpty()) && app.getResume() != null) {
+                    name = app.getResume().getFullName();
+                }
+                if ((name == null || name.trim().isEmpty()) && app.getCandidate().getUser() != null) {
+                    String email = app.getCandidate().getUser().getEmail();
+                    if(email != null && email.contains("@")) {
+                        name = email.substring(0, email.indexOf("@"));
+                    } else {
+                        name = email;
+                    }
+                }
+                dto.setCandidateName(name);
+
                 if (app.getCandidate().getUser() != null) {
                     dto.setCandidateEmail(app.getCandidate().getUser().getEmail());
                 }
@@ -171,6 +185,7 @@ public class JobApplicationService {
             if (app.getResume() != null) {
                 dto.setResumeId(app.getResume().getId());
                 dto.setResumeUrl(app.getResume().getFileUrl());
+                dto.setResumeTitle(app.getResume().getCvName());
             }
 
             dtoList.add(dto);
@@ -178,4 +193,27 @@ public class JobApplicationService {
         return dtoList;
     }
 
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    public Resume getCandidateResumeForRecruiter(Long resumeId, String recruiterEmail) {
+        User currentUser = userRepository.findByEmail(recruiterEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tài khoản Nhà tuyển dụng!"));
+
+        Long companyId;
+        RecruiterProfile recruiterProfile = recruiterProfileRepository.findByUserId(currentUser.getId()).orElse(null);
+
+        if (recruiterProfile != null && recruiterProfile.getCompany() != null) {
+            companyId = recruiterProfile.getCompany().getId();
+        } else if (currentUser.getCompanies() != null) {
+            companyId = currentUser.getCompanies().getId();
+        } else {
+            throw new IllegalArgumentException("Người dùng chưa liên kết với công ty nào.");
+        }
+
+        boolean hasAccess = jobApplicationRepository.existsByResumeIdAndJobDescriptionCompanyId(resumeId, companyId);
+        if (!hasAccess) {
+            throw new IllegalArgumentException("Bạn không có quyền xem CV này!");
+        }
+
+        return resumeRepository.findById(resumeId).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy CV!"));
+    }
 }

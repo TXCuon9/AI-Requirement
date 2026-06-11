@@ -44,6 +44,7 @@ public class JobViewService {
         jobviewResponseDTO.setId(jobDescription.getId());
         if (jobDescription.getCompany() != null) {
             jobviewResponseDTO.setCompanyName(jobDescription.getCompany().getName());
+            jobviewResponseDTO.setCompanyLogo(jobDescription.getCompany().getLogoUrl());
         }
         jobviewResponseDTO.setTitle(jobDescription.getTitle());
         jobviewResponseDTO.setDescription(jobDescription.getDescription());
@@ -52,6 +53,7 @@ public class JobViewService {
         jobviewResponseDTO.setLocation(jobDescription.getLocation());
         jobviewResponseDTO.setSalaryMax(jobDescription.getSalaryMax());
         jobviewResponseDTO.setSalaryMin(jobDescription.getSalaryMin());
+        jobviewResponseDTO.setCurrency(jobDescription.getCurrency());
         jobviewResponseDTO.setRemote(jobDescription.getRemote());
         jobviewResponseDTO.setJobType(jobDescription.getJobType() != null ? jobDescription.getJobType().name() : null);
         jobviewResponseDTO.setExperienceLevel(jobDescription.getExperienceLevel() != null ? jobDescription.getExperienceLevel().name() : null);

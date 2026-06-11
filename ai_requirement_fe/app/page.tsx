@@ -1,10 +1,33 @@
 "use client";
 
 import Link from "next/link";
-import { Search, MapPin, BriefcaseBusiness, ChevronDown, Heart, Building2, ChevronRight, Zap } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Search, MapPin, BriefcaseBusiness, ChevronDown, Heart, Building2, ChevronRight, Zap, Loader2 } from "lucide-react";
 import Navbar from "../components/Navbar";
+import { useState, useEffect } from "react";
+import { fetchApi } from "../lib/api";
+import { JobResponse } from "../lib/types/job";
 
 export default function Home() {
+  const router = useRouter();
+  const [jobs, setJobs] = useState<JobResponse[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchApi("/jobs")
+      .then((data) => setJobs(data ? data.slice(0, 6) : []))
+      .catch((err) => console.error("Failed to fetch jobs:", err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const formatSalary = (min: number | null, max: number | null, currency: string) => {
+    const cur = currency || "VNĐ";
+    if (!min && !max) return "Thỏa thuận";
+    if (min && max) return `${min} - ${max} ${cur}`;
+    if (min) return `Từ ${min} ${cur}`;
+    return `Đến ${max} ${cur}`;
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 font-sans text-slate-900">
       <Navbar />
@@ -110,45 +133,58 @@ export default function Home() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {/* Dummy Job Cards */}
-              {[
-                { title: "Senior Java Developer", company: "Tech Company 1", salary: "20 - 40 triệu", location: "Hà Nội" },
-                { title: "ReactJS Frontend Engineer", company: "Global Tech", salary: "Thỏa thuận", location: "TP. Hồ Chí Minh" },
-                { title: "Product Manager (B2B SaaS)", company: "Innovate JSC", salary: "1500 - 2500 USD", location: "Hà Nội" },
-                { title: "DevOps Engineer (AWS/Kubernetes)", company: "Cloud Services VN", salary: "Up to 50M", location: "Đà Nẵng" },
-                { title: "UI/UX Designer", company: "Creative Studio", salary: "15 - 25 triệu", location: "Hà Nội" },
-                { title: "AI/Machine Learning Engineer", company: "Future AI", salary: "2000 - 4000 USD", location: "TP. Hồ Chí Minh" },
-              ].map((job, index) => (
-                <div key={index} className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-900/5 transition-all group flex flex-col h-full cursor-pointer relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-1 h-full bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="size-16 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
-                      <Building2 className="size-8 text-slate-300" />
+              {loading ? (
+                <div className="col-span-full flex justify-center py-10">
+                  <Loader2 className="size-8 text-blue-600 animate-spin" />
+                </div>
+              ) : jobs.length === 0 ? (
+                <div className="col-span-full text-center py-10 text-slate-500">
+                  Chưa có công việc nào.
+                </div>
+              ) : (
+                jobs.map((job) => (
+                  <div 
+                    key={job.id} 
+                    onClick={() => router.push(`/jobs/${job.id}`)}
+                    className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-900/5 transition-all group flex flex-col h-full cursor-pointer relative overflow-hidden"
+                  >
+                    <div className="absolute top-0 left-0 w-1 h-full bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="size-16 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 overflow-hidden">
+                        {job.companyLogo ? (
+                           <img src={job.companyLogo} alt={job.companyName || "Logo"} className="w-full h-full object-cover" />
+                        ) : (
+                           <Building2 className="size-8 text-slate-300" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-slate-900 text-lg truncate group-hover:text-blue-600 transition-colors" title={job.title}>
+                          {job.title}
+                        </h3>
+                        <p className="text-slate-600 text-sm truncate mt-0.5">{job.companyName || "N/A"}</p>
+                      </div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-slate-900 text-lg truncate group-hover:text-blue-600 transition-colors" title={job.title}>
-                        {job.title}
-                      </h3>
-                      <p className="text-slate-600 text-sm truncate mt-0.5">{job.company}</p>
+                    
+                    <div className="mt-auto pt-4 flex items-center justify-between border-t border-slate-100">
+                      <div className="flex flex-col gap-1.5">
+                        <span className="inline-block px-2.5 py-1 bg-red-50 text-red-600 text-sm font-semibold rounded-md max-w-fit">
+                          {formatSalary(job.salaryMin, job.salaryMax, job.currency)}
+                        </span>
+                        <span className="text-sm text-slate-500 flex items-center gap-1">
+                          <MapPin className="size-3.5" /> {job.location}
+                        </span>
                     </div>
-                  </div>
-                  
-                  <div className="mt-auto pt-4 flex items-center justify-between border-t border-slate-100">
-                    <div className="flex flex-col gap-1.5">
-                      <span className="inline-block px-2.5 py-1 bg-red-50 text-red-600 text-sm font-semibold rounded-md max-w-fit">
-                        {job.salary}
-                      </span>
-                      <span className="text-sm text-slate-500 flex items-center gap-1">
-                        <MapPin className="size-3.5" /> {job.location}
-                      </span>
-                    </div>
-                    <button className="size-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 transition-all">
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); /* TODO: Implement save logic on homepage */ }}
+                      className="size-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 transition-all z-10"
+                    >
                       <Heart className="size-5" />
                     </button>
                   </div>
                 </div>
-              ))}
+                ))
+              )}
             </div>
 
             <div className="mt-10 text-center">

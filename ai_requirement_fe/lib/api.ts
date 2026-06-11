@@ -26,7 +26,7 @@ export const fetchApi = async (endpoint: string, options: RequestInit = {}) => {
   });
 
   if (!response.ok) {
-    if (response.status === 401 || response.status === 403) {
+    if (response.status === 401) {
       if (typeof window !== "undefined") {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");

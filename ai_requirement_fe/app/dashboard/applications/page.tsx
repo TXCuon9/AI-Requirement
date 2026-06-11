@@ -52,6 +52,17 @@ export default function ApplicationsManagementPage() {
     }
   };
 
+  const getFullUrl = (url: string | undefined, resumeId: number) => {
+    if (!url) return "#";
+    if (url.startsWith("http")) return url;
+    if (url.startsWith("builder://")) {
+      const template = url.replace("builder://", "");
+      return `/cv/builder?resumeId=${resumeId}&template=${template}&readonly=true`;
+    }
+    const baseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api').replace('/api', '');
+    return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`;
+  };
+
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -104,7 +115,7 @@ export default function ApplicationsManagementPage() {
                     </td>
                     <td className="p-4">
                       <a 
-                        href={app.resumeUrl} 
+                        href={getFullUrl(app.resumeUrl, app.resumeId)} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline"

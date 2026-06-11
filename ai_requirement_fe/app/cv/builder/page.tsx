@@ -12,11 +12,13 @@ export default function CvBuilderPage() {
   const templateId = searchParams.get("template") || "professional";
   const resumeIdParam = searchParams.get("resumeId");
   
-  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+  const isReadonly = searchParams.get("readonly") === "true";
+  
+  const [isLoadingProfile, setIsLoadingProfile] = useState(!isReadonly);
   const [profileData, setProfileData] = useState<any>(null);
   const [existingResume, setExistingResume] = useState<any>(null);
   
-  const [showImportModal, setShowImportModal] = useState(!resumeIdParam);
+  const [showImportModal, setShowImportModal] = useState(!resumeIdParam && !isReadonly);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
@@ -44,16 +46,21 @@ export default function CvBuilderPage() {
 
   useEffect(() => {
     Promise.all([
-      fetchApi("/candidate/profile").catch(() => null),
-      resumeIdParam ? fetchApi("/resume").catch(() => []) : Promise.resolve(null)
+      !isReadonly ? fetchApi("/candidate/profile").catch(() => null) : Promise.resolve(null),
+      resumeIdParam ? fetchApi(isReadonly ? `/recruiter/resume/${resumeIdParam}` : `/resume/${resumeIdParam}`).catch(() => null) : Promise.resolve(null)
     ]).then(([profileRes, resumesRes]) => {
       if (profileRes) setProfileData(profileRes);
       
+      let found = null;
       if (resumesRes && Array.isArray(resumesRes)) {
-        const found = resumesRes.find((r: any) => r.id.toString() === resumeIdParam);
-        if (found) {
-          setExistingResume(found);
-          setFormData({
+        found = resumesRes.find((r: any) => r.id.toString() === resumeIdParam);
+      } else if (resumesRes && !Array.isArray(resumesRes)) {
+        found = resumesRes;
+      }
+
+      if (found) {
+        setExistingResume(found);
+        setFormData({
             cvName: found.cvName || "CV Của Tôi",
             fullName: found.fullName || "",
             targetPosition: found.targetPosition || "",
@@ -80,7 +87,6 @@ export default function CvBuilderPage() {
             educationItems: found.educationItemDTOS || [],
             projectItems: found.projectItems || []
           });
-        }
       }
       setIsLoadingProfile(false);
     });
@@ -249,7 +255,7 @@ export default function CvBuilderPage() {
     }
   };
 
-  if (isLoadingProfile) {
+  if (isLoadingProfile && !isReadonly) {
     return (
       <div className="flex flex-col min-h-screen bg-[#F4F5F5] items-center justify-center">
         <Loader2 className="size-10 text-blue-600 animate-spin mb-4" />
@@ -288,15 +294,23 @@ export default function CvBuilderPage() {
       {/* Top Toolbar (Hidden in Print) */}
       <div className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm print:hidden">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/templates" className="flex items-center gap-2 text-slate-600 hover:text-blue-600 font-medium transition-colors">
-            <ArrowLeft className="size-4" /> Trở lại danh sách mẫu
-          </Link>
+          {!isReadonly ? (
+            <Link href="/templates" className="flex items-center gap-2 text-slate-600 hover:text-blue-600 font-medium transition-colors">
+              <ArrowLeft className="size-4" /> Trở lại danh sách mẫu
+            </Link>
+          ) : (
+            <button onClick={() => window.close()} className="flex items-center gap-2 text-slate-600 hover:text-blue-600 font-medium transition-colors">
+              <ArrowLeft className="size-4" /> Đóng
+            </button>
+          )}
           
           <div className="flex items-center gap-4">
              {saveSuccess && <span className="text-emerald-600 text-sm font-medium flex items-center gap-1"><CheckCircle2 className="size-4" /> Đã lưu thành công!</span>}
-             <button onClick={handleSaveCV} disabled={isSaving} className="bg-blue-50 text-blue-600 px-5 py-2 rounded-lg font-semibold hover:bg-blue-100 transition-colors flex items-center gap-2">
-               {isSaving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />} Lưu CV
-             </button>
+             {!isReadonly && (
+               <button onClick={handleSaveCV} disabled={isSaving} className="bg-blue-50 text-blue-600 px-5 py-2 rounded-lg font-semibold hover:bg-blue-100 transition-colors flex items-center gap-2">
+                 {isSaving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />} Lưu CV
+               </button>
+             )}
              <button onClick={handlePrint} className="bg-emerald-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-emerald-700 transition-colors flex items-center gap-2 shadow-sm">
                <Printer className="size-4" /> Tải xuống PDF
              </button>
@@ -306,7 +320,8 @@ export default function CvBuilderPage() {
 
       <div className="flex-1 flex overflow-hidden print:overflow-visible">
         
-        {/* LEFT: Form Input Sidebar (Hidden in Print) */}
+        {/* LEFT: Form Input Sidebar (Hidden in Print and Readonly mode) */}
+        {!isReadonly && (
         <div className="w-[450px] shrink-0 bg-white border-r border-slate-200 overflow-y-auto p-6 print:hidden">
            <h3 className="text-lg font-bold text-slate-900 mb-6 sticky top-0 bg-white py-2 z-10 border-b border-slate-100">Chỉnh sửa nội dung</h3>
            
@@ -479,6 +494,7 @@ export default function CvBuilderPage() {
 
            </div>
         </div>
+        )}
 
         {/* RIGHT: Live Preview Area */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-8 flex justify-center bg-slate-300/30 print:p-0 print:block print:bg-white">

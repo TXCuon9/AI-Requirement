@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { fetchApi } from "../../../lib/api";
 import { JobResponse } from "../../../lib/types/job";
-import { Loader2, Plus, BriefcaseBusiness, MapPin, DollarSign, Clock } from "lucide-react";
+import { Loader2, Plus, BriefcaseBusiness, MapPin, DollarSign, Clock, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { formatSalaryRange } from "../../../lib/utils";
 
 export default function JobsManagementPage() {
   const [jobs, setJobs] = useState<JobResponse[]>([]);
@@ -25,6 +26,17 @@ export default function JobsManagementPage() {
   useEffect(() => {
     loadJobs();
   }, []);
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("Bạn có chắc chắn muốn xóa tin tuyển dụng này?")) return;
+    try {
+      await fetchApi(`/recruiter/${id}`, { method: "DELETE" });
+      setJobs(jobs.filter(job => job.id !== id));
+      alert("Xóa tin tuyển dụng thành công!");
+    } catch (error: any) {
+      alert("Lỗi khi xóa: " + (error.message || "Unknown error"));
+    }
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -70,6 +82,7 @@ export default function JobsManagementPage() {
                   <th className="p-4">Mức lương</th>
                   <th className="p-4">Ngày đăng</th>
                   <th className="p-4 pr-6 text-right">Trạng thái</th>
+                  <th className="p-4 pr-6 text-right">Thao tác</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -89,7 +102,7 @@ export default function JobsManagementPage() {
                     <td className="p-4">
                       <div className="text-sm font-semibold text-emerald-600 flex items-center gap-1">
                         <DollarSign className="size-4" /> 
-                        {job.salaryMin} - {job.salaryMax}
+                        {formatSalaryRange(job.salaryMin, job.salaryMax, job.currency)}
                       </div>
                     </td>
                     <td className="p-4 text-sm text-slate-600">
@@ -103,6 +116,24 @@ export default function JobsManagementPage() {
                       <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                         Đang mở
                       </span>
+                    </td>
+                    <td className="p-4 pr-6 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <Link 
+                          href={`/dashboard/jobs/edit/${job.id}`}
+                          className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          title="Sửa"
+                        >
+                          <Pencil className="size-4" />
+                        </Link>
+                        <button 
+                          onClick={() => handleDelete(job.id)}
+                          className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Xóa"
+                        >
+                          <Trash2 className="size-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

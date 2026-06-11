@@ -25,6 +25,14 @@ public class UserResponseDTO {
         this.updatedAt = updatedAt;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -60,6 +68,8 @@ public class UserResponseDTO {
     public UserStatus getStatus() {
         return status;
     }
-    public void setStatus(UserStatus status) {}
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
 
 }

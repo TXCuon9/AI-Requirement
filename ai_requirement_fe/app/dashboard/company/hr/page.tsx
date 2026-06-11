@@ -5,7 +5,7 @@ import { fetchApi } from "../../../../lib/api";
 import { Loader2, Plus, UserPlus, Users, AlertCircle, Ban } from "lucide-react";
 
 interface HRUser {
-  id: number;
+  userId: number;
   email: string;
   role: string;
   status: string;
@@ -114,7 +114,7 @@ export default function HRManagementPage() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {hrList.map((hr) => (
-                  <tr key={hr.id} className="hover:bg-slate-50/50 transition-colors">
+                  <tr key={hr.userId} className="hover:bg-slate-50/50 transition-colors">
                     <td className="p-4 pl-6 font-medium text-slate-900">{hr.email}</td>
                     <td className="p-4 text-sm text-slate-600">{new Date(hr.createdAt).toLocaleDateString('vi-VN')}</td>
                     <td className="p-4">
@@ -126,12 +126,12 @@ export default function HRManagementPage() {
                     </td>
                     <td className="p-4 pr-6 text-right">
                       <button
-                        onClick={() => handleBan(hr.id)}
-                        disabled={banningId === hr.id || hr.status === 'BANNED'}
+                        onClick={() => handleBan(hr.userId)}
+                        disabled={banningId === hr.userId || hr.status === 'BANNED'}
                         className="inline-flex items-center justify-center p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
                         title="Khóa tài khoản"
                       >
-                        {banningId === hr.id ? <Loader2 className="size-5 animate-spin" /> : <Ban className="size-5" />}
+                        {banningId === hr.userId ? <Loader2 className="size-5 animate-spin" /> : <Ban className="size-5" />}
                       </button>
                     </td>
                   </tr>

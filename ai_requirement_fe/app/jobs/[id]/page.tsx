@@ -6,6 +6,7 @@ import { MapPin, BriefcaseBusiness, Heart, Building2, Send, DollarSign, Users, C
 import Navbar from "../../../components/Navbar";
 import { useParams } from "next/navigation";
 import { fetchApi } from "../../../lib/api";
+import { formatSalaryRange } from "../../../lib/utils";
 import { JobDetailResponse } from "../../../lib/types/job";
 
 export default function JobDetailPage() {
@@ -88,13 +89,6 @@ export default function JobDetailPage() {
     }
   };
 
-  const formatSalary = (min: number | null, max: number | null) => {
-    if (!min && !max) return "Thỏa thuận";
-    if (min && max) return `${min} - ${max} triệu`;
-    if (min) return `Từ ${min} triệu`;
-    return `Đến ${max} triệu`;
-  };
-
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen bg-slate-50">
@@ -138,7 +132,7 @@ export default function JobDetailPage() {
 
       {/* Breadcrumbs */}
       <div className="bg-slate-50 py-3 border-b border-slate-200">
-        <div className="container mx-auto px-4 flex items-center text-sm text-slate-500">
+        <div className="container max-w-6xl mx-auto px-4 flex items-center text-sm text-slate-500">
           <Link href="/" className="hover:text-blue-600">Trang chủ</Link>
           <ChevronRight className="size-4 mx-1" />
           <Link href="/jobs" className="hover:text-blue-600">Việc làm IT</Link>
@@ -147,7 +141,7 @@ export default function JobDetailPage() {
         </div>
       </div>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container max-w-6xl mx-auto px-4 py-8">
         
         {/* Top Header Card */}
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-6 relative overflow-hidden">
@@ -155,8 +149,12 @@ export default function JobDetailPage() {
           
           <div className="flex flex-col md:flex-row gap-6 mt-2">
             {/* Company Logo */}
-            <div className="size-24 rounded-2xl bg-white border-2 border-slate-100 flex items-center justify-center shrink-0 shadow-sm p-2">
-              <Building2 className="size-12 text-blue-200" />
+            <div className="size-24 rounded-2xl bg-white border-2 border-slate-100 flex items-center justify-center shrink-0 shadow-sm p-2 overflow-hidden">
+              {job.companyLogo ? (
+                 <img src={job.companyLogo} alt={job.companyName || "Logo"} className="w-full h-full object-cover" />
+              ) : (
+                 <Building2 className="size-12 text-blue-200" />
+              )}
             </div>
 
             <div className="flex-1">
@@ -172,7 +170,7 @@ export default function JobDetailPage() {
                   </div>
                   <div>
                     <div className="text-xs text-slate-500 font-medium">Mức lương</div>
-                    <div className="font-semibold text-slate-900">{formatSalary(job.salaryMin, job.salaryMax)}</div>
+                    <div className="font-semibold text-slate-900">{formatSalaryRange(job.salaryMin, job.salaryMax, job.currency)}</div>
                   </div>
                 </div>
                 <div className="w-px h-10 bg-slate-200 hidden md:block"></div>
@@ -231,21 +229,21 @@ export default function JobDetailPage() {
                 {job.description && (
                   <div>
                     <h3 className="text-lg font-semibold text-slate-900 mb-2">Mô tả công việc</h3>
-                    <div className="whitespace-pre-line">{job.description}</div>
+                    <div className="whitespace-pre-line break-words">{job.description}</div>
                   </div>
                 )}
                 
                 {job.requirements && (
                   <div>
                     <h3 className="text-lg font-semibold text-slate-900 mb-2">Yêu cầu ứng viên</h3>
-                    <div className="whitespace-pre-line">{job.requirements}</div>
+                    <div className="whitespace-pre-line break-words">{job.requirements}</div>
                   </div>
                 )}
                 
                 {job.responsibilities && (
                   <div>
                     <h3 className="text-lg font-semibold text-slate-900 mb-2">Trách nhiệm / Quyền lợi</h3>
-                    <div className="whitespace-pre-line">{job.responsibilities}</div>
+                    <div className="whitespace-pre-line break-words">{job.responsibilities}</div>
                   </div>
                 )}
               </div>
@@ -265,8 +263,12 @@ export default function JobDetailPage() {
             {/* Company Summary */}
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
               <div className="flex items-center gap-4 mb-6">
-                <div className="size-16 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
-                  <Building2 className="size-8 text-blue-200" />
+                <div className="size-16 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 overflow-hidden">
+                  {job.companyLogo ? (
+                     <img src={job.companyLogo} alt={job.companyName || "Logo"} className="w-full h-full object-cover" />
+                  ) : (
+                     <Building2 className="size-8 text-blue-200" />
+                  )}
                 </div>
                 <h2 className="text-lg font-bold text-slate-900 leading-tight">{job.companyName || "Công ty bảo mật"}</h2>
               </div>
