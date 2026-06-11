@@ -1,14 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { fetchApi } from "../../../../lib/api";
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { fetchApi } from "../../../../../lib/api";
 import { Save, Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
-export default function CreateJobPage() {
+export default function EditJobPage() {
+  const params = useParams();
+  const id = params.id as string;
   const router = useRouter();
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
   
   const [formData, setFormData] = useState({
     title: "",
@@ -24,6 +27,31 @@ export default function CreateJobPage() {
     experienceLevel: "JUNIOR",
     expiredAt: ""
   });
+
+  useEffect(() => {
+    if (!id) return;
+    fetchApi(`/recruiter/${id}`)
+      .then((data) => {
+        if (data) {
+          setFormData({
+            title: data.title || "",
+            description: data.description || "",
+            requirement: data.requirements || "",
+            responsibilities: data.responsibilities || "",
+            salaryMin: data.salaryMin ? data.salaryMin.toString() : "",
+            salaryMax: data.salaryMax ? data.salaryMax.toString() : "",
+            currency: data.currency || "USD",
+            location: data.location || "",
+            remote: data.remote || false,
+            jobType: data.jobType || "FULL_TIME",
+            experienceLevel: data.experienceLevel || "JUNIOR",
+            expiredAt: data.expiredAt ? new Date(data.expiredAt).toISOString().substring(0, 16) : ""
+          });
+        }
+      })
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  }, [id]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -49,11 +77,11 @@ export default function CreateJobPage() {
     };
 
     try {
-      await fetchApi("/recruiter/create", {
-        method: "POST",
+      await fetchApi(`/recruiter/${id}`, {
+        method: "PUT",
         body: JSON.stringify(submitData)
       });
-      alert("Đăng tin tuyển dụng thành công!");
+      alert("Cập nhật tin tuyển dụng thành công!");
       router.push("/dashboard/jobs");
     } catch (error: any) {
       alert("Lỗi khi đăng tin: " + (error.message || "Unknown error"));
@@ -69,8 +97,8 @@ export default function CreateJobPage() {
           <ArrowLeft className="size-5 text-slate-600" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Đăng tin tuyển dụng mới</h1>
-          <p className="text-slate-500 mt-1">Điền đầy đủ thông tin để tìm kiếm ứng viên phù hợp nhất.</p>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Chỉnh sửa tin tuyển dụng</h1>
+          <p className="text-slate-500 mt-1">Cập nhật thông tin để tìm kiếm ứng viên phù hợp nhất.</p>
         </div>
       </div>
 
@@ -249,11 +277,11 @@ export default function CreateJobPage() {
             </Link>
             <button
               type="submit"
-              disabled={saving}
+              disabled={saving || loading}
               className="inline-flex items-center justify-center gap-2 px-8 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-md shadow-blue-600/20 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {saving ? <Loader2 className="size-5 animate-spin" /> : <Save className="size-5" />}
-              {saving ? "Đang xử lý..." : "Đăng tin ngay"}
+              {saving ? "Đang xử lý..." : "Cập nhật tin"}
             </button>
           </div>
         </div>

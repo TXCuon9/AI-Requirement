@@ -11,12 +11,14 @@ import java.time.LocalDateTime;
 public class JobResponseDTO {
     private Long id;
     private String companyName; // Trả thêm tên công ty ra ngoài
+    private String companyLogo; // Thêm logo
     private String title;
     private String description;
     private String requirements;
     private String responsibilities;
     private BigDecimal salaryMin;
     private BigDecimal salaryMax;
+    private String currency;
     private String location;
     private Boolean remote;
     private JobType jobType;
@@ -29,6 +31,7 @@ public class JobResponseDTO {
         this.id = job.getId();
         if (job.getCompany() != null) {
             this.companyName = job.getCompany().getName();
+            this.companyLogo = job.getCompany().getLogoUrl();
         }
         this.title = job.getTitle();
         this.description = job.getDescription();
@@ -36,6 +39,7 @@ public class JobResponseDTO {
         this.responsibilities = job.getResponsibilities();
         this.salaryMin = job.getSalaryMin();
         this.salaryMax = job.getSalaryMax();
+        this.currency = job.getCurrency();
         this.location = job.getLocation();
         this.remote = job.getRemote();
         this.jobType = job.getJobType();
@@ -47,12 +51,14 @@ public class JobResponseDTO {
 
     public Long getId() { return id; }
     public String getCompanyName() { return companyName; }
+    public String getCompanyLogo() { return companyLogo; }
     public String getTitle() { return title; }
     public String getDescription() { return description; }
     public String getRequirements() { return requirements; }
     public String getResponsibilities() { return responsibilities; }
     public BigDecimal getSalaryMin() { return salaryMin; }
     public BigDecimal getSalaryMax() { return salaryMax; }
+    public String getCurrency() { return currency; }
     public String getLocation() { return location; }
     public Boolean getRemote() { return remote; }
     public JobType getJobType() { return jobType; }

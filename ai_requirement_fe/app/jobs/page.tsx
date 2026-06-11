@@ -6,6 +6,7 @@ import { Search, MapPin, BriefcaseBusiness, Filter, Heart, Building2, ChevronLef
 import Navbar from "../../components/Navbar";
 import { fetchApi } from "../../lib/api";
 import { JobResponse } from "../../lib/types/job";
+import { formatSalaryRange } from "../../lib/utils";
 
 export default function JobsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -21,12 +22,7 @@ export default function JobsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const formatSalary = (min: number | null, max: number | null) => {
-    if (!min && !max) return "Thỏa thuận";
-    if (min && max) return `${min} - ${max} triệu`;
-    if (min) return `Từ ${min} triệu`;
-    return `Đến ${max} triệu`;
-  };
+
 
   const filteredJobs = jobs.filter(job => {
     const matchSearch = searchTerm === "" || 
@@ -175,7 +171,7 @@ export default function JobsPage() {
                         </Link>
                       </div>
                       <span className="inline-flex items-center justify-center shrink-0 px-3 py-1 bg-red-50 text-red-600 text-sm font-semibold rounded-lg whitespace-nowrap">
-                        {formatSalary(job.salaryMin, job.salaryMax)}
+                        {formatSalaryRange(job.salaryMin, job.salaryMax, job.currency)}
                       </span>
                     </div>
                     

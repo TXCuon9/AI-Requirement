@@ -2,9 +2,12 @@ package com.example.ai_requirement_be.service.Recruiter;
 
 import com.example.ai_requirement_be.dto.RecruiterDto.JobResponseDTO;
 import com.example.ai_requirement_be.dto.RecruiterDto.SaveJobDTO;
+import com.example.ai_requirement_be.entity.CandidateManager.Resume;
 import com.example.ai_requirement_be.entity.CompaniesManager.Companies;
+import com.example.ai_requirement_be.entity.Job.JobApplication;
 import com.example.ai_requirement_be.entity.RecruiterManager.JobDescription;
 import com.example.ai_requirement_be.entity.UserManager.User;
+import com.example.ai_requirement_be.repository.IJobApplicationRepository;
 import com.example.ai_requirement_be.repository.IJobdepRepository;
 import com.example.ai_requirement_be.repository.IUserRepository;
 import jakarta.transaction.Transactional;
@@ -59,6 +62,29 @@ public class JobService {
         }
 
         mapDtoToEntity(saveJobDTO, jobDescription);
+    }
+
+    @Transactional
+    public void deleteJob(Long jobId, String recruiterEmail) {
+        Companies companies = getCompanyByRecruiterEmail(recruiterEmail);
+        JobDescription jobDescription = jobdepRepository.findById(jobId).orElseThrow(() -> new RuntimeException("Không tìm thấy bài đăng tuyển dụng!"));
+
+        if(!jobDescription.getCompany().getId().equals(companies.getId())) {
+            throw new RuntimeException("Bạn không có quyền xóa bài viết của công ty khác!");
+        }
+
+        jobdepRepository.delete(jobDescription);
+    }
+
+    public JobResponseDTO getJobById(Long jobId, String recruiterEmail) {
+        Companies companies = getCompanyByRecruiterEmail(recruiterEmail);
+        JobDescription jobDescription = jobdepRepository.findById(jobId).orElseThrow(() -> new RuntimeException("Không tìm thấy bài đăng tuyển dụng!"));
+
+        if(!jobDescription.getCompany().getId().equals(companies.getId())) {
+            throw new RuntimeException("Bạn không có quyền xem bài viết của công ty khác!");
+        }
+
+        return new JobResponseDTO(jobDescription);
     }
 
     private Companies getCompanyByRecruiterEmail(String recruiterEmail) {

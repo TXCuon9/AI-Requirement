@@ -6,12 +6,14 @@ import java.math.BigDecimal;
 public class JobviewResponseDTO {
     private Long id;
     private String companyName;
+    private String companyLogo;
     private String title;
     private String description;
     private String requirements;
     private String responsibilities;
     private BigDecimal salaryMin;
     private BigDecimal salaryMax;
+    private String currency;
     private String location;
     private boolean remote;
     private String jobType;
@@ -21,15 +23,17 @@ public class JobviewResponseDTO {
 
     }
 
-    public JobviewResponseDTO(Long id, String companyName, String title, String description, String requirements, String responsibilities, BigDecimal salaryMin, BigDecimal salaryMax, String location, boolean remote, String jobType, String experienceLevel) {
+    public JobviewResponseDTO(Long id, String companyName, String companyLogo, String title, String description, String requirements, String responsibilities, BigDecimal salaryMin, BigDecimal salaryMax, String currency, String location, boolean remote, String jobType, String experienceLevel) {
         this.id = id;
         this.companyName = companyName;
+        this.companyLogo = companyLogo;
         this.title = title;
         this.description = description;
         this.requirements = requirements;
         this.responsibilities = responsibilities;
         this.salaryMin = salaryMin;
         this.salaryMax = salaryMax;
+        this.currency = currency;
         this.location = location;
         this.remote = remote;
         this.jobType = jobType;
@@ -50,6 +54,14 @@ public class JobviewResponseDTO {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public String getCompanyLogo() {
+        return companyLogo;
+    }
+
+    public void setCompanyLogo(String companyLogo) {
+        this.companyLogo = companyLogo;
     }
 
     public String getTitle() {
@@ -98,6 +110,14 @@ public class JobviewResponseDTO {
 
     public void setSalaryMax(BigDecimal salaryMax) {
         this.salaryMax = salaryMax;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public String getLocation() {

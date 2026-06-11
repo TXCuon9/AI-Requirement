@@ -42,11 +42,18 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/candidate/**").hasRole("CANDIDATE")
                         .requestMatchers("/api/job/**").hasRole("CANDIDATE")
-                        .requestMatchers("/api/company/**").hasRole("COMPANY")
-                        .requestMatchers("/api/recruiter/**").hasRole("RECRUITER")
+                        .requestMatchers("/api/company/**").hasAnyRole("COMPANY", "RECRUITER")
+                        .requestMatchers("/api/recruiter/resume/**").permitAll()
+                        .requestMatchers("/api/recruiter/**").hasAnyRole("COMPANY", "RECRUITER")
                         .requestMatchers("/api/resume", "/api/resume/**").hasRole("CANDIDATE")
                         .requestMatchers("/api/file", "/api/file/**").hasRole("CANDIDATE")
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling(exc -> exc
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(401);
+                            response.getWriter().write("Vui lòng đăng nhập!");
+                        })
                 )
                 // Thêm JwtAuthenticationFilter vào trước UsernamePasswordAuthenticationFilter
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

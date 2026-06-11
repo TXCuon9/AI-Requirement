@@ -53,6 +53,9 @@ public class JobDescription {
     @Column(name = "salary_max" , precision = 12 , scale = 2)
     private BigDecimal salaryMax;
 
+    @Column(name = "currency" , length = 10)
+    private String currency = "USD";
+
     @Column(name = "location" , length = 255)
     private String location;
 
@@ -148,6 +151,14 @@ public class JobDescription {
 
     public void setSalaryMax(BigDecimal salaryMax) {
         this.salaryMax = salaryMax;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public String getLocation() {

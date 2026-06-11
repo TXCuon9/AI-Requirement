@@ -18,6 +18,7 @@ public class SaveJobDTO {
     private String responsibilities;
     private BigDecimal salaryMin;
     private BigDecimal salaryMax;
+    private String currency = "USD";
 
     @NotBlank(message = "Địa điểm làm việc không được để trống")
     private String location;
@@ -82,6 +83,14 @@ public class SaveJobDTO {
 
     public void setSalaryMax(BigDecimal salaryMax) {
         this.salaryMax = salaryMax;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public String getLocation() {

@@ -45,7 +45,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             userEmail = jwtService.extractEmail(jwt);
         } catch (Exception e) {
             // Token không hợp lệ
-            filterChain.doFilter(request, response);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại!");
             return;
         }
 
