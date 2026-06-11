@@ -33,7 +33,6 @@ public class RecruiterProfile {
     public RecruiterProfile() {
 
     }
-
     public Long getId() {
         return id;
     }

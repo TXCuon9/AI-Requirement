@@ -100,14 +100,14 @@ public class JobController {
                     jobApplicationService.changeToInterviewStatus(applicationId, recruiterEmail);
 
             try {
-              JobApplication jobApplicationService1  = jobApplicationRepository.findById(applicationId).orElse(null);
-              if(jobApplicationService1 != null){
-                  String candidateEmail = jobApplicationService1.getCandidate().getUser().getEmail();
-                  String companyName = jobApplicationService1.getJobDescription().getCompany().getName();
-                  emailService.sendInterviewInvitationEmail(candidateEmail, result.getCandidateName(), companyName);
-
-              }
-            }catch (Exception mailEx){
+                if (result.getCandidateEmail() != null) {
+                    emailService.sendInterviewInvitationEmail(
+                            result.getCandidateEmail(), 
+                            result.getCandidateName(), 
+                            result.getCompanyName()
+                    );
+                }
+            } catch (Exception mailEx) {
                 System.out.println(
                         "Cập nhật thành công nhưng gửi mail thất bại: "
                                 + mailEx.getMessage()
@@ -124,6 +124,38 @@ public class JobController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi hệ thống: " + e.getMessage());
         }
     }
+
+    @PutMapping("/reject/{applicationId}")
+    public ResponseEntity<?> rejectToInterview(@PathVariable Long applicationId , Principal principal) {
+        try {
+            if (principal == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Vui lòng đăng nhập tài khoản");
+            }
+            String recruiterEmail = principal.getName();
+            JobApplicationResponseDTO result =
+                    jobApplicationService.changeToRejectedStatus(applicationId, recruiterEmail);
+            try {
+                if(result.getCandidateEmail() != null) {
+
+                        emailService.sendInterviewRejectionEmail(result.getCandidateEmail() , result.getCandidateName() , result.getCompanyName());
+
+                }
+            } catch (Exception mailEx) {
+                System.out.println(
+                        "Cập nhật thành công nhưng gửi mail thất bại: "
+                                + mailEx.getMessage()
+                );
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Đã cập nhật trạng thái phỏng vấn nhưng gửi mail thất bại. Vui lòng kiểm tra lại cấu hình Email! Lỗi: " + mailEx.getMessage());
+            }
+            return ResponseEntity.ok(result);
+        }    catch (IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }catch (Exception e){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi hệ thống: " + e.getMessage());
+    }
+    }
+
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllCandidateApplications(Principal principal) {

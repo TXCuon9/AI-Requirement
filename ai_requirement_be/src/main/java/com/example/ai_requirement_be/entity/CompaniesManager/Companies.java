@@ -4,7 +4,6 @@ import com.example.ai_requirement_be.entity.RecruiterManager.JobDescription;
 import com.example.ai_requirement_be.entity.RecruiterManager.RecruiterProfile;
 import com.example.ai_requirement_be.entity.UserManager.User;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 

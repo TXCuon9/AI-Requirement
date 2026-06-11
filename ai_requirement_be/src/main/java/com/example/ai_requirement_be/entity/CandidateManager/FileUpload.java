@@ -2,7 +2,6 @@ package com.example.ai_requirement_be.entity.CandidateManager;
 
 import com.example.ai_requirement_be.entity.UserManager.User;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity
