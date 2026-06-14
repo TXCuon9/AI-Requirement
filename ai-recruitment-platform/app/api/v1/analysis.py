@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 import json
 import re
-from app.providers.local_provider import LocalProvider
+from app.providers.gemini_provider import GeminiProvider
 
 router = APIRouter()
 
@@ -15,6 +15,16 @@ class CVData(BaseModel):
     projectItems: Optional[list] = []
     summary: Optional[str] = ""
     targetPosition: Optional[str] = ""
+
+class JobData(BaseModel):
+    title: str
+    description: Optional[str] = ""
+    requirements: Optional[str] = ""
+    responsibilities: Optional[str] = ""
+
+class JobFitRequest(BaseModel):
+    cv_data: CVData
+    job_data: JobData
 
 @router.post("/cv")
 async def analyze_cv(cv_data: CVData):
@@ -72,7 +82,7 @@ async def analyze_cv(cv_data: CVData):
                 DỮ LIỆU CV THỰC TẾ:
                 {cv_text_representation}
                 """
-        provider = LocalProvider()
+        provider = GeminiProvider()
         llm_response = await provider.generate(prompt)
 
         # Trích xuất JSON từ LLM
@@ -85,3 +95,64 @@ async def analyze_cv(cv_data: CVData):
     except Exception as e:
         print(f"Error analyzing CV: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/job-fit")
+async def analyze_job_fit(request_data: JobFitRequest):
+    try:
+        cv_data = request_data.cv_data
+        job_data = request_data.job_data
+        
+        # Format CV Text
+        skills_list = cv_data.skills or []
+        skills_str = ", ".join([s.get("name", str(s)) if isinstance(s, dict) else str(s) for s in skills_list])
+        
+        cv_text_representation = f"Vị trí ứng tuyển: {cv_data.targetPosition or ''}\n"
+        cv_text_representation += f"Mục tiêu nghề nghiệp: {cv_data.summary or ''}\n"
+        cv_text_representation += f"Kỹ năng: {skills_str}\n"
+        
+        cv_text_representation += "Kinh nghiệm làm việc:\n"
+        for exp in (cv_data.experiences or []):
+            cv_text_representation += f"- {exp.get('position') or ''} tại {exp.get('companyName') or ''}: {exp.get('description') or ''}\n"
+            
+        cv_text_representation += "Dự án:\n"
+        for proj in (cv_data.projectItems or []):
+            cv_text_representation += f"- {proj.get('projectName') or ''} ({proj.get('role') or ''}): {proj.get('description') or ''}\n"
+
+        # Format Job Text
+        job_text_representation = f"Chức danh: {job_data.title}\n"
+        job_text_representation += f"Mô tả công việc:\n{job_data.description}\n"
+        job_text_representation += f"Yêu cầu công việc:\n{job_data.requirements}\n"
+        job_text_representation += f"Trách nhiệm/Quyền lợi:\n{job_data.responsibilities}\n"
+
+        prompt = f"""
+                Bạn là một Chuyên gia Tuyển dụng (Recruitment Expert) cực kỳ khắt khe và hệ thống tự động đánh giá CV. 
+                Hãy đánh giá mức độ phù hợp giữa một CV của ứng viên và một tin tuyển dụng dựa trên kỹ năng, kinh nghiệm, và yêu cầu công việc.
+
+                Trình bày phản hồi bằng tiếng Việt.
+                Bạn BẮT BUỘC phải trả về ĐÚNG MỘT khối JSON theo định dạng mẫu dưới đây (chỉ thay thế các giá trị, KHÔNG giải thích thêm):
+                {{
+                "match_score": [Điểm số phù hợp từ 0-100, là một số nguyên],
+                "pros": ["Điểm mạnh 1 phù hợp với công việc", "Điểm mạnh 2", "..."],
+                "cons": ["Điểm yếu hoặc kỹ năng còn thiếu 1", "Điểm yếu 2", "..."],
+                "recommendations": ["Lời khuyên để ứng viên cải thiện 1", "Lời khuyên 2", "..."]
+                }}
+
+                DỮ LIỆU CV ỨNG VIÊN:
+                {cv_text_representation}
+
+                DỮ LIỆU TIN TUYỂN DỤNG:
+                {job_text_representation}
+                """
+        provider = GeminiProvider()
+        llm_response = await provider.generate(prompt)
+        
+        # Extract JSON from LLM
+        match = re.search(r'\{.*\}', llm_response, re.DOTALL)
+        json_str = match.group(0) if match else llm_response
+        result = json.loads(json_str)
+        return result
+        
+    except Exception as e:
+        print(f"Error analyzing job fit: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+

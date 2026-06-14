@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { MapPin, BriefcaseBusiness, Heart, Building2, Send, DollarSign, Users, ChevronRight, AlertCircle, Loader2 } from "lucide-react";
+import { MapPin, BriefcaseBusiness, Heart, Building2, Send, DollarSign, Users, ChevronRight, AlertCircle, Loader2, Sparkles, CheckCircle2, XCircle } from "lucide-react";
 import Navbar from "../../../components/Navbar";
 import { useParams } from "next/navigation";
 import { fetchApi } from "../../../lib/api";
 import { formatSalaryRange } from "../../../lib/utils";
 import { JobDetailResponse } from "../../../lib/types/job";
+import { useAuth } from "../../../lib/authContext";
 
 export default function JobDetailPage() {
   const params = useParams();
@@ -25,6 +26,61 @@ export default function JobDetailPage() {
   const [selectedResumeId, setSelectedResumeId] = useState<number | null>(null);
   const [isApplying, setIsApplying] = useState(false);
   const [applyMessage, setApplyMessage] = useState("");
+  const { user } = useAuth(); // Import useAuth from lib/authContext
+  const [fitScore, setFitScore] = useState<any>(null);
+  const [isScoring, setIsScoring] = useState(false);
+  const [scoreError, setScoreError] = useState("");
+
+  const handleScoreJobFit = async () => {
+    setIsScoring(true);
+    setScoreError("");
+    setFitScore(null);
+    try {
+      // 1. Get primary CV
+      const resumes = await fetchApi("/resume");
+      if (!resumes || resumes.length === 0) {
+        throw new Error("Bạn chưa tải lên CV nào. Vui lòng tải CV để sử dụng tính năng này.");
+      }
+      const primaryCv = resumes.find((r: any) => r.isPrimary) || resumes[0];
+
+      // 2. Format Job Data
+      const jobData = {
+        title: job?.title || "",
+        description: job?.description || "",
+        requirements: job?.requirements || "",
+        responsibilities: job?.responsibilities || ""
+      };
+
+      // 3. Format CV Data
+      const cvData = {
+        parsedText: primaryCv.parsedText || "",
+        skills: primaryCv.skills || [],
+        experiences: primaryCv.experiences || [],
+        educationItemDTOS: primaryCv.educationItemDTOS || [],
+        projectItems: primaryCv.projectItems || [],
+        summary: primaryCv.summary || "",
+        targetPosition: primaryCv.targetPosition || ""
+      };
+
+      // 4. Call Python API
+      const response = await fetch("http://localhost:8000/api/v1/analysis/job-fit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cv_data: cvData, job_data: jobData })
+      });
+
+      if (!response.ok) {
+        throw new Error("Có lỗi xảy ra khi gọi AI phân tích.");
+      }
+
+      const result = await response.json();
+      setFitScore(result);
+    } catch (err: any) {
+      setScoreError(err.message || "Lỗi không xác định");
+    } finally {
+      setIsScoring(false);
+    }
+  };
 
   useEffect(() => {
     if (jobId) {
@@ -311,6 +367,108 @@ export default function JobDetailPage() {
               </div>
             </div>
 
+            {/* AI Fit Assessment for Candidate */}
+            {user?.role === "CANDIDATE" && (
+              <div className="bg-gradient-to-b from-blue-50 to-white p-6 rounded-2xl border border-blue-100 shadow-sm relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-indigo-500"></div>
+                <div className="flex items-center gap-2 mb-4">
+                  <Sparkles className="size-5 text-blue-600" />
+                  <h2 className="text-lg font-bold text-slate-900">Phân tích độ phù hợp</h2>
+                </div>
+                
+                <p className="text-sm text-slate-600 mb-4">
+                  AI sẽ đối chiếu CV chính của bạn với yêu cầu công việc này để đưa ra đánh giá khách quan nhất.
+                </p>
+
+                {!fitScore && !isScoring && (
+                  <button 
+                    onClick={handleScoreJobFit}
+                    className="w-full bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Sparkles className="size-4" /> Đánh giá ngay bằng AI
+                  </button>
+                )}
+
+                {isScoring && (
+                  <div className="flex flex-col items-center justify-center py-6 text-blue-600">
+                    <Loader2 className="size-8 animate-spin mb-3" />
+                    <span className="text-sm font-medium">AI đang phân tích CV của bạn...</span>
+                  </div>
+                )}
+
+                {scoreError && (
+                  <div className="p-3 bg-red-50 text-red-600 text-sm rounded-xl flex items-start gap-2 border border-red-100 mt-4">
+                    <AlertCircle className="size-4 shrink-0 mt-0.5" />
+                    <span>{scoreError}</span>
+                  </div>
+                )}
+
+                {fitScore && (
+                  <div className="space-y-4 mt-2 animate-in fade-in slide-in-from-top-4">
+                    {/* Score Circle */}
+                    <div className="flex flex-col items-center justify-center p-4 bg-white rounded-xl border border-blue-100">
+                      <div className="relative size-24 flex items-center justify-center">
+                        <svg className="size-full -rotate-90" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+                          <circle cx="18" cy="18" r="16" fill="none" className="stroke-current text-slate-100" strokeWidth="3"></circle>
+                          <circle cx="18" cy="18" r="16" fill="none" className={`stroke-current ${fitScore.match_score >= 80 ? 'text-emerald-500' : fitScore.match_score >= 50 ? 'text-blue-500' : 'text-amber-500'}`} strokeWidth="3" strokeDasharray="100" strokeDashoffset={100 - fitScore.match_score} strokeLinecap="round"></circle>
+                        </svg>
+                        <div className="absolute text-2xl font-bold text-slate-900">{fitScore.match_score}%</div>
+                      </div>
+                      <span className="text-sm font-semibold text-slate-700 mt-2">Mức độ phù hợp</span>
+                    </div>
+
+                    {/* Pros */}
+                    {fitScore.pros && fitScore.pros.length > 0 && (
+                      <div>
+                        <h4 className="text-sm font-bold text-emerald-700 flex items-center gap-1.5 mb-2">
+                          <CheckCircle2 className="size-4" /> Điểm mạnh
+                        </h4>
+                        <ul className="space-y-1.5 text-sm text-slate-700">
+                          {fitScore.pros.map((p: string, i: number) => (
+                            <li key={i} className="flex items-start gap-2">
+                              <span className="size-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0"></span> {p}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Cons */}
+                    {fitScore.cons && fitScore.cons.length > 0 && (
+                      <div className="pt-2 border-t border-slate-100">
+                        <h4 className="text-sm font-bold text-amber-700 flex items-center gap-1.5 mb-2">
+                          <AlertCircle className="size-4" /> Kỹ năng còn thiếu
+                        </h4>
+                        <ul className="space-y-1.5 text-sm text-slate-700">
+                          {fitScore.cons.map((c: string, i: number) => (
+                            <li key={i} className="flex items-start gap-2">
+                              <span className="size-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0"></span> {c}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Recommendations */}
+                    {fitScore.recommendations && fitScore.recommendations.length > 0 && (
+                      <div className="pt-2 border-t border-slate-100">
+                        <h4 className="text-sm font-bold text-blue-700 flex items-center gap-1.5 mb-2">
+                          <Sparkles className="size-4" /> Lời khuyên
+                        </h4>
+                        <ul className="space-y-1.5 text-sm text-slate-700">
+                          {fitScore.recommendations.map((r: string, i: number) => (
+                            <li key={i} className="flex items-start gap-2">
+                              <span className="size-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0"></span> {r}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+            
           </div>
         </div>
       </main>
@@ -354,7 +512,7 @@ export default function JobDetailPage() {
                         className="size-4 text-blue-600 focus:ring-blue-500"
                       />
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium text-slate-900 truncate">{r.title || `CV #${r.id}`}</div>
+                        <div className="font-medium text-slate-900 truncate">{r.cvName || r.title || `CV #${r.id}`}</div>
                         <div className="text-xs text-slate-500">Cập nhật lúc: {new Date(r.updatedAt || r.createdAt).toLocaleDateString()}</div>
                       </div>
                       {r.isPrimary && <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">Mặc định</span>}

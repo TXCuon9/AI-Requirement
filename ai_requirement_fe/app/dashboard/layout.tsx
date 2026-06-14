@@ -20,14 +20,27 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   if (isLoading || !isAuthenticated) return null;
 
-  const isHR = user?.role === "COMPANY" || user?.role === "RECRUITER";
+  const isAdmin = user?.role === "ADMIN";
+  const isCompany = user?.role === "COMPANY";
+  const isRecruiter = user?.role === "RECRUITER";
   const isCandidate = user?.role === "CANDIDATE";
 
   // Menu items based on role
-  const hrMenuItems = [
+  const adminMenuItems = [
+    { label: "Bảng điều khiển", href: "/dashboard", icon: LayoutDashboard },
+    { label: "Duyệt tài khoản", href: "/dashboard/admin/users", icon: Users },
+  ];
+
+  const companyMenuItems = [
     { label: "Bảng điều khiển", href: "/dashboard", icon: LayoutDashboard },
     { label: "Hồ sơ Công ty", href: "/dashboard/company/profile", icon: Building },
     { label: "Quản lý Nhân sự", href: "/dashboard/company/hr", icon: Users },
+    { label: "Tin tuyển dụng", href: "/dashboard/jobs", icon: Briefcase },
+    { label: "Quản lý Ứng viên", href: "/dashboard/applications", icon: Contact },
+  ];
+
+  const recruiterMenuItems = [
+    { label: "Bảng điều khiển", href: "/dashboard", icon: LayoutDashboard },
     { label: "Tin tuyển dụng", href: "/dashboard/jobs", icon: Briefcase },
     { label: "Quản lý Ứng viên", href: "/dashboard/applications", icon: Contact },
   ];
@@ -39,7 +52,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { label: "Việc đã ứng tuyển", href: "/dashboard/applied", icon: Briefcase },
   ];
 
-  const menuItems = isHR ? hrMenuItems : (isCandidate ? candidateMenuItems : []);
+  let menuItems: any[] = [];
+  let roleTitle = "";
+  if (isAdmin) {
+    menuItems = adminMenuItems;
+    roleTitle = "Quản trị viên";
+  } else if (isCompany) {
+    menuItems = companyMenuItems;
+    roleTitle = "Công ty";
+  } else if (isRecruiter) {
+    menuItems = recruiterMenuItems;
+    roleTitle = "Nhà tuyển dụng";
+  } else if (isCandidate) {
+    menuItems = candidateMenuItems;
+    roleTitle = "Ứng viên";
+  }
 
   return (
     <div className="flex h-screen bg-slate-50 font-sans text-slate-900">
@@ -54,7 +81,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
           <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 px-2">
-            {isHR ? "Nhà tuyển dụng" : "Ứng viên"}
+            {roleTitle}
           </div>
           {menuItems.map((item) => {
             const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname?.startsWith(item.href));
@@ -87,7 +114,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <header className="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 shrink-0 shadow-sm">
           <h2 className="font-semibold text-slate-800">
-            {isHR ? "Bảng điều khiển Nhà tuyển dụng" : "Bảng điều khiển Ứng viên"}
+            Bảng điều khiển {roleTitle}
           </h2>
           <div className="flex items-center gap-3">
              <div className="size-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">

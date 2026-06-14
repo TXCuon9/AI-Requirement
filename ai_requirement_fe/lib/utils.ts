@@ -6,11 +6,11 @@ export const formatSalary = (salary: number | null | undefined, currency?: strin
 
   if (isVND) {
     if (salary > 0 && salary < 1000) {
-      return `${salary} Triệu`;
+      return `${salary} triệu VNĐ`;
     }
     if (salary >= 1000000) {
       const millions = salary / 1000000;
-      return `${Number.isInteger(millions) ? millions : millions.toFixed(1)} Triệu`;
+      return `${Number.isInteger(millions) ? millions : millions.toFixed(1)} triệu VNĐ`;
     }
   }
 
@@ -26,8 +26,8 @@ export const formatSalaryRange = (min: number | null | undefined, max: number | 
   if (min && !max) return `Từ ${minStr}`;
   if (!min && max) return `Lên đến ${maxStr}`;
   
-  if (minStr.includes("Triệu") && maxStr.includes("Triệu")) {
-    const minNum = minStr.replace(" Triệu", "");
+  if (minStr.includes("triệu VNĐ") && maxStr.includes("triệu VNĐ")) {
+    const minNum = minStr.replace(" triệu VNĐ", "");
     return `${minNum} - ${maxStr}`;
   }
   

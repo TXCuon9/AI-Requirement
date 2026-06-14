@@ -1,5 +1,5 @@
 from app.modules.resume_parser.pdf_extractor import PDFExtractor
-from app.providers.local_provider import LocalProvider
+from app.providers.gemini_provider import GeminiProvider
 import json
 import re
 
@@ -63,7 +63,7 @@ class ParserService:
         VĂN BẢN CV:
         {text}
         """
-        provider = LocalProvider()
+        provider = GeminiProvider()
         llm_response = await provider.generate(prompt)
         
         match = re.search(r'\{.*\}', llm_response, re.DOTALL)

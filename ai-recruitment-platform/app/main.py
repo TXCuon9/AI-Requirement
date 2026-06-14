@@ -4,12 +4,13 @@ from app.api.v1.resume import router as resume_router
 from app.api.v1.recommendation import (router as recommendation_router)
 from app.api.v1.scoring import (router as scoring_router)
 from app.api.v1.analysis import (router as analysis_router)
+from app.api.v1.jobs import router as jobs_router
 
 app=FastAPI(title="AI Recruitment Platform",version="1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -37,6 +38,12 @@ app.include_router(
     analysis_router,
     prefix="/api/v1/analysis",
     tags=["Analysis"]
+)
+
+app.include_router(
+    jobs_router,
+    prefix="/api/v1/jobs",
+    tags=["Jobs"]
 )
 
 @app.get("/")

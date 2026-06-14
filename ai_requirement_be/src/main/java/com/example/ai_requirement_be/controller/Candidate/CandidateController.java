@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,5 +32,14 @@ public class CandidateController {
         String currentEmail = principal.getName();
         candidateService.updateProfile(currentEmail, updateCandidateProfileDTO);
         return ResponseEntity.ok("Cập nhật thông tin hồ sơ thành công");
+    }
+
+    @PostMapping("/onboarding")
+    public ResponseEntity<String> submitOnboarding(Principal principal, @RequestBody com.example.ai_requirement_be.dto.Candidate.OnboardingRequestDTO dto) {
+        if (principal == null) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+        candidateService.saveOnboarding(principal.getName(), dto);
+        return ResponseEntity.ok("Lưu thông tin khảo sát thành công");
     }
 }

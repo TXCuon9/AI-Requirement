@@ -5,13 +5,25 @@ import { Building2, Users, BriefcaseBusiness, Contact, FileText } from "lucide-r
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const isHR = user?.role === "COMPANY" || user?.role === "RECRUITER";
+  const isAdmin = user?.role === "ADMIN";
+  const isCompany = user?.role === "COMPANY";
+  const isRecruiter = user?.role === "RECRUITER";
 
-  const hrStats = [
-    { label: "Tin tuyển dụng đang mở", value: "3", icon: BriefcaseBusiness, color: "bg-blue-50 text-blue-600", border: "border-blue-200" },
+  const adminStats = [
+    { label: "Tài khoản chờ duyệt", value: "2", icon: Users, color: "bg-amber-50 text-amber-600", border: "border-amber-200" },
+    { label: "Công ty đang hoạt động", value: "45", icon: Building2, color: "bg-blue-50 text-blue-600", border: "border-blue-200" },
+  ];
+
+  const companyStats = [
+    { label: "Tin tuyển dụng của công ty", value: "3", icon: BriefcaseBusiness, color: "bg-blue-50 text-blue-600", border: "border-blue-200" },
     { label: "Lượt ứng tuyển mới", value: "12", icon: Contact, color: "bg-emerald-50 text-emerald-600", border: "border-emerald-200" },
     { label: "Nhân sự HR", value: "2", icon: Users, color: "bg-purple-50 text-purple-600", border: "border-purple-200" },
     { label: "Lượt xem hồ sơ công ty", value: "340", icon: Building2, color: "bg-amber-50 text-amber-600", border: "border-amber-200" },
+  ];
+
+  const recruiterStats = [
+    { label: "Tin tuyển dụng đang quản lý", value: "3", icon: BriefcaseBusiness, color: "bg-blue-50 text-blue-600", border: "border-blue-200" },
+    { label: "Lượt ứng tuyển cần duyệt", value: "12", icon: Contact, color: "bg-emerald-50 text-emerald-600", border: "border-emerald-200" },
   ];
 
   const candidateStats = [
@@ -20,7 +32,11 @@ export default function DashboardPage() {
     { label: "Lượt nhà tuyển dụng xem CV", value: "12", icon: Users, color: "bg-purple-50 text-purple-600", border: "border-purple-200" },
   ];
 
-  const stats = isHR ? hrStats : candidateStats;
+  let stats = [];
+  if (isAdmin) stats = adminStats;
+  else if (isCompany) stats = companyStats;
+  else if (isRecruiter) stats = recruiterStats;
+  else stats = candidateStats;
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">

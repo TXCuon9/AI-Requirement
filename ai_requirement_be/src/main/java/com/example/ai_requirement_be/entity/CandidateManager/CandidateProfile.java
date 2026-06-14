@@ -53,6 +53,9 @@ public class CandidateProfile {
     @Column(name="current_position" , length = 255)
     private String currentPosition;
 
+    @Column(name="target_position" , length = 255)
+    private String targetPosition;
+
     @Column(name="experience_years" , columnDefinition = "INT DEFAULT 0")
     private Integer experienceYears = 0;
 
@@ -73,6 +76,9 @@ public class CandidateProfile {
 
     @Column(name = "is_looking_for_job", columnDefinition = "BOOLEAN DEFAULT false")
     private Boolean isLookingForJob = false;
+
+    @Column(name = "is_onboarded", columnDefinition = "BOOLEAN DEFAULT false")
+    private Boolean isOnboarded = false;
 
     @PrePersist
     protected void onCreate() {
@@ -229,5 +235,21 @@ public class CandidateProfile {
 
     public void setIsLookingForJob(Boolean isLookingForJob) {
         this.isLookingForJob = isLookingForJob;
+    }
+
+    public String getTargetPosition() {
+        return targetPosition;
+    }
+
+    public void setTargetPosition(String targetPosition) {
+        this.targetPosition = targetPosition;
+    }
+
+    public Boolean getIsOnboarded() {
+        return isOnboarded;
+    }
+
+    public void setIsOnboarded(Boolean isOnboarded) {
+        this.isOnboarded = isOnboarded;
     }
 }

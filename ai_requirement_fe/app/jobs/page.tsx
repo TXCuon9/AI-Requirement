@@ -154,8 +154,12 @@ export default function JobsPage() {
                 <div key={job.id} className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-900/5 transition-all group flex flex-col sm:flex-row gap-5 cursor-pointer relative overflow-hidden">
                   <div className="absolute top-0 left-0 w-1 h-full bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   
-                  <div className="size-20 sm:size-24 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 p-2">
-                    <Building2 className="size-10 text-slate-300" />
+                  <div className="size-20 sm:size-24 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 p-2 overflow-hidden">
+                    {job.companyLogo ? (
+                       <img src={job.companyLogo} alt={job.companyName || "Logo"} className="w-full h-full object-cover rounded-lg" />
+                    ) : (
+                       <Building2 className="size-10 text-slate-300" />
+                    )}
                   </div>
                   
                   <div className="flex-1 min-w-0">

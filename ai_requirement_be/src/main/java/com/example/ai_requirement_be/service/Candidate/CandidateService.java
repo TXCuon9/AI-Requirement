@@ -54,4 +54,21 @@ public class CandidateService {
         }
         return profile;
     }
+
+    @Transactional
+    public void saveOnboarding(String email, com.example.ai_requirement_be.dto.Candidate.OnboardingRequestDTO dto) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        CandidateProfile profile = user.getCandidateProfile();
+        if(profile == null) {
+            throw new RuntimeException("Hồ sơ ứng viên không tồn tại trong hệ thống");
+        }
+        
+        profile.setCurrentPosition(dto.getCurrentPosition());
+        profile.setTargetPosition(dto.getTargetPosition());
+        profile.setExpectedSalary(dto.getExpectedSalary());
+        profile.setAddress(dto.getAddress());
+        profile.setIsOnboarded(true);
+        
+        candidateRepository.save(profile);
+    }
 }

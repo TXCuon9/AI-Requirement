@@ -1,14 +1,31 @@
 "use client";
 
-import { Building2, Users, BriefcaseBusiness, CheckCircle } from "lucide-react";
+import { Building2, Users, BriefcaseBusiness, CheckCircle, CheckSquare } from "lucide-react";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import { fetchApi } from "../../lib/api";
 
 export default function AdminDashboardPage() {
+  const [statsData, setStatsData] = useState({
+    totalCompanies: 0,
+    pendingCompanies: 0,
+    totalUsers: 0,
+    totalJobs: 0
+  });
+
+  useEffect(() => {
+    fetchApi("/admin/dashboard-stats")
+      .then(data => {
+        if (data) setStatsData(data);
+      })
+      .catch(console.error);
+  }, []);
+
   const stats = [
-    { label: "Doanh nghiệp chờ duyệt", value: "Cần xử lý", icon: Building2, color: "bg-amber-50 text-amber-600", border: "border-amber-200" },
-    { label: "Tổng số doanh nghiệp", value: "120+", icon: CheckCircle, color: "bg-blue-50 text-blue-600", border: "border-blue-200" },
-    { label: "Tổng số người dùng", value: "1,500+", icon: Users, color: "bg-emerald-50 text-emerald-600", border: "border-emerald-200" },
-    { label: "Việc làm đang mở", value: "340", icon: BriefcaseBusiness, color: "bg-purple-50 text-purple-600", border: "border-purple-200" },
+    { label: "Doanh nghiệp chờ duyệt", value: statsData.pendingCompanies, icon: Building2, color: "bg-amber-50 text-amber-600", border: "border-amber-200" },
+    { label: "Tổng số doanh nghiệp", value: statsData.totalCompanies, icon: CheckCircle, color: "bg-blue-50 text-blue-600", border: "border-blue-200" },
+    { label: "Tổng số người dùng", value: statsData.totalUsers, icon: Users, color: "bg-emerald-50 text-emerald-600", border: "border-emerald-200" },
+    { label: "Việc làm đang mở", value: statsData.totalJobs, icon: BriefcaseBusiness, color: "bg-purple-50 text-purple-600", border: "border-purple-200" },
   ];
 
   return (
@@ -51,5 +68,4 @@ export default function AdminDashboardPage() {
   );
 }
 
-// Just importing CheckSquare at the bottom to avoid messy top imports for a simple component
-import { CheckSquare } from "lucide-react";
+

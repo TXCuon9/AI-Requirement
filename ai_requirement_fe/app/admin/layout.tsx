@@ -24,6 +24,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const navItems = [
     { label: "Bảng điều khiển", href: "/admin", icon: LayoutDashboard },
     { label: "Duyệt doanh nghiệp", href: "/admin/approvals", icon: CheckSquare },
+    { label: "Danh sách doanh nghiệp", href: "/admin/companies", icon: UserCog },
   ];
 
   return (

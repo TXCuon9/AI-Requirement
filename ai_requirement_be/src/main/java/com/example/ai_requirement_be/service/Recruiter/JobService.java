@@ -49,7 +49,8 @@ public class JobService {
         mapDtoToEntity(saveJobDTO, jobDescription);
         jobDescription.setCompany(companies);
 
-        jobdepRepository.save(jobDescription);
+        JobDescription savedJob = jobdepRepository.save(jobDescription);
+        syncJobToVectorDB(savedJob);
     }
 
     @Transactional
@@ -62,6 +63,8 @@ public class JobService {
         }
 
         mapDtoToEntity(saveJobDTO, jobDescription);
+        JobDescription savedJob = jobdepRepository.save(jobDescription);
+        syncJobToVectorDB(savedJob);
     }
 
     @Transactional
@@ -108,6 +111,7 @@ public class JobService {
         job.setResponsibilities(dto.getResponsibilities());
         job.setSalaryMin(dto.getSalaryMin());
         job.setSalaryMax(dto.getSalaryMax());
+        job.setCurrency(dto.getCurrency());
         job.setLocation(dto.getLocation());
         job.setRemote(dto.getRemote());
         job.setJobType(dto.getJobType());
@@ -115,6 +119,21 @@ public class JobService {
         job.setExpiredAt(dto.getExpiredAt());
     }
 
+    private void syncJobToVectorDB(JobDescription job) {
+        try {
+            org.springframework.web.client.RestTemplate restTemplate = new org.springframework.web.client.RestTemplate();
+            String url = "http://localhost:8000/api/v1/jobs/sync";
+            
+            java.util.Map<String, Object> request = new java.util.HashMap<>();
+            request.put("job_id", String.valueOf(job.getId()));
+            request.put("title", job.getTitle() != null ? job.getTitle() : "");
+            request.put("description", job.getDescription() != null ? job.getDescription() : "");
+            request.put("requirements", job.getRequirements() != null ? job.getRequirements() : "");
+            request.put("responsibilities", job.getResponsibilities() != null ? job.getResponsibilities() : "");
 
-
+            restTemplate.postForObject(url, request, String.class);
+        } catch (Exception e) {
+            System.err.println("Lỗi khi đồng bộ Job sang VectorDB: " + e.getMessage());
+        }
+    }
 }

@@ -15,5 +15,7 @@ public interface IUserRepository extends JpaRepository<User,Long> {
     Optional<User> findByEmail(String email);
     List<User> findByStatus(UserStatus status);
     List<User> findByRole(UserRole  role);
+    long countByRole(UserRole role);
+    long countByRoleAndStatus(UserRole role, UserStatus status);
 
 }

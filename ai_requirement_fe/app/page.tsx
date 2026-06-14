@@ -4,29 +4,50 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Search, MapPin, BriefcaseBusiness, ChevronDown, Heart, Building2, ChevronRight, Zap, Loader2 } from "lucide-react";
 import Navbar from "../components/Navbar";
+import CandidateRecommendations from "../components/CandidateRecommendations";
 import { useState, useEffect } from "react";
 import { fetchApi } from "../lib/api";
 import { JobResponse } from "../lib/types/job";
+import { formatSalaryRange } from "../lib/utils";
 
 export default function Home() {
   const router = useRouter();
   const [jobs, setJobs] = useState<JobResponse[]>([]);
+  const [topCompanies, setTopCompanies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchApi("/jobs")
-      .then((data) => setJobs(data ? data.slice(0, 6) : []))
+      .then((data) => {
+        const allJobs = data || [];
+        setJobs(allJobs.slice(0, 6));
+
+        // Aggregate unique companies based on jobs to avoid modifying backend
+        const compMap = new Map();
+        allJobs.forEach((job: JobResponse) => {
+          if (job.companyName && !compMap.has(job.companyName)) {
+            compMap.set(job.companyName, {
+              name: job.companyName,
+              logo: job.companyLogo,
+              jobCount: 1
+            });
+          } else if (job.companyName) {
+            compMap.get(job.companyName).jobCount++;
+          }
+        });
+        
+        // Sort companies by job count descending and take top 4
+        const sortedCompanies = Array.from(compMap.values())
+          .sort((a, b) => b.jobCount - a.jobCount)
+          .slice(0, 4);
+          
+        setTopCompanies(sortedCompanies);
+      })
       .catch((err) => console.error("Failed to fetch jobs:", err))
       .finally(() => setLoading(false));
   }, []);
 
-  const formatSalary = (min: number | null, max: number | null, currency: string) => {
-    const cur = currency || "VNĐ";
-    if (!min && !max) return "Thỏa thuận";
-    if (min && max) return `${min} - ${max} ${cur}`;
-    if (min) return `Từ ${min} ${cur}`;
-    return `Đến ${max} ${cur}`;
-  };
+  // using formatSalaryRange from lib/utils
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 font-sans text-slate-900">
@@ -96,6 +117,9 @@ export default function Home() {
           </div>
         </section>
 
+        {/* AI Recommendations */}
+        <CandidateRecommendations />
+
         {/* Top Employers Section */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
@@ -107,17 +131,31 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="group p-6 border border-slate-200 rounded-2xl hover:shadow-xl hover:shadow-blue-900/5 hover:border-blue-200 transition-all flex flex-col items-center justify-center text-center cursor-pointer bg-slate-50/50 hover:bg-white">
-                  <div className="size-20 rounded-xl bg-white border border-slate-100 shadow-sm mb-4 flex items-center justify-center overflow-hidden">
-                    <Building2 className="size-10 text-blue-200" />
-                  </div>
-                  <h3 className="font-bold text-slate-800 group-hover:text-blue-600 transition-colors">Tech Company {i}</h3>
-                  <p className="text-sm text-slate-500 mt-1 flex items-center gap-1">
-                    <BriefcaseBusiness className="size-3.5" /> 15 việc làm
-                  </p>
+              {loading ? (
+                <div className="col-span-full flex justify-center py-10">
+                  <Loader2 className="size-8 text-blue-600 animate-spin" />
                 </div>
-              ))}
+              ) : topCompanies.length > 0 ? (
+                topCompanies.map((comp, index) => (
+                  <div key={index} className="group p-6 border border-slate-200 rounded-2xl hover:shadow-xl hover:shadow-blue-900/5 hover:border-blue-200 transition-all flex flex-col items-center justify-center text-center cursor-pointer bg-slate-50/50 hover:bg-white">
+                    <div className="size-20 rounded-xl bg-white border border-slate-100 shadow-sm mb-4 flex items-center justify-center overflow-hidden">
+                      {comp.logo ? (
+                        <img src={comp.logo} alt={comp.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <Building2 className="size-10 text-blue-200" />
+                      )}
+                    </div>
+                    <h3 className="font-bold text-slate-800 group-hover:text-blue-600 transition-colors line-clamp-1">{comp.name}</h3>
+                    <p className="text-sm text-slate-500 mt-1 flex items-center gap-1">
+                      <BriefcaseBusiness className="size-3.5" /> {comp.jobCount} việc làm
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <div className="col-span-full text-center py-6 text-slate-500">
+                  Chưa có dữ liệu nhà tuyển dụng
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -169,7 +207,7 @@ export default function Home() {
                     <div className="mt-auto pt-4 flex items-center justify-between border-t border-slate-100">
                       <div className="flex flex-col gap-1.5">
                         <span className="inline-block px-2.5 py-1 bg-red-50 text-red-600 text-sm font-semibold rounded-md max-w-fit">
-                          {formatSalary(job.salaryMin, job.salaryMax, job.currency)}
+                          {formatSalaryRange(job.salaryMin, job.salaryMax, job.currency)}
                         </span>
                         <span className="text-sm text-slate-500 flex items-center gap-1">
                           <MapPin className="size-3.5" /> {job.location}
