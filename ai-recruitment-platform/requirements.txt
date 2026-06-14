@@ -1,5 +1,6 @@
 fastapi
 uvicorn
 pypdf
-ollama
+google-generativeai
 chromadb
+python-dotenv

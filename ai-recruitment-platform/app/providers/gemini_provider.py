@@ -1,7 +1,10 @@
 import os
 import asyncio
 import google.generativeai as genai
+from dotenv import load_dotenv
 from app.providers.base_provider import BaseProvider
+
+load_dotenv()
 
 class GeminiProvider(BaseProvider):
     def __init__(self):
