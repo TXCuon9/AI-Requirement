@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.nio.file.Path;
 import java.security.Principal;
-
 @RestController
 @RequestMapping("/api/file")
 public class FileUploadController {
@@ -22,7 +20,6 @@ public class FileUploadController {
   public FileUploadController(FileUploadService fileUploadService) {
       this.fileUploadService = fileUploadService;
   }
-
   @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file ,  Principal principal) {
       try {
@@ -40,6 +37,5 @@ public class FileUploadController {
                   .body("Lỗi hệ thống trong quá trình xử lý file: " + e.getMessage());
       }
   }
-
   }
 

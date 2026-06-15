@@ -23,7 +23,6 @@ public class RecruiterController {
      public ResponseEntity<List<JobResponseDTO>> getMyJobs(Principal principal) {
          return ResponseEntity.ok(jobService.getJobsByRecruiterEmail(principal.getName()));
      }
-
      @PostMapping("/create")
     public ResponseEntity<String> createJob(Principal principal , @Valid @RequestBody SaveJobDTO saveJobDTO) {
          jobService.createJob(saveJobDTO , principal.getName());
@@ -35,13 +34,11 @@ public class RecruiterController {
          jobService.updateJob(id, dto, principal.getName());
          return ResponseEntity.ok("Cập nhật tin tuyển dụng thành công!");
      }
-
      @DeleteMapping("/{id}")
      public ResponseEntity<String> deleteJob(@PathVariable Long id, Principal principal) {
          jobService.deleteJob(id, principal.getName());
          return ResponseEntity.ok("Xóa tin tuyển dụng thành công!");
      }
-
      @GetMapping("/{id}")
      public ResponseEntity<JobResponseDTO> getJobById(@PathVariable Long id, Principal principal) {
          return ResponseEntity.ok(jobService.getJobById(id, principal.getName()));
