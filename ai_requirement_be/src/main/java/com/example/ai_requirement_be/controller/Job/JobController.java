@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 
@@ -40,6 +41,19 @@ public class JobController {
     @GetMapping("/jobs")
     public ResponseEntity<List<JobResponseDTO>> getAllJobs() {
         List<JobResponseDTO> list = jobService.getAllJobs();
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/jobs/search")
+    public ResponseEntity<List<JobResponseDTO>> searchJobs(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) String industry,
+            @RequestParam(required = false) String experienceLevel,
+            @RequestParam(required = false) String jobType,
+            @RequestParam(required = false) BigDecimal salaryMin
+    ) {
+        List<JobResponseDTO> list = jobService.searchJobs(keyword, location, industry, experienceLevel, jobType, salaryMin);
         return ResponseEntity.ok(list);
     }
 

@@ -7,27 +7,35 @@ import { ArrowRight, Star, TrendingUp, CheckCircle2 } from "lucide-react";
 export default function TemplatesPage() {
   const templates = [
     {
-      id: "professional",
-      name: "CV Chuyên Nghiệp",
-      description: "Phù hợp với môi trường kỷ luật, công ty lớn, nhà nước.",
-      icon: <Star className="size-5 text-amber-500" />,
+      id: "impressive",
+      name: "CV Ấn tượng 6",
+      description: "Giao diện 2 cột, nổi bật thông tin với nền tối bên trái.",
+      icon: <Star className="size-5 text-blue-500" />,
       color: "blue",
       img: "https://www.topcv.vn/images/cv/avatars/default/cv-template-default.png"
     },
     {
-      id: "creative",
-      name: "CV Ấn Tượng",
-      description: "Phù hợp cho các vị trí Design, Marketing, Content.",
-      icon: <TrendingUp className="size-5 text-purple-500" />,
-      color: "purple",
+      id: "standard",
+      name: "CV Tiêu chuẩn",
+      description: "Phù hợp với môi trường kỷ luật, công ty truyền thống, ATS-friendly.",
+      icon: <CheckCircle2 className="size-5 text-slate-500" />,
+      color: "slate",
       img: "https://www.topcv.vn/images/cv/avatars/default/cv-template-default.png"
     },
     {
-      id: "harvard",
-      name: "CV Harvard",
-      description: "Tiêu chuẩn cho sinh viên mới ra trường, khối học thuật.",
-      icon: <CheckCircle2 className="size-5 text-emerald-500" />,
+      id: "elegant",
+      name: "CV Thanh lịch",
+      description: "Hiện đại, thông tin liên hệ xếp ngang gọn gàng.",
+      icon: <TrendingUp className="size-5 text-emerald-500" />,
       color: "emerald",
+      img: "https://www.topcv.vn/images/cv/avatars/default/cv-template-default.png"
+    },
+    {
+      id: "creative",
+      name: "CV Sáng tạo",
+      description: "Phù hợp cho các vị trí Design, Marketing, có banner nổi bật.",
+      icon: <TrendingUp className="size-5 text-purple-500" />,
+      color: "purple",
       img: "https://www.topcv.vn/images/cv/avatars/default/cv-template-default.png"
     }
   ];

@@ -37,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/register/recruiter").hasRole("COMPANY")
                         .requestMatchers("/api/auth/**", "/error", "/api/files/view/**").permitAll()
+                        .requestMatchers("/api/company/search", "/api/company/detail/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/candidate/**").hasRole("CANDIDATE")
                         .requestMatchers("/api/job/**").hasRole("CANDIDATE")

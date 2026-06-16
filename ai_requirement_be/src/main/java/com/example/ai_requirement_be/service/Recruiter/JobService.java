@@ -11,8 +11,11 @@ import com.example.ai_requirement_be.repository.IJobApplicationRepository;
 import com.example.ai_requirement_be.repository.IJobdepRepository;
 import com.example.ai_requirement_be.repository.IUserRepository;
 import jakarta.transaction.Transactional;
+import com.example.ai_requirement_be.entity.RecruiterManager.ExperienceLevel;
+import com.example.ai_requirement_be.entity.RecruiterManager.JobType;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -30,6 +33,37 @@ public class JobService {
 
         return jobs.stream()
                 .map(job -> new JobResponseDTO(job)) // hoặc dùng Method Reference: JobResponseDTO::new
+                .toList();
+    }
+
+    public List<JobResponseDTO> searchJobs(String keyword, String location, String industry, String experienceLevelStr, String jobTypeStr, BigDecimal salaryMin) {
+        ExperienceLevel experienceLevel = null;
+        if (experienceLevelStr != null && !experienceLevelStr.isEmpty()) {
+            try { experienceLevel = ExperienceLevel.valueOf(experienceLevelStr.toUpperCase()); } catch (Exception e) {}
+        }
+        
+        JobType jobType = null;
+        if (jobTypeStr != null && !jobTypeStr.isEmpty()) {
+            try { jobType = JobType.valueOf(jobTypeStr.toUpperCase()); } catch (Exception e) {}
+        }
+
+        boolean keywordIsNull = keyword == null || keyword.isEmpty();
+        boolean locationIsNull = location == null || location.isEmpty();
+        boolean industryIsNull = industry == null || industry.isEmpty();
+        boolean expIsNull = experienceLevel == null;
+        boolean typeIsNull = jobType == null;
+        boolean salaryIsNull = salaryMin == null;
+
+        List<JobDescription> jobs = jobdepRepository.searchJobs(
+                keyword, keywordIsNull,
+                location, locationIsNull,
+                industry, industryIsNull,
+                experienceLevel, expIsNull,
+                jobType, typeIsNull,
+                salaryMin, salaryIsNull
+        );
+        return jobs.stream()
+                .map(job -> new JobResponseDTO(job))
                 .toList();
     }
 

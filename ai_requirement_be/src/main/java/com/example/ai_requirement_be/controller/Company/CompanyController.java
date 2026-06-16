@@ -1,6 +1,7 @@
 package com.example.ai_requirement_be.controller.Company;
 
 import com.example.ai_requirement_be.dto.Company.CompanyResponseDTO;
+import com.example.ai_requirement_be.dto.Company.CompanyDetailResponseDTO;
 import com.example.ai_requirement_be.dto.Company.UpdateCompanyDTO;
 import com.example.ai_requirement_be.dto.User.UserResponseDTO;
 import com.example.ai_requirement_be.service.Company.CompanyService;
@@ -59,6 +60,17 @@ public class CompanyController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Lỗi hệ thống khi tìm kiếm công ty: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<?> getCompanyById(@PathVariable Long id) {
+        try {
+            CompanyDetailResponseDTO company = companyService.getCompanyById(id);
+            return ResponseEntity.ok(company);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Lỗi hệ thống khi lấy chi tiết công ty: " + e.getMessage());
         }
     }
 }

@@ -2,19 +2,47 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Search, MapPin, BriefcaseBusiness, ChevronDown, Heart, Building2, ChevronRight, Zap, Loader2 } from "lucide-react";
+import { Search, MapPin, BriefcaseBusiness, ChevronDown, Heart, Building2, ChevronRight, Zap, Loader2, Megaphone, Headphones, FileText, Monitor, Landmark, Building, Calculator, ChevronLeft } from "lucide-react";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import CandidateRecommendations from "../components/CandidateRecommendations";
+import CustomDropdown from "../components/CustomDropdown";
 import { useState, useEffect } from "react";
 import { fetchApi } from "../lib/api";
 import { JobResponse } from "../lib/types/job";
 import { formatSalaryRange } from "../lib/utils";
 
+const topIndustries = [
+  { name: "Kinh doanh - Bán hàng", jobs: 10727, icon: <BriefcaseBusiness className="size-6 text-blue-600" /> },
+  { name: "Marketing - PR - Quảng cáo", jobs: 7715, icon: <Megaphone className="size-6 text-blue-600" /> },
+  { name: "Chăm sóc khách hàng (Cu...", jobs: 1646, icon: <Headphones className="size-6 text-blue-600" /> },
+  { name: "Nhân sự - Hành chính - Ph...", jobs: 3724, icon: <FileText className="size-6 text-blue-600" /> },
+  { name: "Công nghệ Thông tin", jobs: 2028, icon: <Monitor className="size-6 text-blue-600" /> },
+  { name: "Tài chính - Ngân hàng - Bả...", jobs: 1279, icon: <Landmark className="size-6 text-blue-600" /> },
+  { name: "Bất động sản", jobs: 439, icon: <Building className="size-6 text-blue-600" /> },
+  { name: "Kế toán - Kiểm toán - Thuế", jobs: 5219, icon: <Calculator className="size-6 text-blue-600" /> },
+];
+
 export default function Home() {
   const router = useRouter();
+  
+  // Search Form State
+  const [keyword, setKeyword] = useState("");
+  const [location, setLocation] = useState("");
+  const [industry, setIndustry] = useState("");
+
   const [jobs, setJobs] = useState<JobResponse[]>([]);
   const [topCompanies, setTopCompanies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const handleSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const params = new URLSearchParams();
+    if (keyword) params.set("keyword", keyword);
+    if (location) params.set("location", location);
+    if (industry) params.set("industry", industry);
+    router.push(`/jobs?${params.toString()}`);
+  };
 
   useEffect(() => {
     fetchApi("/jobs")
@@ -67,7 +95,7 @@ export default function Home() {
             </p>
 
             {/* TopCV Style Search Bar */}
-            <div className="w-full max-w-5xl bg-white p-2 rounded-2xl shadow-xl shadow-blue-900/5 border border-slate-200/60 flex flex-col md:flex-row items-center gap-2">
+            <form onSubmit={handleSearch} className="w-full max-w-5xl bg-white p-2 rounded-2xl shadow-xl shadow-blue-900/5 border border-slate-200/60 flex flex-col md:flex-row items-center gap-2">
               
               {/* Keyword Input */}
               <div className="flex-1 flex items-center w-full px-4 py-3 bg-slate-50/50 rounded-xl hover:bg-slate-100/50 transition-colors border border-transparent focus-within:border-blue-300 focus-within:bg-white">
@@ -76,34 +104,51 @@ export default function Home() {
                   type="text" 
                   placeholder="Vị trí ứng tuyển, công ty, từ khóa..." 
                   className="w-full bg-transparent outline-none text-slate-700 placeholder:text-slate-400 font-medium"
+                  value={keyword}
+                  onChange={(e) => setKeyword(e.target.value)}
                 />
               </div>
 
               {/* Separator hidden on mobile */}
               <div className="hidden md:block w-px h-8 bg-slate-200"></div>
 
-              {/* Location Select */}
-              <div className="w-full md:w-[220px] shrink-0 flex items-center px-4 py-3 bg-slate-50/50 rounded-xl hover:bg-slate-100/50 transition-colors cursor-pointer group">
-                <MapPin className="size-5 text-slate-400 mr-3 shrink-0 group-hover:text-blue-500" />
-                <div className="flex-1 truncate text-slate-700 font-medium select-none">Tất cả địa điểm</div>
-                <ChevronDown className="size-4 text-slate-400 ml-2 shrink-0" />
-              </div>
+              {/* Location Select Custom */}
+              <CustomDropdown 
+                className="w-full md:w-[200px] shrink-0"
+                icon={MapPin}
+                value={location}
+                onChange={setLocation}
+                placeholder="Tất cả địa điểm"
+                options={[
+                  { value: "Hà Nội", label: "Hà Nội" },
+                  { value: "Hồ Chí Minh", label: "Hồ Chí Minh" },
+                  { value: "Đà Nẵng", label: "Đà Nẵng" }
+                ]}
+              />
 
               {/* Separator hidden on mobile */}
               <div className="hidden md:block w-px h-8 bg-slate-200"></div>
 
-              {/* Category Select */}
-              <div className="w-full md:w-[220px] shrink-0 flex items-center px-4 py-3 bg-slate-50/50 rounded-xl hover:bg-slate-100/50 transition-colors cursor-pointer group">
-                <BriefcaseBusiness className="size-5 text-slate-400 mr-3 shrink-0 group-hover:text-blue-500" />
-                <div className="flex-1 truncate text-slate-700 font-medium select-none">Tất cả ngành nghề</div>
-                <ChevronDown className="size-4 text-slate-400 ml-2 shrink-0" />
-              </div>
+              {/* Category Select Custom */}
+              <CustomDropdown 
+                className="w-full md:w-[220px] shrink-0"
+                icon={BriefcaseBusiness}
+                value={industry}
+                onChange={setIndustry}
+                placeholder="Tất cả ngành nghề"
+                options={[
+                  { value: "IT", label: "Công nghệ thông tin" },
+                  { value: "Marketing", label: "Marketing - PR" },
+                  { value: "Kinh doanh", label: "Kinh doanh - Bán hàng" },
+                  { value: "Kế toán", label: "Kế toán - Kiểm toán" }
+                ]}
+              />
 
               {/* Search Button */}
-              <button className="w-full md:w-[140px] shrink-0 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 px-6 rounded-xl transition-colors shadow-md shadow-blue-600/20">
+              <button type="submit" className="w-full md:w-[140px] shrink-0 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 px-6 rounded-xl transition-colors shadow-md shadow-blue-600/20">
                 Tìm kiếm
               </button>
-            </div>
+            </form>
 
             {/* Suggestions */}
             <div className="flex flex-wrap items-center justify-center gap-2 mt-6 text-sm">
@@ -119,6 +164,35 @@ export default function Home() {
 
         {/* AI Recommendations */}
         <CandidateRecommendations />
+
+        {/* Top Industries Section */}
+        <section className="py-16 bg-white border-t border-slate-100">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold text-slate-900">Top ngành nghề nổi bật</h2>
+              <div className="flex gap-2">
+                <button className="size-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-blue-600 hover:text-blue-600 transition-colors">
+                  <ChevronLeft className="size-4" />
+                </button>
+                <button className="size-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-blue-600 hover:text-blue-600 transition-colors">
+                  <ChevronRight className="size-4" />
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+              {topIndustries.map((industry, idx) => (
+                <div key={idx} className="bg-slate-50 border border-slate-100 rounded-2xl p-6 text-center hover:border-blue-300 hover:shadow-md hover:-translate-y-1 transition-all cursor-pointer group">
+                  <div className="size-16 rounded-2xl bg-white shadow-sm flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                    {industry.icon}
+                  </div>
+                  <h3 className="font-bold text-slate-800 text-sm mb-1.5 px-2 line-clamp-1 group-hover:text-blue-600 transition-colors">{industry.name}</h3>
+                  <p className="text-blue-600 text-sm font-medium">{industry.jobs.toLocaleString('vi-VN')} việc làm</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* Top Employers Section */}
         <section className="py-16 bg-white">
@@ -235,15 +309,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
-        <div className="container mx-auto px-4 text-center">
-          <div className="size-12 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-2xl mx-auto mb-6 shadow-lg shadow-blue-600/20">
-            AI
-          </div>
-          <p className="mb-4">Nền tảng tuyển dụng thông minh ứng dụng AI.</p>
-          <p className="text-sm">&copy; {new Date().getFullYear()} AI Recruitment. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

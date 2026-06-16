@@ -1,7 +1,9 @@
 package com.example.ai_requirement_be.service.Company;
 
 import com.example.ai_requirement_be.dto.Company.CompanyResponseDTO;
+import com.example.ai_requirement_be.dto.Company.CompanyDetailResponseDTO;
 import com.example.ai_requirement_be.dto.Company.UpdateCompanyDTO;
+import com.example.ai_requirement_be.dto.RecruiterDto.JobResponseDTO;
 import com.example.ai_requirement_be.entity.CompaniesManager.Companies;
 import com.example.ai_requirement_be.entity.UserManager.User;
 import com.example.ai_requirement_be.entity.UserManager.UserRole;
@@ -97,7 +99,30 @@ public class CompanyService {
        return dtoList;
    }
 
+   @org.springframework.transaction.annotation.Transactional(readOnly = true)
+   public CompanyDetailResponseDTO getCompanyById(Long id) {
+       Companies comp = companyRepository.findById(id)
+               .orElseThrow(() -> new RuntimeException("Không tìm thấy công ty"));
+       
+       java.util.List<JobResponseDTO> jobs = new java.util.ArrayList<>();
+       if (comp.getJobDescriptions() != null) {
+           jobs = comp.getJobDescriptions().stream()
+                   .map(job -> new JobResponseDTO(job))
+                   .collect(java.util.stream.Collectors.toList());
+       }
 
-
+       return new CompanyDetailResponseDTO(
+               comp.getId(),
+               comp.getName(),
+               comp.getDescription(),
+               comp.getIndustry(),
+               comp.getCompanySize(),
+               comp.getWebsite(),
+               comp.getLogoUrl(),
+               comp.getLocation(),
+               comp.getVerified(),
+               jobs
+       );
+   }
 
 }
