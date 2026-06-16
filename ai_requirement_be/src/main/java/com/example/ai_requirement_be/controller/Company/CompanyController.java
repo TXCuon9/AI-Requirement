@@ -1,5 +1,6 @@
 package com.example.ai_requirement_be.controller.Company;
 
+import com.example.ai_requirement_be.dto.Company.CompanyResponseDTO;
 import com.example.ai_requirement_be.dto.Company.UpdateCompanyDTO;
 import com.example.ai_requirement_be.dto.User.UserResponseDTO;
 import com.example.ai_requirement_be.service.Company.CompanyService;
@@ -8,7 +9,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
 import java.util.List;
 
@@ -25,7 +25,6 @@ public class CompanyController {
    public ResponseEntity<UpdateCompanyDTO> getProfile(Principal principal) {
        return ResponseEntity.ok(companyService.getCompanyProfile(principal.getName()));
    }
-
    @PutMapping("/profile")
     public ResponseEntity<String> updateProfile(Principal principal , @Valid @RequestBody UpdateCompanyDTO updateCompanyDTO) {
        String email = principal.getName();
@@ -52,5 +51,14 @@ public class CompanyController {
        companyService.approveRecruiter(id);
        return ResponseEntity.ok("Đã banned tài khoản trên tài khoản này không sử dụng được");
    }
-
+    @GetMapping("/search")
+    public ResponseEntity<?> searchCompanies(@RequestParam(value = "keyword", required = false) String keyword) {
+        try {
+            List<CompanyResponseDTO> results = companyService.searchCompanies(keyword);
+            return ResponseEntity.ok(results);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Lỗi hệ thống khi tìm kiếm công ty: " + e.getMessage());
+        }
+    }
 }

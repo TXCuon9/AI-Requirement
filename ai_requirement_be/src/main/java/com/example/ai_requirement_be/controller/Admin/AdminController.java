@@ -51,5 +51,4 @@ public class AdminController {
         adminService.toggleCompanyStatus(id);
         return ResponseEntity.ok("Đã cập nhật trạng thái hoạt động của công ty");
     }
-
 }

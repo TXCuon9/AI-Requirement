@@ -23,19 +23,16 @@ public class ResumeController {
         List<Resume> list = resumeService.getMyResumes(principal.getName());
         return ResponseEntity.ok(list);
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<Resume> getResumeById(@PathVariable Long id, Principal principal) {
         Resume resume = resumeService.getResumeById(id, principal.getName());
         return ResponseEntity.ok(resume);
     }
-
     @PostMapping
     public ResponseEntity<String> CreateResume(Principal principal, @Valid @RequestBody SaveResumeDTO resumeDTO) {
         resumeService.createResume(resumeDTO, principal.getName());
         return ResponseEntity.ok("Tải lên và lưu CV thành công!");
     }
-
     @PutMapping("/{id}")
     public ResponseEntity<String> updateResume(@PathVariable Long id, Principal principal, @Valid @RequestBody SaveResumeDTO resumeDTO) {
         resumeService.updateResume(id , resumeDTO , principal.getName());
@@ -46,7 +43,6 @@ public class ResumeController {
         resumeService.deleteResume(id , principal.getName());
         return ResponseEntity.ok("Xóa CV thành công!");
     }
-
     @PutMapping("/{id}/primary")
     public ResponseEntity<String> setPrimaryResume(@PathVariable Long id, Principal principal) {
         resumeService.setPrimaryResume(id, principal.getName());
