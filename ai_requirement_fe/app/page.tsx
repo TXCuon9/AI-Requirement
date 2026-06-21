@@ -23,9 +23,22 @@ const topIndustries = [
   { name: "Kế toán - Kiểm toán - Thuế", jobs: 5219, icon: <Calculator className="size-6 text-blue-600" /> },
 ];
 
+const getIndustryIcon = (name: string) => {
+  const lower = name.toLowerCase();
+  if (lower.includes('kinh doanh') || lower.includes('bán hàng')) return <BriefcaseBusiness className="size-6 text-blue-600" />;
+  if (lower.includes('marketing') || lower.includes('pr')) return <Megaphone className="size-6 text-blue-600" />;
+  if (lower.includes('khách hàng')) return <Headphones className="size-6 text-blue-600" />;
+  if (lower.includes('nhân sự') || lower.includes('hành chính')) return <FileText className="size-6 text-blue-600" />;
+  if (lower.includes('công nghệ') || lower.includes('it')) return <Monitor className="size-6 text-blue-600" />;
+  if (lower.includes('tài chính') || lower.includes('ngân hàng')) return <Landmark className="size-6 text-blue-600" />;
+  if (lower.includes('bất động sản')) return <Building className="size-6 text-blue-600" />;
+  if (lower.includes('kế toán') || lower.includes('kiểm toán')) return <Calculator className="size-6 text-blue-600" />;
+  return <BriefcaseBusiness className="size-6 text-blue-600" />;
+};
+
 export default function Home() {
   const router = useRouter();
-  
+
   // Search Form State
   const [keyword, setKeyword] = useState("");
   const [location, setLocation] = useState("");
@@ -33,6 +46,7 @@ export default function Home() {
 
   const [jobs, setJobs] = useState<JobResponse[]>([]);
   const [topCompanies, setTopCompanies] = useState<any[]>([]);
+  const [topIndustriesList, setTopIndustriesList] = useState<any[]>(topIndustries);
   const [loading, setLoading] = useState(true);
 
   const handleSearch = (e?: React.FormEvent) => {
@@ -63,13 +77,34 @@ export default function Home() {
             compMap.get(job.companyName).jobCount++;
           }
         });
-        
+
         // Sort companies by job count descending and take top 4
         const sortedCompanies = Array.from(compMap.values())
           .sort((a, b) => b.jobCount - a.jobCount)
           .slice(0, 4);
-          
+
         setTopCompanies(sortedCompanies);
+
+        // Aggregate unique industries
+        const indMap = new Map();
+        allJobs.forEach((job: JobResponse) => {
+          const ind = job.industry;
+          if (ind) {
+            if (!indMap.has(ind)) {
+              indMap.set(ind, { name: ind, jobs: 1 });
+            } else {
+              indMap.get(ind).jobs++;
+            }
+          }
+        });
+        
+        const sortedIndustries = Array.from(indMap.values())
+          .sort((a, b) => b.jobs - a.jobs)
+          .slice(0, 8);
+        
+        if (sortedIndustries.length > 0) {
+          setTopIndustriesList(sortedIndustries);
+        }
       })
       .catch((err) => console.error("Failed to fetch jobs:", err))
       .finally(() => setLoading(false));
@@ -83,12 +118,12 @@ export default function Home() {
 
       <main className="flex-1">
         {/* Hero Section with Advanced Search */}
-        <section className="relative pt-16 pb-20 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-indigo-50 border-b border-blue-100">
+        <section className="relative pt-16 pb-20 bg-gradient-to-br from-blue-50 via-white to-indigo-50 border-b border-blue-100">
           <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] pointer-events-none"></div>
-          
+
           <div className="container mx-auto px-4 relative z-10 flex flex-col items-center">
             <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-slate-900 text-center mb-4 leading-tight">
-              Tìm việc làm nhanh 24h, việc làm mới nhất <br className="hidden md:block"/> trên toàn quốc.
+              Tìm việc làm nhanh 24h, việc làm mới nhất <br className="hidden md:block" /> trên toàn quốc.
             </h1>
             <p className="text-lg text-slate-600 text-center mb-8 max-w-2xl">
               Tiếp cận <span className="font-semibold text-blue-600">30,000+</span> tin tuyển dụng chất lượng cao mỗi ngày.
@@ -96,13 +131,13 @@ export default function Home() {
 
             {/* TopCV Style Search Bar */}
             <form onSubmit={handleSearch} className="w-full max-w-5xl bg-white p-2 rounded-2xl shadow-xl shadow-blue-900/5 border border-slate-200/60 flex flex-col md:flex-row items-center gap-2">
-              
+
               {/* Keyword Input */}
               <div className="flex-1 flex items-center w-full px-4 py-3 bg-slate-50/50 rounded-xl hover:bg-slate-100/50 transition-colors border border-transparent focus-within:border-blue-300 focus-within:bg-white">
                 <Search className="size-5 text-slate-400 mr-3 shrink-0" />
-                <input 
-                  type="text" 
-                  placeholder="Vị trí ứng tuyển, công ty, từ khóa..." 
+                <input
+                  type="text"
+                  placeholder="Vị trí ứng tuyển, công ty, từ khóa..."
                   className="w-full bg-transparent outline-none text-slate-700 placeholder:text-slate-400 font-medium"
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
@@ -113,7 +148,7 @@ export default function Home() {
               <div className="hidden md:block w-px h-8 bg-slate-200"></div>
 
               {/* Location Select Custom */}
-              <CustomDropdown 
+              <CustomDropdown
                 className="w-full md:w-[200px] shrink-0"
                 icon={MapPin}
                 value={location}
@@ -130,7 +165,7 @@ export default function Home() {
               <div className="hidden md:block w-px h-8 bg-slate-200"></div>
 
               {/* Category Select Custom */}
-              <CustomDropdown 
+              <CustomDropdown
                 className="w-full md:w-[220px] shrink-0"
                 icon={BriefcaseBusiness}
                 value={industry}
@@ -181,10 +216,10 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-              {topIndustries.map((industry, idx) => (
+              {topIndustriesList.map((industry, idx) => (
                 <div key={idx} className="bg-slate-50 border border-slate-100 rounded-2xl p-6 text-center hover:border-blue-300 hover:shadow-md hover:-translate-y-1 transition-all cursor-pointer group">
                   <div className="size-16 rounded-2xl bg-white shadow-sm flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                    {industry.icon}
+                    {industry.icon || getIndustryIcon(industry.name)}
                   </div>
                   <h3 className="font-bold text-slate-800 text-sm mb-1.5 px-2 line-clamp-1 group-hover:text-blue-600 transition-colors">{industry.name}</h3>
                   <p className="text-blue-600 text-sm font-medium">{industry.jobs.toLocaleString('vi-VN')} việc làm</p>
@@ -255,19 +290,19 @@ export default function Home() {
                 </div>
               ) : (
                 jobs.map((job) => (
-                  <div 
-                    key={job.id} 
+                  <div
+                    key={job.id}
                     onClick={() => router.push(`/jobs/${job.id}`)}
                     className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-900/5 transition-all group flex flex-col h-full cursor-pointer relative overflow-hidden"
                   >
                     <div className="absolute top-0 left-0 w-1 h-full bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    
+
                     <div className="flex items-start gap-4 mb-4">
                       <div className="size-16 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 overflow-hidden">
                         {job.companyLogo ? (
-                           <img src={job.companyLogo} alt={job.companyName || "Logo"} className="w-full h-full object-cover" />
+                          <img src={job.companyLogo} alt={job.companyName || "Logo"} className="w-full h-full object-cover" />
                         ) : (
-                           <Building2 className="size-8 text-slate-300" />
+                          <Building2 className="size-8 text-slate-300" />
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -277,7 +312,7 @@ export default function Home() {
                         <p className="text-slate-600 text-sm truncate mt-0.5">{job.companyName || "N/A"}</p>
                       </div>
                     </div>
-                    
+
                     <div className="mt-auto pt-4 flex items-center justify-between border-t border-slate-100">
                       <div className="flex flex-col gap-1.5">
                         <span className="inline-block px-2.5 py-1 bg-red-50 text-red-600 text-sm font-semibold rounded-md max-w-fit">
@@ -286,15 +321,15 @@ export default function Home() {
                         <span className="text-sm text-slate-500 flex items-center gap-1">
                           <MapPin className="size-3.5" /> {job.location}
                         </span>
+                      </div>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); /* TODO: Implement save logic on homepage */ }}
+                        className="size-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 transition-all z-10"
+                      >
+                        <Heart className="size-5" />
+                      </button>
                     </div>
-                    <button 
-                      onClick={(e) => { e.stopPropagation(); /* TODO: Implement save logic on homepage */ }}
-                      className="size-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 transition-all z-10"
-                    >
-                      <Heart className="size-5" />
-                    </button>
                   </div>
-                </div>
                 ))
               )}
             </div>

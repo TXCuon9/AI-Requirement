@@ -8,12 +8,17 @@ interface TemplateProps {
 export default function StandardTemplate({ formData }: TemplateProps) {
   return (
     <div className="w-full max-w-[794px] min-h-[600px] h-fit bg-white shadow-xl mx-auto p-12 flex flex-col font-serif text-slate-800 print:shadow-none print:w-full print:max-w-none print:h-auto origin-top transition-all">
-      
+
       {/* Header */}
       <div className="border-b-2 border-slate-800 pb-6 mb-6 flex flex-col items-center text-center">
+        {formData.avatarUrl && (
+          <div className="size-32 rounded-full overflow-hidden border-4 border-slate-200 mb-4 bg-slate-50 flex items-center justify-center">
+            <img src={formData.avatarUrl.startsWith('/') ? `http://localhost:8080${formData.avatarUrl}` : formData.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+          </div>
+        )}
         <h1 className="text-4xl font-bold uppercase tracking-wider mb-2">{formData.fullName || "HỌ VÀ TÊN"}</h1>
         <h2 className="text-xl text-slate-600 mb-4">{formData.targetPosition || "VỊ TRÍ ỨNG TUYỂN"}</h2>
-        
+
         <div className="flex flex-wrap justify-center gap-4 text-sm text-slate-600">
           {formData.phone && <span className="flex items-center gap-1"><Phone className="size-4" /> {formData.phone}</span>}
           {formData.email && <span className="flex items-center gap-1"><Mail className="size-4" /> {formData.email}</span>}
@@ -24,7 +29,7 @@ export default function StandardTemplate({ formData }: TemplateProps) {
 
       {/* Main Content */}
       <div className="flex flex-col gap-6">
-        
+
         {/* Summary */}
         {formData.summary && (
           <section>

@@ -26,7 +26,11 @@ public class FileUploadService {
     // Định dạng các MiMe type được phép (PDF và DOCX)
     private static final List<String> ALLOWED_MIME_TYPES = Arrays.asList(
             "application/pdf",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+            "image/gif"
     );
 
     private static final long MAX_FILE_SIZE = 10 * 1024 * 1024;
@@ -57,7 +61,7 @@ public class FileUploadService {
         // Kiểm tra định dạng file -> chỉ nhận PDF , DOCX
         String contentType = file.getContentType();
         if(contentType == null || !ALLOWED_MIME_TYPES.contains(contentType)) {
-            throw new IllegalArgumentException("Định dạng file không hợp lệ! Hệ thống chỉ chấp nhận file PDF hoặc DOCX.");
+            throw new IllegalArgumentException("Định dạng file không hợp lệ! Hệ thống chỉ chấp nhận file PDF, DOCX, hoặc file ảnh (JPG, PNG).");
         }
 
         try {

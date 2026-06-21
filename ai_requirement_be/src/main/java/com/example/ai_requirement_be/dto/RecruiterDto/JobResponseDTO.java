@@ -12,6 +12,7 @@ public class JobResponseDTO {
     private Long id;
     private String companyName; // Trả thêm tên công ty ra ngoài
     private String companyLogo; // Thêm logo
+    private String industry;
     private String title;
     private String description;
     private String requirements;
@@ -32,6 +33,7 @@ public class JobResponseDTO {
         if (job.getCompany() != null) {
             this.companyName = job.getCompany().getName();
             this.companyLogo = job.getCompany().getLogoUrl();
+            this.industry = job.getCompany().getIndustry();
         }
         this.title = job.getTitle();
         this.description = job.getDescription();
@@ -52,6 +54,7 @@ public class JobResponseDTO {
     public Long getId() { return id; }
     public String getCompanyName() { return companyName; }
     public String getCompanyLogo() { return companyLogo; }
+    public String getIndustry() { return industry; }
     public String getTitle() { return title; }
     public String getDescription() { return description; }
     public String getRequirements() { return requirements; }

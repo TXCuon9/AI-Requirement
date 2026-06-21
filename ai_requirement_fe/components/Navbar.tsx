@@ -1,13 +1,28 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { fetchApi } from "../lib/api";
 import { useAuth } from "../lib/authContext";
 import { FileText, ArrowRight, TrendingUp, Star, Briefcase, Code2, DollarSign, UploadCloud, CheckCircle2, Settings } from "lucide-react";
 
 export default function Navbar() {
   const { user, isAuthenticated, logout } = useAuth();
   const pathname = usePathname();
+  const [avatar, setAvatar] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isAuthenticated && user?.role === "CANDIDATE") {
+      fetchApi("/candidate/profile")
+        .then((data) => {
+          if (data && data.avatarUrl) {
+            setAvatar(data.avatarUrl);
+          }
+        })
+        .catch((err) => console.error("Error fetching avatar:", err));
+    }
+  }, [isAuthenticated, user]);
 
   const getLinkClass = (path: string) => {
     return pathname === path || pathname?.startsWith(path + '/')
@@ -113,19 +128,26 @@ export default function Navbar() {
           {isAuthenticated ? (
             <div className="flex items-center gap-4">
               <div className="hidden sm:flex items-center gap-2">
-                <div className="size-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-medium">
-                  {user?.email.charAt(0).toUpperCase()}
-                </div>
-                <span className="text-sm font-medium">{user?.email}</span>
+                {avatar ? (
+                  <img src={avatar} alt="Avatar" className="size-8 rounded-full object-cover border border-slate-200" />
+                ) : (
+                  <div className="size-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-medium">
+                    {user?.email.charAt(0).toUpperCase()}
+                  </div>
+                )}
+                {user?.role !== "CANDIDATE" && (
+                  <span className="text-sm font-medium">{user?.email}</span>
+                )}
               </div>
-              {user?.role === "ADMIN" ? (
+              {user?.role === "ADMIN" && (
                 <Link
                   href="/admin"
                   className="text-sm font-semibold bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors shadow-md"
                 >
                   Admin Panel
                 </Link>
-              ) : (
+              )}
+              {(user?.role === "RECRUITER" || user?.role === "COMPANY" || user?.role === "ADMIN") && (
                 <Link
                   href="/dashboard"
                   className="text-sm font-semibold bg-blue-50 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors"

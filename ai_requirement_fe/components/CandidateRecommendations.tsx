@@ -29,7 +29,7 @@ export default function CandidateRecommendations() {
       setLoading(true);
       // 1. Fetch Candidate Profile
       const profile = await fetchApi("/candidate/profile");
-      
+
       let vectorQueryPayload = {};
 
       if (profile.resumes && profile.resumes.length > 0) {
@@ -52,7 +52,7 @@ export default function CandidateRecommendations() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(vectorQueryPayload)
       });
-      
+
       if (!aiResponse.ok) {
         throw new Error("AI API Failed");
       }
@@ -69,7 +69,7 @@ export default function CandidateRecommendations() {
       // Ideally we should have a /api/jobs/batch API, but we'll fetch all jobs and filter
       const allJobs: JobResponse[] = await fetchApi("/jobs");
       const matchedJobs = allJobs.filter(j => jobIds.includes(String(j.id)));
-      
+
       setRecommendedJobs(matchedJobs);
 
     } catch (error) {
@@ -106,17 +106,17 @@ export default function CandidateRecommendations() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {recommendedJobs.map((job) => (
-            <div 
-              key={job.id} 
+            <div
+              key={job.id}
               onClick={() => router.push(`/jobs/${job.id}`)}
               className="bg-white p-5 rounded-2xl border border-blue-200 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-900/10 transition-all group flex flex-col h-full cursor-pointer relative overflow-hidden"
             >
               <div className="flex items-start gap-4 mb-4">
                 <div className="size-16 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 overflow-hidden">
                   {job.companyLogo ? (
-                     <img src={job.companyLogo} alt={job.companyName || "Logo"} className="w-full h-full object-cover" />
+                    <img src={job.companyLogo} alt={job.companyName || "Logo"} className="w-full h-full object-cover" />
                   ) : (
-                     <Building2 className="size-8 text-slate-300" />
+                    <Building2 className="size-8 text-slate-300" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -126,7 +126,7 @@ export default function CandidateRecommendations() {
                   <p className="text-slate-600 text-sm truncate mt-0.5">{job.companyName || "N/A"}</p>
                 </div>
               </div>
-              
+
               <div className="mt-auto pt-4 flex items-center justify-between border-t border-slate-100">
                 <div className="flex flex-col gap-1.5">
                   <span className="inline-block px-2.5 py-1 bg-green-50 text-green-700 text-sm font-semibold rounded-md max-w-fit">
@@ -135,15 +135,15 @@ export default function CandidateRecommendations() {
                   <span className="text-sm text-slate-500 flex items-center gap-1">
                     <MapPin className="size-3.5" /> {job.location}
                   </span>
+                </div>
+                <button
+                  onClick={(e) => { e.stopPropagation(); }}
+                  className="size-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 transition-all z-10"
+                >
+                  <Heart className="size-5" />
+                </button>
               </div>
-              <button 
-                onClick={(e) => { e.stopPropagation(); }}
-                className="size-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 transition-all z-10"
-              >
-                <Heart className="size-5" />
-              </button>
             </div>
-          </div>
           ))}
         </div>
       </div>

@@ -14,7 +14,7 @@ export default function ImpressiveTemplate({ formData }: TemplateProps) {
         <div className="flex flex-col items-center mb-8">
           <div className="size-32 rounded-full overflow-hidden border-4 border-slate-500 bg-white flex items-center justify-center text-4xl font-bold text-[#1A2C42]">
             {formData.avatarUrl ? (
-              <img src={formData.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+              <img src={formData.avatarUrl.startsWith('/') ? `http://localhost:8080${formData.avatarUrl}` : formData.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
             ) : (
               formData.fullName ? formData.fullName.charAt(0).toUpperCase() : "A"
             )}
@@ -72,7 +72,7 @@ export default function ImpressiveTemplate({ formData }: TemplateProps) {
             </ul>
           </div>
         )}
-        
+
         {/* Hobbies */}
         {formData.hobbies && (
           <div>

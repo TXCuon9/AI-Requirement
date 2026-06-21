@@ -60,6 +60,18 @@ public class ResumeService {
     }
 
     @Transactional
+    public void updateAiAnalysisResult(Long resumeId, java.util.Map<String, Object> aiResult, String candidateEmail) {
+        CandidateProfile candidateProfile = getCandidateByEmail(candidateEmail);
+        Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new RuntimeException("Không tìm thấy CV yêu cầu!"));
+
+        if(!resume.getCandidateId().getId().equals(candidateProfile.getId())){
+            throw new RuntimeException("Bạn không có quyền chỉnh sửa CV của người khác");
+        }
+        resume.setAiAnalysisResult(aiResult);
+        resumeRepository.save(resume);
+    }
+
+    @Transactional
     public void deleteResume(Long resumeId , String candidateEmail) {
        CandidateProfile candidateProfile = getCandidateByEmail(candidateEmail);
 

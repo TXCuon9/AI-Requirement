@@ -36,29 +36,29 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/register/recruiter").hasRole("COMPANY")
-                        .requestMatchers("/api/auth/**", "/error", "/api/files/view/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/error", "/api/files/view/**", "/api/admin/seed-jobs", "/api/admin/clear-mock-jobs").permitAll()
                         .requestMatchers("/api/company/search", "/api/company/detail/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/candidate/**").hasRole("CANDIDATE")
                         .requestMatchers("/api/job/**").hasRole("CANDIDATE")
+                        .requestMatchers("/api/job-fit-cache/**").hasRole("CANDIDATE")
                         .requestMatchers("/api/company/**").hasAnyRole("COMPANY", "RECRUITER")
                         .requestMatchers("/api/recruiter/resume/**").permitAll()
                         .requestMatchers("/api/recruiter/**").hasAnyRole("COMPANY", "RECRUITER")
                         .requestMatchers("/api/resume", "/api/resume/**").hasRole("CANDIDATE")
                         .requestMatchers("/api/file", "/api/file/**").hasRole("CANDIDATE")
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
                 .exceptionHandling(exc -> exc
                         .authenticationEntryPoint((request, response, authException) -> {
                             response.setStatus(401);
                             response.getWriter().write("Vui lòng đăng nhập!");
-                        })
-                )
+                        }))
                 // Thêm JwtAuthenticationFilter vào trước UsernamePasswordAuthenticationFilter
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

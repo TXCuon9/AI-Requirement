@@ -35,7 +35,7 @@ export default function CustomDropdown({ icon: Icon, value, options, onChange, p
   }, []);
 
   return (
-    <div className={`relative ${className}`} ref={dropdownRef}>
+    <div className={`relative ${isOpen ? 'z-50' : 'z-40'} ${className}`} ref={dropdownRef}>
       <div 
         className="flex items-center w-full px-4 py-2.5 bg-slate-100/80 rounded-lg border border-transparent hover:bg-white focus-within:border-blue-400 focus-within:bg-white transition-colors cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}

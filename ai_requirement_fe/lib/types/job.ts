@@ -2,6 +2,7 @@ export interface JobResponse {
   id: number;
   companyName: string | null;
   companyLogo: string | null;
+  industry?: string | null;
   title: string;
   description: string;
   requirements: string;
@@ -22,6 +23,7 @@ export interface JobDetailResponse {
   id: number;
   companyName: string | null;
   companyLogo: string | null;
+  industry?: string | null;
   title: string;
   description: string;
   requirements: string;

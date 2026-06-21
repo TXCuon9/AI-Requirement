@@ -38,6 +38,13 @@ public class ResumeController {
         resumeService.updateResume(id , resumeDTO , principal.getName());
         return ResponseEntity.ok("Cập nhật thông tin CV thành công!");
     }
+    
+    @PutMapping("/{id}/ai-analysis")
+    public ResponseEntity<String> updateAiAnalysisResult(@PathVariable Long id, Principal principal, @RequestBody java.util.Map<String, Object> aiResult) {
+        resumeService.updateAiAnalysisResult(id, aiResult, principal.getName());
+        return ResponseEntity.ok("Lưu kết quả phân tích AI thành công!");
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteResume(@PathVariable Long id, Principal principal) {
         resumeService.deleteResume(id , principal.getName());

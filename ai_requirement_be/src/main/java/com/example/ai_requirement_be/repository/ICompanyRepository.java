@@ -10,8 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ICompanyRepository extends JpaRepository<Companies , Long> {
+public interface ICompanyRepository extends JpaRepository<Companies, Long> {
     Optional<Companies> findByUserId(long id);
+    Optional<Companies> findByName(String name);
 
     @Query("SELECT c FROM Companies c WHERE " +
             "(LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) OR " +

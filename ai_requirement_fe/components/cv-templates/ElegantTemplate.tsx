@@ -8,12 +8,17 @@ interface TemplateProps {
 export default function ElegantTemplate({ formData }: TemplateProps) {
   return (
     <div className="w-full max-w-[794px] min-h-[600px] h-fit bg-white shadow-xl mx-auto flex flex-col font-sans text-slate-800 print:shadow-none print:w-full print:max-w-none print:h-auto origin-top transition-all">
-      
+
       {/* Header Banner */}
       <div className="bg-slate-100 p-10 flex flex-col items-center text-center">
+        {formData.avatarUrl && (
+          <div className="size-28 rounded-full overflow-hidden border-4 border-white mb-6 shadow-md bg-white">
+            <img src={formData.avatarUrl.startsWith('/') ? `http://localhost:8080${formData.avatarUrl}` : formData.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+          </div>
+        )}
         <h1 className="text-3xl font-light tracking-wide text-slate-900 mb-2">{formData.fullName || "HỌ VÀ TÊN"}</h1>
         <h2 className="text-lg font-medium text-slate-500 uppercase tracking-widest mb-6">{formData.targetPosition || "VỊ TRÍ ỨNG TUYỂN"}</h2>
-        
+
         <div className="flex flex-wrap justify-center gap-6 text-sm text-slate-600">
           {formData.phone && <span className="flex items-center gap-1.5"><Phone className="size-4 text-slate-400" /> {formData.phone}</span>}
           {formData.email && <span className="flex items-center gap-1.5"><Mail className="size-4 text-slate-400" /> {formData.email}</span>}
@@ -24,7 +29,7 @@ export default function ElegantTemplate({ formData }: TemplateProps) {
 
       {/* Main Content */}
       <div className="p-10 flex flex-col gap-8">
-        
+
         {/* Summary */}
         {formData.summary && (
           <section>

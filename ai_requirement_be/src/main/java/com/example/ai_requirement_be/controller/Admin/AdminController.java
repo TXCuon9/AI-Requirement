@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
@@ -20,19 +21,22 @@ public class AdminController {
     private final com.example.ai_requirement_be.repository.IJobdepRepository jobRepository;
 
     @Autowired
-    public AdminController(AdminService adminService , UserService userService, com.example.ai_requirement_be.repository.IJobdepRepository jobRepository) {
+    public AdminController(AdminService adminService, UserService userService,
+            com.example.ai_requirement_be.repository.IJobdepRepository jobRepository) {
 
         this.adminService = adminService;
         this.userService = userService;
         this.jobRepository = jobRepository;
     }
+
     @RequestMapping("/user/pending")
-    public List<UserPendingResponseDTO> getUser(){
-       return userService.findAllPendingUsers();
+    public List<UserPendingResponseDTO> getUser() {
+        return userService.findAllPendingUsers();
     }
+
     @PutMapping("/approve/{id}")
-    public ResponseEntity<String> approveCompany(@PathVariable Long id){
-         adminService.approveCompany(id);
+    public ResponseEntity<String> approveCompany(@PathVariable Long id) {
+        adminService.approveCompany(id);
         return ResponseEntity.ok("Đã duyệt tài khoản thành công sang trạng thái ACTIVE!");
     }
 

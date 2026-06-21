@@ -5,14 +5,31 @@ import com.example.ai_requirement_be.entity.UserManager.UserStatus;
 import com.example.ai_requirement_be.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.ai_requirement_be.dto.Admin.SeedJobDTO;
+import com.example.ai_requirement_be.entity.CompaniesManager.Companies;
+import com.example.ai_requirement_be.entity.RecruiterManager.JobDescription;
+import com.example.ai_requirement_be.entity.RecruiterManager.JobType;
+import com.example.ai_requirement_be.entity.RecruiterManager.RecruiterProfile;
+import com.example.ai_requirement_be.repository.ICompanyRepository;
+import com.example.ai_requirement_be.repository.IJobdepRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class AdminService {
     private final IUserRepository userRepository;
+    private final ICompanyRepository companyRepository;
+    private final IJobdepRepository jobRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AdminService(IUserRepository userRepository) {
+    public AdminService(IUserRepository userRepository, ICompanyRepository companyRepository, IJobdepRepository jobRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.companyRepository = companyRepository;
+        this.jobRepository = jobRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void approveCompany(Long userId) {
@@ -66,4 +83,99 @@ public class AdminService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public void seedJobs(List<SeedJobDTO> dtos) {
+        for (SeedJobDTO dto : dtos) {
+            // Check if company exists
+            Companies company = companyRepository.findByName(dto.getCompanyName()).orElse(null);
+            if (company == null) {
+                // Create company user
+                User companyUser = new User();
+                String emailPrefix = dto.getCompanyName().toLowerCase().replaceAll("[^a-z0-9]", "");
+                companyUser.setEmail("contact@" + emailPrefix + ".com");
+                // Avoid email collision
+                if (userRepository.existsByEmail(companyUser.getEmail())) {
+                    companyUser.setEmail("contact+" + System.currentTimeMillis() + "@" + emailPrefix + ".com");
+                }
+                companyUser.setPasswordHash(passwordEncoder.encode("123456"));
+                companyUser.setRole(com.example.ai_requirement_be.entity.UserManager.UserRole.COMPANY);
+                companyUser.setStatus(UserStatus.ACTIVE);
+
+                company = new Companies();
+                company.setName(dto.getCompanyName());
+                company.setLogoUrl(dto.getCompanyLogoUrl());
+                company.setDescription(dto.getCompanyDescription());
+                company.setVerified(true);
+                company.setUser(companyUser);
+                companyUser.setCompanies(company);
+
+                userRepository.save(companyUser);
+
+                // Create recruiter user for this company
+                User recruiterUser = new User();
+                recruiterUser.setEmail("hr@" + emailPrefix + ".com");
+                if (userRepository.existsByEmail(recruiterUser.getEmail())) {
+                    recruiterUser.setEmail("hr+" + System.currentTimeMillis() + "@" + emailPrefix + ".com");
+                }
+                recruiterUser.setPasswordHash(passwordEncoder.encode("123456"));
+                recruiterUser.setRole(com.example.ai_requirement_be.entity.UserManager.UserRole.RECRUITER);
+                recruiterUser.setStatus(UserStatus.ACTIVE);
+
+                RecruiterProfile recruiterProfile = new RecruiterProfile();
+                recruiterProfile.setCompany(company);
+                recruiterProfile.setPosition("HR Manager");
+                recruiterProfile.setCreatedAt(LocalDateTime.now());
+                recruiterProfile.setUser(recruiterUser);
+                recruiterUser.setRecruiterProfile(recruiterProfile);
+
+                userRepository.save(recruiterUser);
+            }
+
+            // Create Job
+            JobDescription job = new JobDescription();
+            job.setCompany(company);
+            job.setTitle(dto.getJobTitle());
+            job.setDescription(dto.getJobDescription());
+            job.setRequirements(dto.getJobRequirement());
+            String benefits = dto.getJobBenefit() != null ? dto.getJobBenefit() : "";
+            job.setResponsibilities("Quyền lợi: " + benefits); // Save benefits in responsibilities if needed
+            job.setLocation(dto.getLocation());
+            job.setJobType(JobType.FULL_TIME);
+            job.setStatus(com.example.ai_requirement_be.entity.RecruiterManager.JobStatus.OPEN);
+            
+            // Extract salary min/max from string (simplified)
+            try {
+                if (dto.getSalary() != null && !dto.getSalary().isEmpty()) {
+                    String cleanSalary = dto.getSalary().replaceAll("[^0-9\\-]", "");
+                    if (cleanSalary.contains("-")) {
+                        String[] parts = cleanSalary.split("-");
+                        if (parts.length == 2 && !parts[0].isEmpty() && !parts[1].isEmpty()) {
+                            job.setSalaryMin(new java.math.BigDecimal(parts[0].trim()));
+                            job.setSalaryMax(new java.math.BigDecimal(parts[1].trim()));
+                        }
+                    } else if (!cleanSalary.isEmpty()) {
+                        job.setSalaryMin(new java.math.BigDecimal(cleanSalary));
+                        job.setSalaryMax(new java.math.BigDecimal(cleanSalary));
+                    }
+                }
+            } catch (Exception e) {
+                // Ignore salary parsing error
+            }
+
+            jobRepository.save(job);
+        }
+    }
+
+    @Transactional
+    public int clearMockData() {
+        List<User> mockUsers = userRepository.findAll().stream()
+            .filter(u -> u.getEmail() != null && 
+                (u.getEmail().startsWith("contact@") || u.getEmail().startsWith("contact+") || 
+                 u.getEmail().startsWith("hr@") || u.getEmail().startsWith("hr+")))
+            .collect(java.util.stream.Collectors.toList());
+        
+        int count = mockUsers.size();
+        userRepository.deleteAll(mockUsers);
+        return count;
+    }
 }

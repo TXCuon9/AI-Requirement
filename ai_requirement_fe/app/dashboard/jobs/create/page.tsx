@@ -17,7 +17,7 @@ export default function CreateJobPage() {
     responsibilities: "",
     salaryMin: "",
     salaryMax: "",
-    currency: "USD",
+    currency: "VNĐ",
     location: "",
     remote: false,
     jobType: "FULL_TIME",

@@ -8,18 +8,18 @@ interface TemplateProps {
 export default function CreativeTemplate({ formData }: TemplateProps) {
   return (
     <div className="w-full max-w-[794px] min-h-[600px] h-fit bg-white shadow-xl mx-auto flex flex-col font-sans text-slate-800 print:shadow-none print:w-full print:max-w-none print:h-auto origin-top transition-all">
-      
+
       {/* Top Banner */}
       <div className="bg-[#2D8CFF] text-white p-10 flex gap-8 items-center">
         {/* Avatar Section */}
         <div className="size-32 shrink-0 rounded-2xl overflow-hidden border-4 border-white/20 bg-white flex items-center justify-center text-4xl font-bold text-[#2D8CFF] shadow-lg">
           {formData.avatarUrl ? (
-            <img src={formData.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+            <img src={formData.avatarUrl.startsWith('/') ? `http://localhost:8080${formData.avatarUrl}` : formData.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
           ) : (
             formData.fullName ? formData.fullName.charAt(0).toUpperCase() : <User className="size-12" />
           )}
         </div>
-        
+
         {/* Title */}
         <div className="flex-1">
           <h1 className="text-4xl font-black uppercase tracking-wide mb-2">{formData.fullName || "HỌ VÀ TÊN"}</h1>
@@ -33,7 +33,7 @@ export default function CreativeTemplate({ formData }: TemplateProps) {
       <div className="flex flex-1">
         {/* Left Column (Narrow) */}
         <div className="w-[35%] bg-slate-50 p-8 border-r border-slate-200">
-          
+
           {/* Contact */}
           <div className="mb-8">
             <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
@@ -106,7 +106,7 @@ export default function CreativeTemplate({ formData }: TemplateProps) {
 
         {/* Right Column (Wide) */}
         <div className="w-[65%] p-8 bg-white">
-          
+
           {/* Experience */}
           {formData.experienceItems && formData.experienceItems.length > 0 && (
             <div className="mb-10">
@@ -178,7 +178,7 @@ export default function CreativeTemplate({ formData }: TemplateProps) {
                     </div>
                     <div className="flex gap-4 items-center mb-3">
                       {proj.role && <span className="text-sm font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">{proj.role}</span>}
-                      {proj.link && <a href={proj.link} target="_blank" rel="noreferrer" className="text-xs text-[#2D8CFF] hover:underline flex items-center gap-1"><Code2 className="size-3"/> Link</a>}
+                      {proj.link && <a href={proj.link} target="_blank" rel="noreferrer" className="text-xs text-[#2D8CFF] hover:underline flex items-center gap-1"><Code2 className="size-3" /> Link</a>}
                     </div>
                     {proj.description && (
                       <div className="text-sm text-slate-600 whitespace-pre-wrap leading-relaxed">

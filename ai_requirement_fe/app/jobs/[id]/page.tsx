@@ -16,7 +16,7 @@ export default function JobDetailPage() {
 
   const [job, setJob] = useState<JobDetailResponse | null>(null);
   const [loading, setLoading] = useState(true);
-  
+
   // Apply & Save states
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -31,10 +31,12 @@ export default function JobDetailPage() {
   const [isScoring, setIsScoring] = useState(false);
   const [scoreError, setScoreError] = useState("");
 
-  const handleScoreJobFit = async () => {
+  const handleScoreJobFit = async (forceReEvaluate: boolean = false) => {
     setIsScoring(true);
     setScoreError("");
-    setFitScore(null);
+    if (forceReEvaluate) {
+      setFitScore(null);
+    }
     try {
       // 1. Get primary CV
       const resumes = await fetchApi("/resume");
@@ -42,6 +44,20 @@ export default function JobDetailPage() {
         throw new Error("Bạn chưa tải lên CV nào. Vui lòng tải CV để sử dụng tính năng này.");
       }
       const primaryCv = resumes.find((r: any) => r.isPrimary) || resumes[0];
+
+      // 1.5 Check cache first
+      if (!forceReEvaluate) {
+        try {
+          const cachedResult = await fetchApi(`/job-fit-cache?resumeId=${primaryCv.id}&jobId=${jobId}`);
+          if (cachedResult) {
+            setFitScore(cachedResult);
+            setIsScoring(false);
+            return;
+          }
+        } catch (e) {
+          // Cache miss, proceed to Python API
+        }
+      }
 
       // 2. Format Job Data
       const jobData = {
@@ -75,12 +91,30 @@ export default function JobDetailPage() {
 
       const result = await response.json();
       setFitScore(result);
+
+      // Save cache
+      await fetchApi("/job-fit-cache", {
+        method: "POST",
+        body: JSON.stringify({
+          resumeId: primaryCv.id,
+          jobId: jobId,
+          matchResult: result
+        })
+      }).catch(err => console.error("Failed to save job fit cache", err));
+
     } catch (err: any) {
       setScoreError(err.message || "Lỗi không xác định");
     } finally {
       setIsScoring(false);
     }
   };
+
+  useEffect(() => {
+    // Attempt to automatically load job fit score if user is candidate
+    if (user?.role === "CANDIDATE" && job) {
+      handleScoreJobFit(false).catch(console.error);
+    }
+  }, [user, job]);
 
   useEffect(() => {
     if (jobId) {
@@ -198,18 +232,18 @@ export default function JobDetailPage() {
       </div>
 
       <main className="container max-w-6xl mx-auto px-4 py-8">
-        
+
         {/* Top Header Card */}
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-6 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-blue-700"></div>
-          
+
           <div className="flex flex-col md:flex-row gap-6 mt-2">
             {/* Company Logo */}
             <div className="size-24 rounded-2xl bg-white border-2 border-slate-100 flex items-center justify-center shrink-0 shadow-sm p-2 overflow-hidden">
               {job.companyLogo ? (
-                 <img src={job.companyLogo} alt={job.companyName || "Logo"} className="w-full h-full object-cover" />
+                <img src={job.companyLogo} alt={job.companyName || "Logo"} className="w-full h-full object-cover" />
               ) : (
-                 <Building2 className="size-12 text-blue-200" />
+                <Building2 className="size-12 text-blue-200" />
               )}
             </div>
 
@@ -218,7 +252,7 @@ export default function JobDetailPage() {
               <Link href={`/companies/${jobId}`} className="text-lg text-slate-600 hover:text-blue-600 transition-colors font-medium">
                 {job.companyName || "Công ty bảo mật"}
               </Link>
-              
+
               <div className="flex flex-wrap items-center gap-4 mt-4">
                 <div className="flex items-center gap-2 text-slate-700">
                   <div className="p-2 bg-blue-50 rounded-full text-blue-600">
@@ -230,7 +264,7 @@ export default function JobDetailPage() {
                   </div>
                 </div>
                 <div className="w-px h-10 bg-slate-200 hidden md:block"></div>
-                
+
                 <div className="flex items-center gap-2 text-slate-700">
                   <div className="p-2 bg-blue-50 rounded-full text-blue-600">
                     <MapPin className="size-5" />
@@ -241,7 +275,7 @@ export default function JobDetailPage() {
                   </div>
                 </div>
                 <div className="w-px h-10 bg-slate-200 hidden md:block"></div>
-                
+
                 <div className="flex items-center gap-2 text-slate-700">
                   <div className="p-2 bg-blue-50 rounded-full text-blue-600">
                     <BriefcaseBusiness className="size-5" />
@@ -256,16 +290,16 @@ export default function JobDetailPage() {
 
             {/* Actions Desktop */}
             <div className="hidden md:flex flex-col gap-3 shrink-0 w-48">
-              <button 
+              <button
                 onClick={handleOpenApplyModal}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2">
                 <Send className="size-4" /> Ứng tuyển ngay
               </button>
-              <button 
+              <button
                 onClick={handleSaveJob}
                 disabled={isSaving || saveSuccess}
                 className={`w-full border-2 font-semibold py-2.5 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 ${saveSuccess ? 'bg-blue-50 text-blue-600 border-blue-200' : 'bg-white border-slate-200 hover:border-blue-600 text-slate-700 hover:text-blue-600'}`}>
-                {isSaving ? <Loader2 className="size-4 animate-spin" /> : <Heart className={`size-4 ${saveSuccess ? 'fill-blue-600' : ''}`} />} 
+                {isSaving ? <Loader2 className="size-4 animate-spin" /> : <Heart className={`size-4 ${saveSuccess ? 'fill-blue-600' : ''}`} />}
                 {saveSuccess ? 'Đã lưu' : 'Lưu việc làm'}
               </button>
             </div>
@@ -273,14 +307,14 @@ export default function JobDetailPage() {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8 items-start">
-          
+
           {/* Left Column - Job Details */}
           <div className="flex-1 w-full space-y-6">
-            
+
             {/* Chi tiết công việc */}
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
               <h2 className="text-xl font-bold text-slate-900 mb-6 border-l-4 border-blue-600 pl-3">Chi tiết công việc</h2>
-              
+
               <div className="space-y-6 text-slate-700 leading-relaxed">
                 {job.description && (
                   <div>
@@ -288,14 +322,14 @@ export default function JobDetailPage() {
                     <div className="whitespace-pre-line break-words">{job.description}</div>
                   </div>
                 )}
-                
+
                 {job.requirements && (
                   <div>
                     <h3 className="text-lg font-semibold text-slate-900 mb-2">Yêu cầu ứng viên</h3>
                     <div className="whitespace-pre-line break-words">{job.requirements}</div>
                   </div>
                 )}
-                
+
                 {job.responsibilities && (
                   <div>
                     <h3 className="text-lg font-semibold text-slate-900 mb-2">Trách nhiệm / Quyền lợi</h3>
@@ -315,20 +349,20 @@ export default function JobDetailPage() {
 
           {/* Right Column - Company & Summary */}
           <div className="w-full lg:w-[350px] shrink-0 space-y-6">
-            
+
             {/* Company Summary */}
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
               <div className="flex items-center gap-4 mb-6">
                 <div className="size-16 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 overflow-hidden">
                   {job.companyLogo ? (
-                     <img src={job.companyLogo} alt={job.companyName || "Logo"} className="w-full h-full object-cover" />
+                    <img src={job.companyLogo} alt={job.companyName || "Logo"} className="w-full h-full object-cover" />
                   ) : (
-                     <Building2 className="size-8 text-blue-200" />
+                    <Building2 className="size-8 text-blue-200" />
                   )}
                 </div>
                 <h2 className="text-lg font-bold text-slate-900 leading-tight">{job.companyName || "Công ty bảo mật"}</h2>
               </div>
-              
+
               <div className="space-y-4">
                 <div className="flex gap-3 text-slate-700">
                   <MapPin className="size-5 text-slate-400 shrink-0 mt-0.5" />
@@ -338,7 +372,7 @@ export default function JobDetailPage() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="mt-6 pt-4 border-t border-slate-100">
                 <Link href={`/companies/${jobId}`} className="text-blue-600 font-medium hover:underline text-sm flex items-center justify-center">
                   Xem trang công ty <ChevronRight className="size-4 ml-1" />
@@ -371,21 +405,32 @@ export default function JobDetailPage() {
             {user?.role === "CANDIDATE" && (
               <div className="bg-gradient-to-b from-blue-50 to-white p-6 rounded-2xl border border-blue-100 shadow-sm relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-indigo-500"></div>
-                <div className="flex items-center gap-2 mb-4">
-                  <Sparkles className="size-5 text-blue-600" />
-                  <h2 className="text-lg font-bold text-slate-900">Phân tích độ phù hợp</h2>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="size-10 rounded-xl overflow-hidden shadow-sm border border-slate-100 shrink-0 bg-white">
+                    <img src="/images/ai-mascot.png" alt="AI Mascot" className="w-full h-full object-cover" />
+                  </div>
+                  <h2 className="text-lg font-bold text-slate-900">Phân tích độ phù hợp bằng AI</h2>
                 </div>
-                
+
                 <p className="text-sm text-slate-600 mb-4">
                   AI sẽ đối chiếu CV chính của bạn với yêu cầu công việc này để đưa ra đánh giá khách quan nhất.
                 </p>
 
                 {!fitScore && !isScoring && (
-                  <button 
-                    onClick={handleScoreJobFit}
+                  <button
+                    onClick={() => handleScoreJobFit(true)}
                     className="w-full bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2"
                   >
                     <Sparkles className="size-4" /> Đánh giá ngay bằng AI
+                  </button>
+                )}
+
+                {!isScoring && fitScore && (
+                  <button
+                    onClick={() => handleScoreJobFit(true)}
+                    className="w-full mt-4 bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Sparkles className="size-4" /> Đánh giá lại
                   </button>
                 )}
 
@@ -468,7 +513,7 @@ export default function JobDetailPage() {
                 )}
               </div>
             )}
-            
+
           </div>
         </div>
       </main>
@@ -488,12 +533,12 @@ export default function JobDetailPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
             <h2 className="text-xl font-bold mb-4">Ứng tuyển {job.title}</h2>
-            
+
             {loadingResumes ? (
               <div className="flex justify-center py-8"><Loader2 className="size-8 animate-spin text-blue-600" /></div>
             ) : resumes.length === 0 ? (
               <div className="text-center py-6 text-slate-600">
-                Bạn chưa có CV nào trên hệ thống. 
+                Bạn chưa có CV nào trên hệ thống.
                 <br /><br />
                 <Link href="/cv" className="text-blue-600 font-semibold underline">Đi tới trang quản lý CV</Link>
               </div>
@@ -503,11 +548,11 @@ export default function JobDetailPage() {
                 <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
                   {resumes.map(r => (
                     <label key={r.id} className={`flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-colors ${selectedResumeId === r.id ? 'border-blue-500 bg-blue-50' : 'border-slate-200 hover:bg-slate-50'}`}>
-                      <input 
-                        type="radio" 
-                        name="resumeId" 
-                        value={r.id} 
-                        checked={selectedResumeId === r.id} 
+                      <input
+                        type="radio"
+                        name="resumeId"
+                        value={r.id}
+                        checked={selectedResumeId === r.id}
                         onChange={() => setSelectedResumeId(r.id)}
                         className="size-4 text-blue-600 focus:ring-blue-500"
                       />
@@ -519,20 +564,20 @@ export default function JobDetailPage() {
                     </label>
                   ))}
                 </div>
-                
+
                 {applyMessage && (
                   <div className={`p-3 rounded-lg text-sm ${applyMessage.includes('thành công') ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
                     {applyMessage}
                   </div>
                 )}
-                
+
                 <div className="flex gap-3 mt-6">
-                  <button 
+                  <button
                     onClick={() => setShowApplyModal(false)}
                     className="flex-1 py-2.5 rounded-xl font-semibold border border-slate-200 text-slate-700 hover:bg-slate-50">
                     Hủy
                   </button>
-                  <button 
+                  <button
                     onClick={handleApplyJob}
                     disabled={isApplying}
                     className="flex-1 py-2.5 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 flex items-center justify-center gap-2">
@@ -541,7 +586,7 @@ export default function JobDetailPage() {
                 </div>
               </div>
             )}
-            
+
             {resumes.length === 0 && (
               <div className="mt-6 flex justify-end">
                 <button onClick={() => setShowApplyModal(false)} className="px-4 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg">Đóng</button>

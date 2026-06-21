@@ -17,7 +17,7 @@ export default function JobsPage() {
 
   // Keyword needs local state to update while typing
   const [keyword, setKeyword] = useState("");
-  
+
   // Local state for top dropdowns to apply only when hitting search
   const [location, setLocation] = useState("");
   const [industry, setIndustry] = useState("");
@@ -51,7 +51,7 @@ export default function JobsPage() {
     if (keyword) params.set("keyword", keyword); else params.delete("keyword");
     if (location) params.set("location", location); else params.delete("location");
     if (industry) params.set("industry", industry); else params.delete("industry");
-    
+
     router.push(`/jobs?${params.toString()}`);
   };
 
@@ -89,18 +89,18 @@ export default function JobsPage() {
             {/* Keyword */}
             <div className="flex-1 flex items-center px-4 py-2.5 bg-slate-100/80 rounded-lg border border-transparent focus-within:border-blue-400 focus-within:bg-white transition-colors">
               <Search className="size-5 text-slate-400 mr-3 shrink-0" />
-              <input 
-                type="text" 
-                placeholder="Tên công việc, vị trí, công ty..." 
+              <input
+                type="text"
+                placeholder="Tên công việc, vị trí, công ty..."
                 className="w-full bg-transparent outline-none text-slate-700 font-medium placeholder:font-normal"
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               />
             </div>
-            
+
             {/* Location Dropdown Custom */}
-            <CustomDropdown 
+            <CustomDropdown
               className="w-full md:w-56"
               icon={MapPin}
               value={location}
@@ -110,7 +110,7 @@ export default function JobsPage() {
             />
 
             {/* Category Dropdown Custom */}
-            <CustomDropdown 
+            <CustomDropdown
               className="w-full md:w-64"
               icon={BriefcaseBusiness}
               value={industry}
@@ -119,7 +119,7 @@ export default function JobsPage() {
               placeholder="Tất cả ngành nghề"
             />
 
-            <button 
+            <button
               onClick={handleSearch}
               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-2.5 rounded-lg transition-colors shrink-0 shadow-sm"
             >
@@ -136,7 +136,7 @@ export default function JobsPage() {
             <Filter className="size-5 text-blue-600" />
             <h2 className="text-lg font-bold">Lọc tìm kiếm</h2>
           </div>
-          
+
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             {/* Filter: Mức lương */}
             <div className="p-4 border-b border-slate-100">
@@ -150,10 +150,10 @@ export default function JobsPage() {
                   { value: "30", label: "Trên 30 triệu" },
                 ].map((item) => (
                   <label key={item.label} className="flex items-center gap-3 cursor-pointer group">
-                    <input 
-                      type="radio" 
+                    <input
+                      type="radio"
                       name="salaryMin"
-                      className="size-4 border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer" 
+                      className="size-4 border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                       checked={salaryMin === item.value}
                       onChange={() => handleFilterChange("salaryMin", item.value)}
                     />
@@ -174,10 +174,10 @@ export default function JobsPage() {
                   { value: "SENIOR", label: "Trên 3 năm / Senior" },
                 ].map((item) => (
                   <label key={item.value} className="flex items-center gap-3 cursor-pointer group">
-                    <input 
-                      type="radio" 
+                    <input
+                      type="radio"
                       name="experienceLevel"
-                      className="size-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer" 
+                      className="size-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                       checked={experienceLevel === item.value}
                       onChange={() => handleFilterChange("experienceLevel", item.value)}
                     />
@@ -198,10 +198,10 @@ export default function JobsPage() {
                   { value: "FREELANCE", label: "Freelance" },
                 ].map((item) => (
                   <label key={item.value} className="flex items-center gap-3 cursor-pointer group">
-                    <input 
+                    <input
                       type="radio"
                       name="jobType"
-                      className="size-4 border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer" 
+                      className="size-4 border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                       checked={jobType === item.value}
                       onChange={() => handleFilterChange("jobType", item.value)}
                     />
@@ -242,7 +242,7 @@ export default function JobsPage() {
                 </div>
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Không tìm thấy việc làm phù hợp</h3>
                 <p className="text-slate-500 max-w-md mx-auto">Thử thay đổi tiêu chí lọc hoặc từ khóa tìm kiếm để có nhiều kết quả hơn.</p>
-                <button 
+                <button
                   onClick={() => router.push('/jobs')}
                   className="mt-6 text-blue-600 font-semibold hover:underline"
                 >
@@ -253,15 +253,15 @@ export default function JobsPage() {
               jobs.map((job) => (
                 <div key={job.id} className="bg-white p-5 rounded-xl border border-slate-200 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-900/5 transition-all group flex flex-col sm:flex-row gap-5 cursor-pointer relative overflow-hidden">
                   <div className="absolute top-0 left-0 w-1 h-full bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  
+
                   <div className="size-24 rounded-lg bg-white border border-slate-100 flex items-center justify-center shrink-0 p-2 overflow-hidden shadow-sm">
                     {job.companyLogo ? (
-                       <img src={job.companyLogo} alt={job.companyName || "Logo"} className="w-full h-full object-contain" />
+                      <img src={job.companyLogo} alt={job.companyName || "Logo"} className="w-full h-full object-contain" />
                     ) : (
-                       <Building2 className="size-10 text-slate-300" />
+                      <Building2 className="size-10 text-slate-300" />
                     )}
                   </div>
-                  
+
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4">
                       <div className="min-w-0 flex-1">
@@ -278,22 +278,22 @@ export default function JobsPage() {
                         {formatSalaryRange(job.salaryMin, job.salaryMax, job.currency)}
                       </span>
                     </div>
-                    
+
                     <div className="mt-3 flex flex-wrap items-center gap-2">
                       <div className="flex items-center gap-1.5 bg-slate-100 text-slate-600 px-2.5 py-1 rounded text-xs font-medium">
                         <MapPin className="size-3.5" /> {job.location || "Nhiều địa điểm"}
                       </div>
                       <div className="flex items-center gap-1.5 bg-slate-100 text-slate-600 px-2.5 py-1 rounded text-xs font-medium">
-                        <BriefcaseBusiness className="size-3.5" /> 
-                        {job.experienceLevel === "FRESHER" ? "Thực tập / Fresher" : 
-                         job.experienceLevel === "JUNIOR" ? "Dưới 1 năm (Junior)" : 
-                         job.experienceLevel === "MIDDLE" ? "1-3 năm (Middle)" : 
-                         job.experienceLevel === "SENIOR" ? "Trưởng nhóm / Senior" : "Chưa có kinh nghiệm"}
+                        <BriefcaseBusiness className="size-3.5" />
+                        {job.experienceLevel === "FRESHER" ? "Thực tập / Fresher" :
+                          job.experienceLevel === "JUNIOR" ? "Dưới 1 năm (Junior)" :
+                            job.experienceLevel === "MIDDLE" ? "1-3 năm (Middle)" :
+                              job.experienceLevel === "SENIOR" ? "Trưởng nhóm / Senior" : "Chưa có kinh nghiệm"}
                       </div>
                       {job.jobType && (
                         <div className="flex items-center gap-1.5 bg-slate-100 text-slate-600 px-2.5 py-1 rounded text-xs font-medium">
-                          {job.jobType === "FULL_TIME" ? "Toàn thời gian" : 
-                           job.jobType === "PART_TIME" ? "Bán thời gian" : job.jobType}
+                          {job.jobType === "FULL_TIME" ? "Toàn thời gian" :
+                            job.jobType === "PART_TIME" ? "Bán thời gian" : job.jobType}
                         </div>
                       )}
                     </div>

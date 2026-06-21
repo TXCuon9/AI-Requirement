@@ -54,7 +54,7 @@ public class JobDescription {
     private BigDecimal salaryMax;
 
     @Column(name = "currency" , length = 10)
-    private String currency = "USD";
+    private String currency = "VNĐ";
 
     @Column(name = "location" , length = 255)
     private String location;

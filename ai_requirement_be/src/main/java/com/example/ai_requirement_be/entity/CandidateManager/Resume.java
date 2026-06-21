@@ -63,6 +63,10 @@ public class Resume {
     @Column(name="projects")
     private List<ProjectItemDTO> projectItems;
 
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name="ai_analysis_result")
+    private java.util.Map<String, Object> aiAnalysisResult;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -248,4 +252,7 @@ public class Resume {
 
     public String getHobbies() { return hobbies; }
     public void setHobbies(String hobbies) { this.hobbies = hobbies; }
+
+    public java.util.Map<String, Object> getAiAnalysisResult() { return aiAnalysisResult; }
+    public void setAiAnalysisResult(java.util.Map<String, Object> aiAnalysisResult) { this.aiAnalysisResult = aiAnalysisResult; }
 }

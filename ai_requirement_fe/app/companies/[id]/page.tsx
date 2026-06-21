@@ -7,6 +7,7 @@ import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
 import { fetchApi } from "../../../lib/api";
 import { Building2, MapPin, Globe, Users, Briefcase, Calendar, DollarSign } from "lucide-react";
+import { formatSalaryRange } from "../../../lib/utils";
 
 export default function CompanyDetailPage() {
   const params = useParams();
@@ -141,7 +142,7 @@ export default function CompanyDetailPage() {
                         {job.salaryMin || job.salaryMax ? (
                           <div className="flex items-center gap-1.5 font-semibold text-blue-600">
                             <DollarSign className="size-4" /> 
-                            {job.salaryMin ? job.salaryMin : 0} - {job.salaryMax ? job.salaryMax : "Thỏa thuận"} {job.currency || "VNĐ"}
+                            {formatSalaryRange(job.salaryMin, job.salaryMax, job.currency)}
                           </div>
                         ) : (
                           <div className="flex items-center gap-1.5 font-semibold text-blue-600">
