@@ -34,7 +34,7 @@ public class User implements UserDetails {
 
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false , name="role" , columnDefinition ="users_role_enum")
+    @Column(nullable = false , name="role")
     private UserRole role;
 
     @Column(length = 50 , name="provider")
@@ -42,7 +42,7 @@ public class User implements UserDetails {
 
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Enumerated(EnumType.STRING)
-    @Column(name="status" , columnDefinition ="users_status_enum")
+    @Column(name="status")
     private UserStatus status =  UserStatus.ACTIVE;
 
     @CreationTimestamp
