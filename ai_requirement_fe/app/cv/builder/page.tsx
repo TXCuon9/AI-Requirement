@@ -385,7 +385,7 @@ function CvBuilderContent() {
                   <div className="flex items-center gap-4">
                     <div className="size-20 rounded-full bg-slate-100 border-2 border-slate-200 overflow-hidden shrink-0 flex items-center justify-center">
                       {formData.avatarUrl ? (
-                        <img src={formData.avatarUrl.startsWith('/') ? `http://localhost:8080${formData.avatarUrl}` : formData.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                        <img src={formData.avatarUrl.startsWith('/') ? `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://ai-recruitment-java.onrender.com'}${formData.avatarUrl}` : formData.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                       ) : (
                         <span className="text-slate-400 text-xs text-center px-2">Ảnh đại diện</span>
                       )}
