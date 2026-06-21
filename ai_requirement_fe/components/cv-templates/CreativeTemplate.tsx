@@ -14,7 +14,7 @@ export default function CreativeTemplate({ formData }: TemplateProps) {
         {/* Avatar Section */}
         <div className="size-32 shrink-0 rounded-2xl overflow-hidden border-4 border-white/20 bg-white flex items-center justify-center text-4xl font-bold text-[#2D8CFF] shadow-lg">
           {formData.avatarUrl ? (
-            <img src={formData.avatarUrl.startsWith('/') ? `http://localhost:8080${formData.avatarUrl}` : formData.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+            <img src={formData.avatarUrl.startsWith('/') ? `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://ai-recruitment-java.onrender.com'}${formData.avatarUrl}` : formData.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
           ) : (
             formData.fullName ? formData.fullName.charAt(0).toUpperCase() : <User className="size-12" />
           )}

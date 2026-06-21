@@ -13,7 +13,7 @@ export default function ElegantTemplate({ formData }: TemplateProps) {
       <div className="bg-slate-100 p-10 flex flex-col items-center text-center">
         {formData.avatarUrl && (
           <div className="size-28 rounded-full overflow-hidden border-4 border-white mb-6 shadow-md bg-white">
-            <img src={formData.avatarUrl.startsWith('/') ? `http://localhost:8080${formData.avatarUrl}` : formData.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+            <img src={formData.avatarUrl.startsWith('/') ? `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://ai-recruitment-java.onrender.com'}${formData.avatarUrl}` : formData.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
           </div>
         )}
         <h1 className="text-3xl font-light tracking-wide text-slate-900 mb-2">{formData.fullName || "HỌ VÀ TÊN"}</h1>

@@ -13,7 +13,7 @@ export default function StandardTemplate({ formData }: TemplateProps) {
       <div className="border-b-2 border-slate-800 pb-6 mb-6 flex flex-col items-center text-center">
         {formData.avatarUrl && (
           <div className="size-32 rounded-full overflow-hidden border-4 border-slate-200 mb-4 bg-slate-50 flex items-center justify-center">
-            <img src={formData.avatarUrl.startsWith('/') ? `http://localhost:8080${formData.avatarUrl}` : formData.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+            <img src={formData.avatarUrl.startsWith('/') ? `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://ai-recruitment-java.onrender.com'}${formData.avatarUrl}` : formData.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
           </div>
         )}
         <h1 className="text-4xl font-bold uppercase tracking-wider mb-2">{formData.fullName || "HỌ VÀ TÊN"}</h1>
