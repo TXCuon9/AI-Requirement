@@ -1,14 +1,16 @@
-from sentence_transformers import SentenceTransformer
-
+import os
+import google.generativeai as genai
 
 class EmbeddingService:
-
-    model=SentenceTransformer(
-        "all-MiniLM-L6-v2"
-    )
-
-
     @classmethod
-    def generate(cls,text:str):
-        vector=cls.model.encode(text)
-        return vector.tolist()
+    def generate(cls, text: str):
+        api_key = os.getenv("GEMINI_API_KEY")
+        if api_key:
+            genai.configure(api_key=api_key)
+            
+        result = genai.embed_content(
+            model="models/embedding-001",
+            content=text,
+            task_type="retrieval_document"
+        )
+        return result['embedding']
