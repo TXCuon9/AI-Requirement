@@ -108,7 +108,7 @@ export default function JobsManagementPage() {
                     <td className="p-4 text-sm text-slate-600">
                       <div className="flex items-center gap-1.5">
                         <Clock className="size-3.5 text-slate-400" />
-                        {new Date(job.createdAt).toLocaleDateString('vi-VN')}
+                        {job.createdAt ? new Date(job.createdAt).toLocaleDateString('vi-VN') : 'N/A'}
                       </div>
                     </td>
                     <td className="p-4 pr-6 text-right">
