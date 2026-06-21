@@ -11,7 +11,9 @@ import StandardTemplate from "../../../components/cv-templates/StandardTemplate"
 import ElegantTemplate from "../../../components/cv-templates/ElegantTemplate";
 import CreativeTemplate from "../../../components/cv-templates/CreativeTemplate";
 
-export default function CvBuilderPage() {
+import { Suspense } from "react";
+
+function CvBuilderContent() {
   const searchParams = useSearchParams();
   const templateId = searchParams.get("template") || "professional";
   const resumeIdParam = searchParams.get("resumeId");
@@ -581,5 +583,13 @@ export default function CvBuilderPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CvBuilderPage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center h-screen"><Loader2 className="size-10 animate-spin text-blue-600" /></div>}>
+      <CvBuilderContent />
+    </Suspense>
   );
 }

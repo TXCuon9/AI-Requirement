@@ -11,7 +11,9 @@ import { fetchApi } from "../../lib/api";
 import { JobResponse } from "../../lib/types/job";
 import { formatSalaryRange } from "../../lib/utils";
 
-export default function JobsPage() {
+import { Suspense } from "react";
+
+function JobsPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -333,5 +335,13 @@ export default function JobsPage() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function JobsPage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center h-screen"><Loader2 className="size-10 animate-spin text-blue-600" /></div>}>
+      <JobsPageContent />
+    </Suspense>
   );
 }

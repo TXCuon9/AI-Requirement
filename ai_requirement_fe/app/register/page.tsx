@@ -6,7 +6,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { fetchApi } from "../../lib/api";
 import { Briefcase, UserCircle2, Loader2, ArrowRight } from "lucide-react";
 
-export default function Register() {
+import { Suspense } from "react";
+
+function RegisterContent() {
   const searchParams = useSearchParams();
   const initialType = searchParams.get("type") === "company" ? "company" : "candidate";
   
@@ -157,5 +159,13 @@ export default function Register() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Register() {
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center h-screen"><Loader2 className="size-10 animate-spin text-blue-600" /></div>}>
+      <RegisterContent />
+    </Suspense>
   );
 }
