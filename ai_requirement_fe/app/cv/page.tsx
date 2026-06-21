@@ -60,7 +60,8 @@ export default function CVManagementPage() {
       const parseFormData = new FormData();
       parseFormData.append("file", file);
 
-      const parseRes = await fetch("http://localhost:8000/api/v1/resume/parse", {
+      const aiApiUrl = process.env.NEXT_PUBLIC_AI_API_URL || "https://ai-recruitment-python.onrender.com";
+      const parseRes = await fetch(`${aiApiUrl}/api/v1/resume/parse`, {
         method: "POST",
         body: parseFormData
       });

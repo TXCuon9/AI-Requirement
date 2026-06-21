@@ -79,7 +79,8 @@ export default function JobDetailPage() {
       };
 
       // 4. Call Python API
-      const response = await fetch("http://localhost:8000/api/v1/analysis/job-fit", {
+      const aiApiUrl = process.env.NEXT_PUBLIC_AI_API_URL || "https://ai-recruitment-python.onrender.com";
+      const response = await fetch(`${aiApiUrl}/api/v1/analysis/job-fit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cv_data: cvData, job_data: jobData })

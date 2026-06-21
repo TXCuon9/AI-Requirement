@@ -32,7 +32,8 @@ export default function AIAnalyzePage() {
         }
 
         // Call Python AI API
-        return fetch("http://localhost:8000/api/v1/analysis/cv", {
+        const aiApiUrl = process.env.NEXT_PUBLIC_AI_API_URL || "https://ai-recruitment-python.onrender.com";
+        return fetch(`${aiApiUrl}/api/v1/analysis/cv`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(resume)

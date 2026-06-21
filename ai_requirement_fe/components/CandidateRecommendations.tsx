@@ -47,7 +47,8 @@ export default function CandidateRecommendations() {
       }
 
       // 2. Fetch Job IDs from Python AI API
-      const aiResponse = await fetch("http://127.0.0.1:8000/api/v1/recommendation/jobs", {
+      const aiApiUrl = process.env.NEXT_PUBLIC_AI_API_URL || "https://ai-recruitment-python.onrender.com";
+      const aiResponse = await fetch(`${aiApiUrl}/api/v1/recommendation/jobs`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(vectorQueryPayload)
