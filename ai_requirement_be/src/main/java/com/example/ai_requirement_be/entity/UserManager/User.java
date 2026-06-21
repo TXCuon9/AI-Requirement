@@ -32,7 +32,6 @@ public class User implements UserDetails {
     @Column(name="password_hash" , nullable = false , length = 255)
     private String passwordHash;
 
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Enumerated(EnumType.STRING)
     @Column(nullable = false , name="role")
     private UserRole role;
@@ -40,7 +39,6 @@ public class User implements UserDetails {
     @Column(length = 50 , name="provider")
     private String provider;
 
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Enumerated(EnumType.STRING)
     @Column(name="status")
     private UserStatus status =  UserStatus.ACTIVE;

@@ -62,17 +62,14 @@ public class JobDescription {
     @Column(name = "remote", nullable = false)
     private Boolean remote = false;
 
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Enumerated(EnumType.STRING)
     @Column(name = "job_type")
     private JobType jobType;
 
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Enumerated(EnumType.STRING)
     @Column(name = "experience_level")
     private ExperienceLevel experienceLevel;
 
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private JobStatus status = JobStatus.OPEN;

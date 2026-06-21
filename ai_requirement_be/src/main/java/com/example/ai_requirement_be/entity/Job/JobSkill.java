@@ -21,7 +21,6 @@ public class JobSkill {
     @JoinColumn(name="skill_id" , nullable = false)
     private Skill skill;
 
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Enumerated(EnumType.STRING)
     @Column(name = "required_level")
     private JobSkillsRequiredLevelEnum requiredLevel;

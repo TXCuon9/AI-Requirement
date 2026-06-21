@@ -28,7 +28,6 @@ public class JobApplication {
     @JoinColumn(name = "resume_id" , nullable = false)
     private Resume resume;
 
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private JobApplicationStatusEnum status = JobApplicationStatusEnum.APPLIED;

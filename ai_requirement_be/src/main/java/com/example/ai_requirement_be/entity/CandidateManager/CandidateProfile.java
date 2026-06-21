@@ -40,7 +40,6 @@ public class CandidateProfile {
     @Column(name="dob")
     private LocalDateTime dob;
 
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
