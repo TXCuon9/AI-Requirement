@@ -1,5 +1,6 @@
 export interface JobResponse {
   id: number;
+  companyId?: number;
   companyName: string | null;
   companyLogo: string | null;
   industry?: string | null;
@@ -21,6 +22,7 @@ export interface JobResponse {
 
 export interface JobDetailResponse {
   id: number;
+  companyId?: number;
   companyName: string | null;
   companyLogo: string | null;
   industry?: string | null;
