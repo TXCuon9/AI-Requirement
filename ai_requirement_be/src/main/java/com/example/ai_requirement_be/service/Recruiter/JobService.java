@@ -13,6 +13,7 @@ import com.example.ai_requirement_be.repository.IUserRepository;
 import jakarta.transaction.Transactional;
 import com.example.ai_requirement_be.entity.RecruiterManager.ExperienceLevel;
 import com.example.ai_requirement_be.entity.RecruiterManager.JobType;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -22,6 +23,9 @@ import java.util.List;
 public class JobService {
     private final IJobdepRepository jobdepRepository;
     private final IUserRepository userRepository;
+
+    @Value("${python.api.url:http://localhost:8000}")
+    private String pythonApiUrl;
 
     public JobService(IJobdepRepository jobdepRepository, IUserRepository userRepository) {
         this.jobdepRepository = jobdepRepository;
@@ -156,7 +160,7 @@ public class JobService {
     private void syncJobToVectorDB(JobDescription job) {
         try {
             org.springframework.web.client.RestTemplate restTemplate = new org.springframework.web.client.RestTemplate();
-            String url = "http://localhost:8000/api/v1/jobs/sync";
+            String url = pythonApiUrl + "/api/v1/jobs/sync";
             
             java.util.Map<String, Object> request = new java.util.HashMap<>();
             request.put("job_id", String.valueOf(job.getId()));
