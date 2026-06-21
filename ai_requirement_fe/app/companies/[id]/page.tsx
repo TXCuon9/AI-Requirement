@@ -59,7 +59,7 @@ export default function CompanyDetailPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F4F5F5] font-sans text-slate-900 pb-20">
+    <div className="flex flex-col min-h-screen bg-[#F4F5F5] font-sans text-slate-900">
       <Navbar />
 
       {/* Breadcrumb */}
@@ -71,7 +71,7 @@ export default function CompanyDetailPage() {
         <span className="uppercase text-slate-700 font-medium line-clamp-1">{company.name}</span>
       </div>
 
-      <div className="container mx-auto px-4 max-w-6xl">
+      <div className="container mx-auto px-4 max-w-6xl mb-20">
         {/* Header Card */}
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col md:flex-row gap-6 items-start md:items-center">
           <div className="size-[120px] rounded-lg border border-slate-100 flex items-center justify-center p-2 shrink-0 bg-white">
