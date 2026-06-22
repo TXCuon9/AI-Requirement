@@ -73,7 +73,11 @@ public class JobApplicationService {
         responseDTO.setResumeUrl(resume.getFileUrl());
         responseDTO.setStatus(savedApp.getStatus().name());
         responseDTO.setAppliedAt(savedApp.getAppliedAt());
+        responseDTO.setCandidateEmail(candidateEmail);
 
+        if(jobDescription.getCompany() != null) {
+            responseDTO.setCompanyName(jobDescription.getCompany().getName());
+        }
         return responseDTO;
     }
 
@@ -118,6 +122,10 @@ public class JobApplicationService {
         responseDTO.setApplicationId(updatedApp.getId());
         responseDTO.setStatus(updatedApp.getStatus().name()); // Sẽ hiển thị là "INTERVIEW"
         responseDTO.setAppliedAt(updatedApp.getAppliedAt());
+        responseDTO.setJobTitle(updatedApp.getJobDescription().getTitle());
+        responseDTO.setSalary(updatedApp.getJobDescription().getSalaryMin().doubleValue());
+        responseDTO.setContractDate(updatedApp.getJobDescription().getCreatedAt().toString());
+        responseDTO.setStartDate(updatedApp.getJobDescription().getExpiredAt().toString());
 
         if (updatedApp.getCandidate() != null) {
             responseDTO.setCandidateId(updatedApp.getCandidate().getId());

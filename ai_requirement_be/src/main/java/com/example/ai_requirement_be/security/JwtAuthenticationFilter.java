@@ -49,7 +49,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.getWriter().write("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại!");
             return;
         }
-
         // 3. Nếu lấy được email và chưa có thông tin xác thực trong SecurityContext
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             
@@ -72,7 +71,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-        
         filterChain.doFilter(request, response);
     }
 }

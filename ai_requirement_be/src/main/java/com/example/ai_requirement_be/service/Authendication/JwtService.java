@@ -1,6 +1,7 @@
 package com.example.ai_requirement_be.service.Authendication;
 
 import com.example.ai_requirement_be.entity.UserManager.User;
+import com.example.ai_requirement_be.service.User.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -65,7 +66,6 @@ public class JwtService {
     public boolean isTokenValid(String token , String email) {
         String extractedEmail = extractEmail(token); // giải mã token
         return (extractedEmail.equals(email) && !isTokenExpired(token));
-
     }
     // 5. Kiểm tra token đã hết hạn hay chưa
     public boolean isTokenExpired(String token) {

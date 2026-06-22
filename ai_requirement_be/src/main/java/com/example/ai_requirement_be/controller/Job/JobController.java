@@ -81,6 +81,19 @@ public class JobController {
             String candidateEmail = principal.getName();
             JobApplicationResponseDTO result = jobApplicationService.applyJob(jobId, requestDTO, candidateEmail);
 
+            try {
+                if(result.getCandidateEmail() != null) {
+                    emailService.sendEmail(
+                            result.getCandidateEmail(),
+                            result.getCandidateName(),
+                            result.getCompanyName()
+                    );
+                }
+
+            }catch (Exception mailEx) {
+                System.out.println("Nộp đơn thành công nhưng gửi mail xác nhận thất bại: " + mailEx.getMessage());
+            }
+
             return ResponseEntity.status(HttpStatus.CREATED).body(result);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -104,7 +117,11 @@ public class JobController {
                     emailService.sendInterviewInvitationEmail(
                             result.getCandidateEmail(), 
                             result.getCandidateName(), 
-                            result.getCompanyName()
+                            result.getCompanyName(),
+                            result.getJobTitle(),
+                            result.getSalary(),
+                            result.getContractDate(),
+                            result.getStartDate()
                     );
                 }
             } catch (Exception mailEx) {

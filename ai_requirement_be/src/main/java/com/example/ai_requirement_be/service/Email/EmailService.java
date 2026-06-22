@@ -13,21 +13,35 @@ public class EmailService {
     private JavaMailSender mailSender;
 
 
+
     public void sendInterviewInvitationEmail(
             String toEmail,
             String candidateName,
-            String companyName
+            String companyName,
+            String title,
+            Double salary,
+            String contractDate,
+            String startDate
     ) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
-        message.setSubject("Thư Mời Phỏng Vấn từ " + companyName);
+        message.setSubject("Chúc mừng bạn đã trúng tuyển" + companyName);
         message.setText(
                 "Chào " + candidateName + ",\n\n"
-                        + "Chúc mừng bạn! Hồ sơ của bạn đã vượt qua vòng sơ loại và "
-                        + "chúng tôi muốn mời bạn tham gia vòng phỏng vấn tại "
-                        + companyName + ".\n\n"
-                        + "Vui lòng kiểm tra hệ thống hoặc phản hồi lại email này "
-                        + "để xác nhận lịch phỏng vấn.\n\n"
+                        + "Trước hết, " + companyName + " xin chúc mừng bạn đã xuất sắc vượt qua "
+                        + "các vòng phỏng vấn và chính thức trúng tuyển vào vị trí "
+                        + title + " tại công ty.\n\n"
+                        + "Chúng tôi rất ấn tượng với kiến thức chuyên môn, kinh nghiệm làm việc "
+                        + "cũng như những kỹ năng bạn đã thể hiện trong quá trình tuyển dụng.\n\n"
+                        + "Theo nội dung đã trao đổi, mức lương khởi điểm dành cho bạn là "
+                        + salary + ", đã bao gồm các chế độ bảo hiểm theo quy định. "
+                        + "Ngoài ra, bạn sẽ được hưởng đầy đủ các phúc lợi, chế độ thưởng, "
+                        + "nghỉ phép, lễ tết và tham gia các chương trình đào tạo của công ty.\n\n"
+                        + "Trong trường hợp bạn đồng ý, hai bên sẽ tiến hành ký hợp đồng vào ngày "
+                        + contractDate + " và bạn có thể bắt đầu công việc từ ngày "
+                        + startDate + ".\n\n"
+                        + "Nếu có bất kỳ thắc mắc nào, bạn vui lòng phản hồi lại email này "
+                        + "để được hỗ trợ.\n\n"
                         + "Trân trọng,\n"
                         + companyName
         );
@@ -41,7 +55,7 @@ public class EmailService {
     ) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
-        message.setSubject("Thông báo kết quả phỏng vấn" + companyName);
+        message.setSubject("Thông báo kết quả phỏng vấn " + companyName);
         message.setText(
                 "Chào " + candidateName + ",\n\n"
                         + "Cảm ơn bạn đã quan tâm và dành thời gian ứng tuyển, cũng như tham gia phỏng vấn tại "
@@ -57,5 +71,24 @@ public class EmailService {
         );
         mailSender.send(message);
     }
+
+    public void sendEmail(String toEmail, String candidateName, String companyName) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(toEmail);
+        message.setSubject("Gửi gmail thành công: " + companyName);
+        message.setText(
+                "Kính gửi " + candidateName + ",\n\n"
+                        + "Cảm ơn bạn đã quan tâm và nộp hồ sơ ứng tuyển vào " + companyName + ". "
+                        + "Chúng tôi xin xác nhận rằng hồ sơ của bạn đã được ghi nhận thành công "
+                        + "trên hệ thống.\n\n"
+                        + "Bộ phận Tuyển dụng sẽ xem xét hồ sơ và liên hệ với bạn trong thời gian sớm nhất "
+                        + "nếu hồ sơ phù hợp với vị trí tuyển dụng.\n\n"
+                        + "Chúc bạn một ngày làm việc hiệu quả.\n\n"
+                        + "Trân trọng,\n"
+                        + companyName
+        );
+        mailSender.send(message);
+    }
+
 
 }
