@@ -8,12 +8,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
-
     @Autowired
     private JavaMailSender mailSender;
-
-
-
     public void sendInterviewInvitationEmail(
             String toEmail,
             String candidateName,
@@ -47,7 +43,6 @@ public class EmailService {
         );
         mailSender.send(message);
     }
-
     public void sendInterviewRejectionEmail(
             String toEmail,
             String candidateName,
@@ -89,6 +84,4 @@ public class EmailService {
         );
         mailSender.send(message);
     }
-
-
 }

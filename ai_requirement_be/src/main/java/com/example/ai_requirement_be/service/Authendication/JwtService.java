@@ -76,10 +76,8 @@ public class JwtService {
                 .getBody().
                 getExpiration();
         return expiration.before(new Date());
-
         // exp = Expiration
         // Time hời điểm token HẾT HẠN, được tính bằng số giây kể từ 01/01/1970 (Unix timestamp)
-
     }
 
 
