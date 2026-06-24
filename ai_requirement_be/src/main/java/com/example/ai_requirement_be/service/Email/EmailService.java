@@ -24,22 +24,22 @@ public class EmailService {
         message.setSubject("Chúc mừng bạn đã trúng tuyển" + companyName);
         message.setText(
                 "Chào " + candidateName + ",\n\n"
-                        + "Trước hết, " + companyName + " xin chúc mừng bạn đã xuất sắc vượt qua "
-                        + "các vòng phỏng vấn và chính thức trúng tuyển vào vị trí "
-                        + title + " tại công ty.\n\n"
-                        + "Chúng tôi rất ấn tượng với kiến thức chuyên môn, kinh nghiệm làm việc "
-                        + "cũng như những kỹ năng bạn đã thể hiện trong quá trình tuyển dụng.\n\n"
-                        + "Theo nội dung đã trao đổi, mức lương khởi điểm dành cho bạn là "
-                        + salary + ", đã bao gồm các chế độ bảo hiểm theo quy định. "
-                        + "Ngoài ra, bạn sẽ được hưởng đầy đủ các phúc lợi, chế độ thưởng, "
-                        + "nghỉ phép, lễ tết và tham gia các chương trình đào tạo của công ty.\n\n"
-                        + "Trong trường hợp bạn đồng ý, hai bên sẽ tiến hành ký hợp đồng vào ngày "
-                        + contractDate + " và bạn có thể bắt đầu công việc từ ngày "
+                        + companyName + " cảm ơn bạn đã quan tâm và ứng tuyển vào vị trí "
+                        + title + " tại công ty chúng tôi.\n\n"
+                        + "Sau khi xem xét hồ sơ, chúng tôi đánh giá cao kiến thức, kinh nghiệm "
+                        + "cũng như những kỹ năng mà bạn đã thể hiện và trân trọng mời bạn tham gia "
+                        + "buổi phỏng vấn để trao đổi chi tiết hơn về vị trí công việc.\n\n"
+                        + "Buổi phỏng vấn dự kiến sẽ diễn ra vào ngày " + contractDate
+                        + ". Trong buổi phỏng vấn, chúng tôi sẽ trao đổi thêm về công việc, "
+                        + "môi trường làm việc cũng như các thông tin liên quan đến chế độ đãi ngộ, "
+                        + "bao gồm mức lương dự kiến là " + salary + ".\n\n"
+                        + "Nếu bạn phù hợp và vượt qua vòng phỏng vấn, thời gian dự kiến bắt đầu công việc sẽ từ ngày "
                         + startDate + ".\n\n"
-                        + "Nếu có bất kỳ thắc mắc nào, bạn vui lòng phản hồi lại email này "
-                        + "để được hỗ trợ.\n\n"
+                        + "Bạn vui lòng phản hồi lại email này để xác nhận tham gia phỏng vấn "
+                        + "hoặc liên hệ với chúng tôi nếu cần thêm bất kỳ thông tin nào.\n\n"
                         + "Trân trọng,\n"
                         + companyName
+
         );
         mailSender.send(message);
     }
