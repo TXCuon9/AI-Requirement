@@ -95,7 +95,6 @@ public class CompanyService {
            );
            dtoList.add(dto);
        }
-
        return dtoList;
    }
 

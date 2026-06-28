@@ -8,32 +8,41 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
-
     @Autowired
     private JavaMailSender mailSender;
-
-
     public void sendInterviewInvitationEmail(
             String toEmail,
             String candidateName,
-            String companyName
+            String companyName,
+            String title,
+            Double salary,
+            String contractDate,
+            String startDate
     ) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
-        message.setSubject("Thư Mời Phỏng Vấn từ " + companyName);
+        message.setSubject("Chúc mừng bạn đã trúng tuyển" + companyName);
         message.setText(
                 "Chào " + candidateName + ",\n\n"
-                        + "Chúc mừng bạn! Hồ sơ của bạn đã vượt qua vòng sơ loại và "
-                        + "chúng tôi muốn mời bạn tham gia vòng phỏng vấn tại "
-                        + companyName + ".\n\n"
-                        + "Vui lòng kiểm tra hệ thống hoặc phản hồi lại email này "
-                        + "để xác nhận lịch phỏng vấn.\n\n"
+                        + companyName + " cảm ơn bạn đã quan tâm và ứng tuyển vào vị trí "
+                        + title + " tại công ty chúng tôi.\n\n"
+                        + "Sau khi xem xét hồ sơ, chúng tôi đánh giá cao kiến thức, kinh nghiệm "
+                        + "cũng như những kỹ năng mà bạn đã thể hiện và trân trọng mời bạn tham gia "
+                        + "buổi phỏng vấn để trao đổi chi tiết hơn về vị trí công việc.\n\n"
+                        + "Buổi phỏng vấn dự kiến sẽ diễn ra vào ngày " + contractDate
+                        + ". Trong buổi phỏng vấn, chúng tôi sẽ trao đổi thêm về công việc, "
+                        + "môi trường làm việc cũng như các thông tin liên quan đến chế độ đãi ngộ, "
+                        + "bao gồm mức lương dự kiến là " + salary + ".\n\n"
+                        + "Nếu bạn phù hợp và vượt qua vòng phỏng vấn, thời gian dự kiến bắt đầu công việc sẽ từ ngày "
+                        + startDate + ".\n\n"
+                        + "Bạn vui lòng phản hồi lại email này để xác nhận tham gia phỏng vấn "
+                        + "hoặc liên hệ với chúng tôi nếu cần thêm bất kỳ thông tin nào.\n\n"
                         + "Trân trọng,\n"
                         + companyName
+
         );
         mailSender.send(message);
     }
-
     public void sendInterviewRejectionEmail(
             String toEmail,
             String candidateName,
@@ -41,7 +50,7 @@ public class EmailService {
     ) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
-        message.setSubject("Thông báo kết quả phỏng vấn" + companyName);
+        message.setSubject("Thông báo kết quả phỏng vấn " + companyName);
         message.setText(
                 "Chào " + candidateName + ",\n\n"
                         + "Cảm ơn bạn đã quan tâm và dành thời gian ứng tuyển, cũng như tham gia phỏng vấn tại "
@@ -58,4 +67,21 @@ public class EmailService {
         mailSender.send(message);
     }
 
+    public void sendEmail(String toEmail, String candidateName, String companyName) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(toEmail);
+        message.setSubject("Gửi gmail thành công: " + companyName);
+        message.setText(
+                "Kính gửi " + candidateName + ",\n\n"
+                        + "Cảm ơn bạn đã quan tâm và nộp hồ sơ ứng tuyển vào " + companyName + ". "
+                        + "Chúng tôi xin xác nhận rằng hồ sơ của bạn đã được ghi nhận thành công "
+                        + "trên hệ thống.\n\n"
+                        + "Bộ phận Tuyển dụng sẽ xem xét hồ sơ và liên hệ với bạn trong thời gian sớm nhất "
+                        + "nếu hồ sơ phù hợp với vị trí tuyển dụng.\n\n"
+                        + "Chúc bạn một ngày làm việc hiệu quả.\n\n"
+                        + "Trân trọng,\n"
+                        + companyName
+        );
+        mailSender.send(message);
+    }
 }

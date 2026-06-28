@@ -32,13 +32,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
-
         // 1. Kiểm tra header Authorization có chứa Bearer token không
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
-
         // 2. Trích xuất token
         jwt = authHeader.substring(7);
         try {
@@ -49,13 +47,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.getWriter().write("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại!");
             return;
         }
-
         // 3. Nếu lấy được email và chưa có thông tin xác thực trong SecurityContext
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            
             // Tìm user trong database
             User user = userRepository.findByEmail(userEmail).orElse(null);
-
             // 4. Nếu user tồn tại và token hợp lệ
             if (user != null && jwtService.isTokenValid(jwt, userEmail)) {
                 
@@ -72,7 +67,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-        
         filterChain.doFilter(request, response);
     }
 }

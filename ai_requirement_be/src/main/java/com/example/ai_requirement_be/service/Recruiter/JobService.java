@@ -140,8 +140,6 @@ public class JobService {
         }
         return user.getRecruiterProfile().getCompany();
     }
-
-
     private void mapDtoToEntity(SaveJobDTO dto, JobDescription job) {
         job.setTitle(dto.getTitle());
         job.setDescription(dto.getDescription());
@@ -156,7 +154,6 @@ public class JobService {
         job.setExperienceLevel(dto.getExperienceLevel());
         job.setExpiredAt(dto.getExpiredAt());
     }
-
     private void syncJobToVectorDB(JobDescription job) {
         try {
             org.springframework.web.client.RestTemplate restTemplate = new org.springframework.web.client.RestTemplate();

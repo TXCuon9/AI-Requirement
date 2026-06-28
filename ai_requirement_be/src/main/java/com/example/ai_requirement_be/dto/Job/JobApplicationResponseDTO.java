@@ -12,13 +12,17 @@ public class JobApplicationResponseDTO {
     private String status;    // Trạng thái (APPLIED, REVIEWING...)
     private LocalDateTime appliedAt;
     private String companyName;
+    private String jobTitle;
+    private double salary;
+    private String contractDate;
+    private String startDate;
 
     public JobApplicationResponseDTO() {
     }
 
     public JobApplicationResponseDTO(Long applicationId, Long candidateId, String candidateName,
                                      String candidateEmail, Long resumeId, String resumeUrl,
-                                     String status, LocalDateTime appliedAt, String companyName) {
+                                     String status, LocalDateTime appliedAt, String companyName , String jobTitle , String contractDate, String startDate) {
         this.applicationId = applicationId;
         this.candidateId = candidateId;
         this.candidateName = candidateName;
@@ -28,8 +32,11 @@ public class JobApplicationResponseDTO {
         this.status = status;
         this.appliedAt = appliedAt;
         this.companyName = companyName;
+        this.jobTitle = jobTitle;
+        this.salary = salary;
+        this.contractDate = contractDate;
+        this.startDate = startDate;
     }
-
     public Long getApplicationId() { return applicationId; }
     public void setApplicationId(Long applicationId) { this.applicationId = applicationId; }
 
@@ -56,4 +63,36 @@ public class JobApplicationResponseDTO {
 
     public String getCompanyName() { return companyName; }
     public void setCompanyName(String companyName) { this.companyName = companyName; }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public String getContractDate() {
+        return contractDate;
+    }
+
+    public void setContractDate(String contractDate) {
+        this.contractDate = contractDate;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
 }
