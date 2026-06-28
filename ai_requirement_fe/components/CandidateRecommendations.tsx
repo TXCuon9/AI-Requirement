@@ -66,12 +66,14 @@ export default function CandidateRecommendations() {
         return;
       }
 
-      // 3. Fetch Job Details from Java Backend (can just fetch all and filter for now)
-      // Ideally we should have a /api/jobs/batch API, but we'll fetch all jobs and filter
-      const allJobs: JobResponse[] = await fetchApi("/jobs");
-      const matchedJobs = allJobs.filter(j => jobIds.includes(String(j.id)));
+      // 3. Fetch Job Details from Java Backend using the batch API
+      const jobIdsNumber = jobIds.map(id => parseInt(id, 10)).filter(id => !isNaN(id));
+      const matchedJobs: JobResponse[] = await fetchApi("/jobs/batch", {
+        method: "POST",
+        body: JSON.stringify(jobIdsNumber)
+      });
 
-      setRecommendedJobs(matchedJobs);
+      setRecommendedJobs(matchedJobs || []);
 
     } catch (error) {
       console.error("Failed to fetch recommended jobs", error);

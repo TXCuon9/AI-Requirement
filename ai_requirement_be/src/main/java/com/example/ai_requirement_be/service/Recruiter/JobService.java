@@ -40,6 +40,13 @@ public class JobService {
                 .toList();
     }
 
+    public List<JobResponseDTO> getJobsByIds(List<Long> jobIds) {
+        List<JobDescription> jobs = jobdepRepository.findAllById(jobIds);
+        return jobs.stream()
+                .map(JobResponseDTO::new)
+                .toList();
+    }
+
     public List<JobResponseDTO> searchJobs(String keyword, String location, String industry, String experienceLevelStr, String jobTypeStr, BigDecimal salaryMin) {
         ExperienceLevel experienceLevel = null;
         if (experienceLevelStr != null && !experienceLevelStr.isEmpty()) {

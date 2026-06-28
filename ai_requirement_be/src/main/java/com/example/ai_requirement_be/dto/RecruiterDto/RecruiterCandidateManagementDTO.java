@@ -15,11 +15,14 @@ public class RecruiterCandidateManagementDTO {
     private String resumeTitle;
     private String resumeUrl;
 
+    private Long jobId;
+    private Integer matchScore;
+
     public RecruiterCandidateManagementDTO() {
 
     }
 
-    public RecruiterCandidateManagementDTO(Long applicationId, String status, LocalDateTime appliedAt, Long candidateId, String candidateName, String candidateEmail, Long resumeId, String resumeTitle, String resumeUrl) {
+    public RecruiterCandidateManagementDTO(Long applicationId, String status, LocalDateTime appliedAt, Long candidateId, String candidateName, String candidateEmail, Long resumeId, String resumeTitle, String resumeUrl, Long jobId, Integer matchScore) {
         this.applicationId = applicationId;
         this.status = status;
         this.appliedAt = appliedAt;
@@ -29,6 +32,8 @@ public class RecruiterCandidateManagementDTO {
         this.resumeId = resumeId;
         this.resumeTitle = resumeTitle;
         this.resumeUrl = resumeUrl;
+        this.jobId = jobId;
+        this.matchScore = matchScore;
     }
 
     public Long getApplicationId() {
@@ -101,5 +106,21 @@ public class RecruiterCandidateManagementDTO {
 
     public void setResumeUrl(String resumeUrl) {
         this.resumeUrl = resumeUrl;
+    }
+
+    public Long getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(Long jobId) {
+        this.jobId = jobId;
+    }
+
+    public Integer getMatchScore() {
+        return matchScore;
+    }
+
+    public void setMatchScore(Integer matchScore) {
+        this.matchScore = matchScore;
     }
 }

@@ -44,6 +44,12 @@ public class JobController {
         return ResponseEntity.ok(list);
     }
 
+    @PostMapping("/jobs/batch")
+    public ResponseEntity<List<JobResponseDTO>> getJobsByIds(@RequestBody List<Long> jobIds) {
+        List<JobResponseDTO> list = jobService.getJobsByIds(jobIds);
+        return ResponseEntity.ok(list);
+    }
+
     @GetMapping("/jobs/search")
     public ResponseEntity<List<JobResponseDTO>> searchJobs(
             @RequestParam(required = false) String keyword,

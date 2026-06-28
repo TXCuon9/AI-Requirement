@@ -3,28 +3,43 @@
 import { useEffect, useState } from "react";
 import { fetchApi } from "../../../lib/api";
 import { JobResponse } from "../../../lib/types/job";
-import { Loader2, Plus, BriefcaseBusiness, MapPin, DollarSign, Clock, Pencil, Trash2 } from "lucide-react";
+import { Loader2, Plus, BriefcaseBusiness, MapPin, DollarSign, Clock, Pencil, Trash2, Users, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { formatSalaryRange } from "../../../lib/utils";
 
 export default function JobsManagementPage() {
   const [jobs, setJobs] = useState<JobResponse[]>([]);
+  const [applicantCounts, setApplicantCounts] = useState<Record<number, number>>({});
   const [loading, setLoading] = useState(true);
 
-  const loadJobs = async () => {
+  const loadData = async () => {
     setLoading(true);
     try {
-      const data = await fetchApi("/recruiter/jobs");
-      setJobs(data || []);
+      const [jobsData, appsData] = await Promise.all([
+        fetchApi("/recruiter/jobs"),
+        fetchApi("/all").catch(() => []) // if it fails, default to empty
+      ]);
+      
+      setJobs(jobsData || []);
+      
+      // Calculate applicant counts per job
+      const counts: Record<number, number> = {};
+      (appsData || []).forEach((app: any) => {
+        if (app.jobId) {
+          counts[app.jobId] = (counts[app.jobId] || 0) + 1;
+        }
+      });
+      setApplicantCounts(counts);
+
     } catch (error) {
-      console.error("Failed to load jobs:", error);
+      console.error("Failed to load jobs data:", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadJobs();
+    loadData();
   }, []);
 
   const handleDelete = async (id: number) => {
@@ -78,65 +93,77 @@ export default function JobsManagementPage() {
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200 text-sm font-semibold text-slate-600">
                   <th className="p-4 pl-6">Vị trí tuyển dụng</th>
+                  <th className="p-4">Số ứng viên</th>
                   <th className="p-4">Hình thức</th>
                   <th className="p-4">Mức lương</th>
                   <th className="p-4">Ngày đăng</th>
-                  <th className="p-4 pr-6 text-right">Trạng thái</th>
                   <th className="p-4 pr-6 text-right">Thao tác</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {jobs.map((job) => (
-                  <tr key={job.id} className="hover:bg-slate-50/50 transition-colors">
-                    <td className="p-4 pl-6">
-                      <div className="font-bold text-slate-900 line-clamp-1">{job.title}</div>
-                      <div className="text-sm text-slate-500 flex items-center gap-1.5 mt-1">
-                        <MapPin className="size-3.5" /> {job.location} {job.remote && "(Remote)"}
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
-                        {job.jobType}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <div className="text-sm font-semibold text-emerald-600 flex items-center gap-1">
-                        <DollarSign className="size-4" /> 
-                        {formatSalaryRange(job.salaryMin, job.salaryMax, job.currency)}
-                      </div>
-                    </td>
-                    <td className="p-4 text-sm text-slate-600">
-                      <div className="flex items-center gap-1.5">
-                        <Clock className="size-3.5 text-slate-400" />
-                        {job.createdAt ? new Date(job.createdAt).toLocaleDateString('vi-VN') : 'N/A'}
-                      </div>
-                    </td>
-                    <td className="p-4 pr-6 text-right">
-                      {/* For simplicity, assume all are active if not expired */}
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        Đang mở
-                      </span>
-                    </td>
-                    <td className="p-4 pr-6 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <Link 
-                          href={`/dashboard/jobs/edit/${job.id}`}
-                          className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                          title="Sửa"
-                        >
-                          <Pencil className="size-4" />
-                        </Link>
-                        <button 
-                          onClick={() => handleDelete(job.id)}
-                          className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                          title="Xóa"
-                        >
-                          <Trash2 className="size-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {jobs.map((job) => {
+                  const count = applicantCounts[job.id] || 0;
+                  return (
+                    <tr key={job.id} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="p-4 pl-6">
+                        <div className="font-bold text-slate-900 line-clamp-1">{job.title}</div>
+                        <div className="text-sm text-slate-500 flex items-center gap-1.5 mt-1">
+                          <MapPin className="size-3.5" /> {job.location} {job.remote && "(Remote)"}
+                        </div>
+                      </td>
+                      <td className="p-4">
+                        <div className="flex items-center gap-2">
+                          <div className={`flex items-center justify-center px-3 py-1 rounded-full text-xs font-bold border ${count > 0 ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-slate-50 text-slate-500 border-slate-200'}`}>
+                            <Users className="size-3.5 mr-1" /> {count}
+                          </div>
+                          {count > 0 && (
+                            <Link
+                              href={`/dashboard/applications?jobId=${job.id}&autorank=true`}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-gradient-to-r from-purple-50 to-indigo-50 text-purple-700 border border-purple-200 rounded-lg hover:bg-purple-100 transition-colors"
+                            >
+                              <Sparkles className="size-3" /> Xem xếp hạng
+                            </Link>
+                          )}
+                        </div>
+                      </td>
+                      <td className="p-4">
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
+                          {job.jobType}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <div className="text-sm font-semibold text-emerald-600 flex items-center gap-1">
+                          <DollarSign className="size-4" /> 
+                          {formatSalaryRange(job.salaryMin, job.salaryMax, job.currency)}
+                        </div>
+                      </td>
+                      <td className="p-4 text-sm text-slate-600">
+                        <div className="flex items-center gap-1.5">
+                          <Clock className="size-3.5 text-slate-400" />
+                          {job.createdAt ? new Date(job.createdAt).toLocaleDateString('vi-VN') : 'N/A'}
+                        </div>
+                      </td>
+                      <td className="p-4 pr-6 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <Link 
+                            href={`/dashboard/jobs/edit/${job.id}`}
+                            className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            title="Sửa"
+                          >
+                            <Pencil className="size-4" />
+                          </Link>
+                          <button 
+                            onClick={() => handleDelete(job.id)}
+                            className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Xóa"
+                          >
+                            <Trash2 className="size-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

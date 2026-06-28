@@ -10,6 +10,7 @@ import com.example.ai_requirement_be.entity.Job.JobApplicationStatusEnum;
 import com.example.ai_requirement_be.entity.RecruiterManager.JobDescription;
 import com.example.ai_requirement_be.entity.RecruiterManager.RecruiterProfile;
 import com.example.ai_requirement_be.entity.UserManager.User;
+import com.example.ai_requirement_be.entity.Job.JobFitCache;
 import com.example.ai_requirement_be.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -26,14 +27,16 @@ public class JobApplicationService {
     private final ICandidateRepository candidateRepository;
     private final IResumeRepository resumeRepository;
     private final IRecruiterProfileRepository recruiterProfileRepository;
+    private final IJobFitCacheRepository jobFitCacheRepository;
 
-    public JobApplicationService(IJobApplicationRepository jobApplicationRepository, IJobdepRepository jobdepRepository, IUserRepository userRepository, ICandidateRepository candidateRepository, IResumeRepository resumeRepository, IRecruiterProfileRepository recruiterProfileRepository) {
+    public JobApplicationService(IJobApplicationRepository jobApplicationRepository, IJobdepRepository jobdepRepository, IUserRepository userRepository, ICandidateRepository candidateRepository, IResumeRepository resumeRepository, IRecruiterProfileRepository recruiterProfileRepository, IJobFitCacheRepository jobFitCacheRepository) {
         this.jobApplicationRepository = jobApplicationRepository;
         this.jobdepRepository = jobdepRepository;
         this.userRepository = userRepository;
         this.candidateRepository = candidateRepository;
         this.resumeRepository = resumeRepository;
         this.recruiterProfileRepository = recruiterProfileRepository;
+        this.jobFitCacheRepository = jobFitCacheRepository;
     }
 
     // Apply Cv
@@ -243,6 +246,22 @@ public class JobApplicationService {
                 dto.setResumeId(app.getResume().getId());
                 dto.setResumeUrl(app.getResume().getFileUrl());
                 dto.setResumeTitle(app.getResume().getCvName());
+            }
+            
+            if (app.getJobDescription() != null) {
+                dto.setJobId(app.getJobDescription().getId());
+                
+                if (app.getResume() != null) {
+                    jobFitCacheRepository.findByResumeIdAndJobId(app.getResume().getId(), app.getJobDescription().getId())
+                        .ifPresent(cache -> {
+                            if (cache.getMatchResult() != null && cache.getMatchResult().containsKey("match_score")) {
+                                Object score = cache.getMatchResult().get("match_score");
+                                if (score instanceof Number) {
+                                    dto.setMatchScore(((Number) score).intValue());
+                                }
+                            }
+                        });
+                }
             }
 
             dtoList.add(dto);

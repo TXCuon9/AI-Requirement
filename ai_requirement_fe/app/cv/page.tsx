@@ -5,6 +5,8 @@ import Navbar from "../../components/Navbar";
 import { UploadCloud, CheckCircle2, FileText, ArrowRight, TrendingUp, Settings, FileUp, Loader2, AlertCircle, Plus, Eye, MoreVertical, Trash2, Star, Sparkles } from "lucide-react";
 import { fetchApi } from "../../lib/api";
 import Link from "next/link";
+import { useAuth } from "../../lib/authContext";
+import { useRouter } from "next/navigation";
 
 export default function CVManagementPage() {
   const [isUploading, setIsUploading] = useState(false);
@@ -13,6 +15,8 @@ export default function CVManagementPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isJobSearchActive, setIsJobSearchActive] = useState(false);
   const [userName, setUserName] = useState("Bạn");
+  const { user, isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
 
   const getFileUrl = (url: string) => {
     if (!url) return "";
@@ -23,11 +27,28 @@ export default function CVManagementPage() {
 
   // Fetch existing resumes on mount
   useEffect(() => {
+    if (isLoading) return;
+
+    if (!isAuthenticated) {
+      router.push("/login?redirect=/cv");
+      return;
+    }
+
+    if (user?.role !== "CANDIDATE") {
+      router.push("/dashboard");
+      return;
+    }
+
     fetchApi("/resume")
       .then(data => {
         if (Array.isArray(data)) setResumes(data);
       })
-      .catch(console.error);
+      .catch((err) => {
+        console.error(err);
+        if (err.message?.includes("Forbidden")) {
+          router.push("/dashboard");
+        }
+      });
 
     fetchApi("/candidate/profile")
       .then(data => {
@@ -37,7 +58,18 @@ export default function CVManagementPage() {
         }
       })
       .catch(console.error);
-  }, []);
+  }, [isAuthenticated, isLoading, user, router]);
+
+  if (isLoading || !isAuthenticated || user?.role !== "CANDIDATE") {
+    return (
+      <div className="flex flex-col min-h-screen bg-[#F4F5F5]">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <Loader2 className="size-10 text-blue-600 animate-spin" />
+        </div>
+      </div>
+    );
+  }
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
