@@ -32,7 +32,6 @@ public class AuthService {
         this.jwtService = jwtService;
         this.companyRepository = companyRepository;
     }
-
     @Transactional
     public String register(RegisterRequestDTO registerRequestDTO) {
         if (userRepository.existsByEmail(registerRequestDTO.getEmail())) {

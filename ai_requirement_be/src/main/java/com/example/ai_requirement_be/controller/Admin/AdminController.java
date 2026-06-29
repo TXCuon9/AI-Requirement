@@ -19,7 +19,6 @@ public class AdminController {
     private final AdminService adminService;
     private final UserService userService;
     private final com.example.ai_requirement_be.repository.IJobdepRepository jobRepository;
-
     @Autowired
     public AdminController(AdminService adminService, UserService userService,
             com.example.ai_requirement_be.repository.IJobdepRepository jobRepository) {
