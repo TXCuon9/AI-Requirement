@@ -71,7 +71,23 @@ public class JobApplicationService {
         JobApplicationResponseDTO responseDTO = new JobApplicationResponseDTO();
         responseDTO.setApplicationId(savedApp.getId());
         responseDTO.setCandidateId(candidateProfile.getId());
-        responseDTO.setCandidateName(candidateProfile.getFullName());
+        
+        String name = null;
+        if (resume != null) {
+            name = resume.getFullName();
+        }
+        if (name == null || name.trim().isEmpty()) {
+            name = candidateProfile.getFullName();
+        }
+        if (name == null || name.trim().isEmpty()) {
+            if (candidateEmail != null && candidateEmail.contains("@")) {
+                name = candidateEmail.substring(0, candidateEmail.indexOf("@"));
+            } else {
+                name = candidateEmail;
+            }
+        }
+        responseDTO.setCandidateName(name);
+
         responseDTO.setResumeId(resume.getId());
         responseDTO.setResumeUrl(resume.getFileUrl());
         responseDTO.setStatus(savedApp.getStatus().name());
@@ -132,7 +148,23 @@ public class JobApplicationService {
 
         if (updatedApp.getCandidate() != null) {
             responseDTO.setCandidateId(updatedApp.getCandidate().getId());
-            responseDTO.setCandidateName(updatedApp.getCandidate().getFullName());
+            
+            String name = null;
+            if (updatedApp.getResume() != null) {
+                name = updatedApp.getResume().getFullName();
+            }
+            if (name == null || name.trim().isEmpty()) {
+                name = updatedApp.getCandidate().getFullName();
+            }
+            if ((name == null || name.trim().isEmpty()) && updatedApp.getCandidate().getUser() != null) {
+                String email = updatedApp.getCandidate().getUser().getEmail();
+                if(email != null && email.contains("@")) {
+                    name = email.substring(0, email.indexOf("@"));
+                } else {
+                    name = email;
+                }
+            }
+            responseDTO.setCandidateName(name);
             if(updatedApp.getCandidate().getUser() != null) {
                 responseDTO.setCandidateEmail(updatedApp.getCandidate().getUser().getEmail());
             }
@@ -180,7 +212,23 @@ public class JobApplicationService {
         responseDTO.setAppliedAt(updatedApp.getAppliedAt());
         if (updatedApp.getCandidate() != null) {
             responseDTO.setCandidateId(updatedApp.getCandidate().getId());
-            responseDTO.setCandidateName(updatedApp.getCandidate().getFullName());
+            
+            String name = null;
+            if (updatedApp.getResume() != null) {
+                name = updatedApp.getResume().getFullName();
+            }
+            if (name == null || name.trim().isEmpty()) {
+                name = updatedApp.getCandidate().getFullName();
+            }
+            if ((name == null || name.trim().isEmpty()) && updatedApp.getCandidate().getUser() != null) {
+                String email = updatedApp.getCandidate().getUser().getEmail();
+                if(email != null && email.contains("@")) {
+                    name = email.substring(0, email.indexOf("@"));
+                } else {
+                    name = email;
+                }
+            }
+            responseDTO.setCandidateName(name);
             if(updatedApp.getCandidate().getUser() != null) {
                 responseDTO.setCandidateEmail(updatedApp.getCandidate().getUser().getEmail());
             }
@@ -223,9 +271,12 @@ public class JobApplicationService {
             if (app.getCandidate() != null) {
                 dto.setCandidateId(app.getCandidate().getId());
                 
-                String name = app.getCandidate().getFullName();
-                if ((name == null || name.trim().isEmpty()) && app.getResume() != null) {
+                String name = null;
+                if (app.getResume() != null) {
                     name = app.getResume().getFullName();
+                }
+                if (name == null || name.trim().isEmpty()) {
+                    name = app.getCandidate().getFullName();
                 }
                 if ((name == null || name.trim().isEmpty()) && app.getCandidate().getUser() != null) {
                     String email = app.getCandidate().getUser().getEmail();
