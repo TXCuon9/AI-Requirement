@@ -27,7 +27,7 @@ export const fetchApi = async (endpoint: string, options: RequestInit = {}) => {
 
   if (!response.ok) {
     if (response.status === 401) {
-      if (typeof window !== "undefined") {
+      if (typeof window !== "undefined" && !endpoint.includes("/auth/login")) {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("userEmail");
