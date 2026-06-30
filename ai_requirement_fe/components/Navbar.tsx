@@ -140,7 +140,11 @@ export default function Navbar() {
               <DropdownItem href="/profile" label="Hồ sơ Online" />
             </DropdownMenu>
           </NavItem>
-          <NavItem href="#" icon={<Wrench className="size-3.5" />} label="Công cụ" active={false} />
+          <NavItem href="#" icon={<Wrench className="size-3.5" />} label="Công cụ" active={isActive('/tools')} hasDropdown>
+            <DropdownMenu>
+              <DropdownItem href="/tools/tax" label="Tính thuế thu nhập cá nhân" />
+            </DropdownMenu>
+          </NavItem>
         </div>
       </div>
     </header>

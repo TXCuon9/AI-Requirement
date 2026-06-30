@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
+
+    @org.springframework.beans.factory.annotation.Value("${spring.mail.username}")
+    private String fromEmail;
+
     public void sendInterviewInvitationEmail(
             String toEmail,
             String candidateName,
@@ -20,6 +24,7 @@ public class EmailService {
             String startDate
     ) {
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(fromEmail);
         message.setTo(toEmail);
         message.setSubject("Chúc mừng bạn đã trúng tuyển" + companyName);
         message.setText(
@@ -49,6 +54,7 @@ public class EmailService {
             String companyName
     ) {
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(fromEmail);
         message.setTo(toEmail);
         message.setSubject("Thông báo kết quả phỏng vấn " + companyName);
         message.setText(
@@ -69,6 +75,7 @@ public class EmailService {
 
     public void sendEmail(String toEmail, String candidateName, String companyName) {
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(fromEmail);
         message.setTo(toEmail);
         message.setSubject("Gửi gmail thành công: " + companyName);
         message.setText(
