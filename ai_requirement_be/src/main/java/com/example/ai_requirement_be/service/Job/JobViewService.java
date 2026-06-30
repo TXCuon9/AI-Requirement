@@ -38,7 +38,6 @@ public class JobViewService {
                 jobviewRepository.save(jobView);
             }
         }
-
         // Trích xuất dữ liệu từ thực thể 'job' vừa tìm được để tạo JSON sạch
         JobviewResponseDTO jobviewResponseDTO = new JobviewResponseDTO();
         jobviewResponseDTO.setId(jobDescription.getId());

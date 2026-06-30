@@ -1,6 +1,5 @@
 package com.example.ai_requirement_be.service;
 
-
 import com.example.ai_requirement_be.dto.Auth.RegisterRequestDTO;
 import com.example.ai_requirement_be.entity.CompaniesManager.Companies;
 import com.example.ai_requirement_be.entity.RecruiterManager.RecruiterProfile;
