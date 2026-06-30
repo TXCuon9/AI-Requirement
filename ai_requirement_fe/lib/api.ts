@@ -1,4 +1,11 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+let rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+if (rawApiUrl.endsWith('/')) {
+  rawApiUrl = rawApiUrl.slice(0, -1);
+}
+if (!rawApiUrl.endsWith('/api')) {
+  rawApiUrl += '/api';
+}
+const API_BASE_URL = rawApiUrl;
 
 export const fetchApi = async (endpoint: string, options: RequestInit = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
