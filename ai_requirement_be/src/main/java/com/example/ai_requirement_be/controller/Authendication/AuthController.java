@@ -2,7 +2,6 @@ package com.example.ai_requirement_be.controller.Authendication;
 
 
 import com.example.ai_requirement_be.dto.Auth.*;
-import com.example.ai_requirement_be.entity.UserManager.User;
 import com.example.ai_requirement_be.service.Authendication.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.security.Principal;
 
 @RestController

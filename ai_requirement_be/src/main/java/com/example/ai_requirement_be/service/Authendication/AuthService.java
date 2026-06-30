@@ -1,7 +1,5 @@
 package com.example.ai_requirement_be.service.Authendication;
-
 import com.example.ai_requirement_be.dto.Auth.*;
-import com.example.ai_requirement_be.dto.RecruiterDto.RegisterProfileDTO;
 import com.example.ai_requirement_be.entity.CandidateManager.CandidateProfile;
 import com.example.ai_requirement_be.entity.CompaniesManager.Companies;
 import com.example.ai_requirement_be.entity.RecruiterManager.RecruiterProfile;
@@ -12,12 +10,9 @@ import com.example.ai_requirement_be.repository.ICompanyRepository;
 import com.example.ai_requirement_be.repository.IUserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
-import java.util.UUID;
 @Service
 public class AuthService {
     private final IUserRepository userRepository;
