@@ -45,7 +45,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("userRole", role);
     setToken(accessToken);
     setUser({ email, role });
-    router.push("/");
+    
+    if (role === "COMPANY" || role === "RECRUITER" || role === "ADMIN") {
+      router.push("/dashboard");
+    } else {
+      router.push("/");
+    }
   };
 
   const logout = () => {
