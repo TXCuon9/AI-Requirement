@@ -31,8 +31,6 @@ public class SavedJobService {
         this.candidateRepository = candidateRepository;
         this.jobdepRepository = jobdepRepository;
     }
-
-
    @Transactional
     public SavedJobResponseDTO saveJobDTO(Long jobId , String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tài khoản người dùng"));
@@ -54,7 +52,6 @@ public class SavedJobService {
        SaveJob saveJob = new SaveJob();
        saveJob.setCandidateProfile(candidateProfile);
        saveJob.setJobDescription(job);
-
        // Lưu và hứng thực thể vừa lưu thành công (lúc này đã có ID sinh tự động và thời gian sinh tự động
        SaveJob savedRecord =  savedJobRepository.save(saveJob);
 

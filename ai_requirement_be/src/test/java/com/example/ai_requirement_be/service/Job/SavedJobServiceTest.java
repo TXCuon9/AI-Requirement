@@ -60,7 +60,6 @@ public class SavedJobServiceTest {
         jobDescription.setId(1L);
         jobDescription.setTitle("Java Developer");
     }
-
     @Test
     void saveJobDTO_Success() {
         when(userRepository.findByEmail("candidate@gmail.com")).thenReturn(Optional.of(user));
@@ -79,7 +78,6 @@ public class SavedJobServiceTest {
         assertEquals(1L, response.getJobId());
         assertEquals("Java Developer", response.getJobTitle());
     }
-
     @Test
     void saveJobDTO_UserNotFound() {
         when(userRepository.findByEmail("notfound@gmail.com")).thenReturn(Optional.empty());
@@ -114,7 +112,6 @@ public class SavedJobServiceTest {
 
         assertEquals("Hồ sơ ứng viên của bạn chưa được khởi tạo!", exception.getMessage());
     }
-
     @Test
     void saveJobDTO_JobNotFound() {
         when(userRepository.findByEmail("candidate@gmail.com")).thenReturn(Optional.of(user));
@@ -138,7 +135,6 @@ public class SavedJobServiceTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             savedJobService.saveJobDTO(1L, "candidate@gmail.com");
         });
-
         assertEquals("Bạn đã lưu bài đăng tuyển dụng trước đó rồi", exception.getMessage());
     }
 }

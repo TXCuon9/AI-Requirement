@@ -80,7 +80,6 @@ public class JobViewServiceTest {
         assertEquals(1L, response.getId());
         verify(jobviewRepository, never()).save(any(JobView.class));
     }
-
     @Test
     void getJobDetailsAndRecordView_JobNotFound() {
         when(jobdepRepository.findById(1L)).thenReturn(Optional.empty());
@@ -91,4 +90,6 @@ public class JobViewServiceTest {
 
         assertEquals("Bài đăng tuyển dụng không tồn tại hoặc bị xóa!", exception.getMessage());
     }
+
+
 }

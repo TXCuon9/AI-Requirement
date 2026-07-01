@@ -72,12 +72,10 @@ public class JobApplicationServiceTest {
         resume.setCandidateId(candidateProfile);
         resume.setFileUrl("resume.pdf");
     }
-
     @Test
     void applyJob_Success() {
         JobApplicationRequestDTO requestDTO = new JobApplicationRequestDTO();
         requestDTO.setResumeId(1L);
-
         when(userRepository.findByEmail("test@gmail.com")).thenReturn(Optional.of(user));
         when(candidateRepository.findByUserId(1L)).thenReturn(Optional.of(candidateProfile));
         when(jobdepRepository.findById(1L)).thenReturn(Optional.of(jobDescription));
@@ -95,7 +93,6 @@ public class JobApplicationServiceTest {
         assertEquals(1L, response.getApplicationId());
         assertEquals("APPLIED", response.getStatus());
     }
-    
     @Test
     void applyJob_UserNotFound() {
         JobApplicationRequestDTO requestDTO = new JobApplicationRequestDTO();
@@ -108,7 +105,6 @@ public class JobApplicationServiceTest {
 
         assertEquals("Không tìm thấy tài khoản người dùng!", exception.getMessage());
     }
-
     @Test
     void changeToInterviewStatus_Success() {
         RecruiterProfile recruiterProfile = new RecruiterProfile();
@@ -130,7 +126,6 @@ public class JobApplicationServiceTest {
         assertNotNull(response);
         assertEquals("INTERVIEW", response.getStatus());
     }
-
     @Test
     void changeToRejectedStatus_Success() {
         RecruiterProfile recruiterProfile = new RecruiterProfile();

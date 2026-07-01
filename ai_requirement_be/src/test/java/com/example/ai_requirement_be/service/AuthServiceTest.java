@@ -21,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
-
 @ExtendWith(MockitoExtension.class)
 public class AuthServiceTest {
 
@@ -64,6 +63,7 @@ public class AuthServiceTest {
         Assertions.assertEquals(UserRole.CANDIDATE, saveUser.getRole());
         Assertions.assertNotNull(saveUser.getCandidateProfile()); // xem thằng candidate được tạo chưa
     }
+
     @Test
     @DisplayName("Đăng ký thành công : Tạo tài khoản cho role Company")
     void register_Sucess_Company() {
@@ -145,7 +145,6 @@ public class AuthServiceTest {
         Assertions.assertEquals("Không tìm thấy tài khoản doanh nghiệp đang thao tác!" , exception.getMessage());
         Mockito.verify(userRepository , Mockito.never()).save(Mockito.any(User.class));
     }
-
     @Test
     @DisplayName("Đăng ký thất bại: Phải quăng lỗi RuntimeException khi Email đã được sử dụng")
     void register_Failure_EmailAlreadyExists() {
