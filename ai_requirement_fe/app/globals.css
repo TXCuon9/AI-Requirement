@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #f4f5f5;
   --foreground: #171717;
+  --vw-blue: #113888;
+  --vw-blue-hover: #0d2b6b;
+  --vw-orange: #ff7b00;
+  --vw-orange-hover: #e66f00;
+  --vw-green: #00b14f;
+  --vw-gray: #f4f5f5;
+  --vw-text-dark: #333333;
 }
 
 @theme inline {
@@ -14,8 +21,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #f4f5f5; /* Maintain light theme for VW clone */
+    --foreground: #171717;
   }
 }
 
@@ -28,19 +35,23 @@ body {
 /* Custom Utilities for Redesign */
 @layer utilities {
   .btn-brand {
-    @apply bg-[#E52329] text-white font-semibold rounded-full px-6 py-2 transition-all hover:bg-[#c91f24] hover:shadow-[0_4px_12px_rgba(229,35,41,0.3)];
+    @apply bg-[var(--vw-orange)] text-white font-bold rounded-lg px-8 py-3 transition-all hover:bg-[var(--vw-orange-hover)];
   }
 
-  .card-hover {
-    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_-8px_rgba(0,0,0,0.12)];
-  }
-
-  .nav-link-topdev {
-    @apply relative pb-2 font-medium text-slate-600 transition-colors;
+  .btn-outline-brand {
+    @apply bg-transparent border border-[var(--vw-orange)] text-[var(--vw-orange)] font-bold rounded-lg px-8 py-3 transition-all hover:bg-orange-50;
   }
   
+  .btn-primary {
+    @apply bg-[var(--vw-blue)] text-white font-bold rounded-lg px-6 py-2 transition-all hover:bg-[var(--vw-blue-hover)];
+  }
+
+  .card-vw {
+    @apply bg-white border border-gray-200 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:border-gray-300;
+  }
+
   .salary-tag {
-    @apply bg-red-50 text-[#E52329] font-semibold px-3 py-1 rounded-md text-sm;
+    @apply text-[var(--vw-green)] font-semibold text-sm flex items-center gap-1; 
   }
 
   /* Scrollbar */

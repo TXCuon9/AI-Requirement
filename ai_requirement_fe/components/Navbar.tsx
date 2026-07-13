@@ -5,192 +5,263 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { fetchApi } from "../lib/api";
 import { useAuth } from "../lib/authContext";
-import { Search, ChevronDown, Flame, BriefcaseBusiness, Building2, Wrench, FileText } from "lucide-react";
+import { ChevronDown, Building2, ShieldCheck, X, Menu, Bell, User as UserIcon, LayoutDashboard, FileText, Briefcase, ShoppingCart, Settings, LogOut, ChevronRight } from "lucide-react";
 
 export default function Navbar() {
   const { user, isAuthenticated, logout } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
   const [avatar, setAvatar] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [fullName, setFullName] = useState<string | null>(null);
+  const [showTopBanner, setShowTopBanner] = useState(true);
 
   useEffect(() => {
     if (isAuthenticated && user?.role === "CANDIDATE") {
       fetchApi("/candidate/profile")
         .then((data) => {
-          if (data && data.avatarUrl) {
-            setAvatar(data.avatarUrl);
+          if (data) {
+            if (data.avatarUrl) setAvatar(data.avatarUrl);
+            if (data.fullName) setFullName(data.fullName);
           }
         })
-        .catch((err) => console.error("Error fetching avatar:", err));
+        .catch((err) => console.warn("Error fetching avatar:", err));
     }
   }, [isAuthenticated, user]);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/jobs?keyword=${encodeURIComponent(searchQuery.trim())}`);
-    }
-  };
-
-  const isActive = (path: string) => pathname === path || pathname?.startsWith(path + '/');
-
   return (
-    <header className="sticky top-0 z-50 w-full bg-white">
-      {/* Tier 1: Logo + Search + Auth */}
-      <div className="border-b border-slate-100">
-        <div className="container mx-auto px-4 h-[72px] flex items-center justify-between gap-6">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0">
-            <div className="size-10 rounded-xl bg-gradient-to-br from-[#E52329] to-[#ff6b6b] flex items-center justify-center text-white font-black text-lg shadow-lg shadow-red-500/20">
-              AI
-            </div>
-            <div className="hidden sm:block">
-              <span className="font-extrabold text-xl tracking-tight text-slate-900">Recruitment</span>
-              <span className="block text-[10px] text-slate-400 font-medium -mt-0.5 tracking-wider">SMART HIRING PLATFORM</span>
-            </div>
+    <header className="w-full flex flex-col z-50 sticky top-0">
+      {/* Top Banner Warning */}
+      {showTopBanner && (
+        <div className="bg-[#1161ed] text-white text-sm py-2 px-4 flex items-center justify-between">
+          <div className="flex-1 flex justify-center items-center gap-2">
+            <ShieldCheck className="size-4" />
+            <span>Hãy bảo vệ chính mình trước các trường hợp mạo danh AI Recruitment.</span>
+            <Link href="#" className="underline font-medium hover:text-blue-200 transition-colors">Xem thêm</Link>
+          </div>
+          <button onClick={() => setShowTopBanner(false)} className="text-white hover:text-blue-200 transition-colors p-1">
+            <X className="size-5" />
+          </button>
+        </div>
+      )}
+
+      {/* Main Navbar */}
+      <div className="bg-[#0b1c47] h-[64px] flex items-center">
+        <div className="container relative mx-auto px-4 max-w-7xl flex items-center justify-between w-full">
+          
+          {/* Left: Logo */}
+          <Link href="/" className="flex flex-col text-white mr-8">
+            <span className="font-semibold text-2xl tracking-tight leading-none mb-0.5">AI Recruitment</span>
+            <span className="text-[10px] text-blue-200 uppercase tracking-widest">Empower growth</span>
           </Link>
 
-          {/* Search Bar - Pill Style */}
-          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-[500px]">
-            <div className="relative w-full">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Vị trí tuyển dụng, công ty..."
-                className="w-full h-11 pl-5 pr-12 rounded-full border-2 border-[#4876EF] bg-white text-sm font-medium text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-[#E52329] focus:ring-2 focus:ring-red-100 transition-all"
-              />
-              <button
-                type="submit"
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 size-8 rounded-full bg-[#4876EF] hover:bg-[#3a62d4] text-white flex items-center justify-center transition-colors"
-              >
-                <Search className="size-4" />
-              </button>
+          {/* Right Section */}
+          <div className="flex items-center gap-4">
+            
+            {/* inTECH fake logo */}
+            <div className="hidden lg:flex flex-col text-white mr-4 text-right">
+              <span className="text-[10px] leading-none mb-0.5 opacity-80">AI Recruitment</span>
+              <span className="text-sm font-black italic">inTECH</span>
             </div>
-          </form>
 
-          {/* Auth / Profile */}
-          <div className="flex items-center gap-3 shrink-0">
-            {isAuthenticated ? (
-              <div className="flex items-center gap-3">
-                <div className="hidden sm:flex items-center gap-2">
-                  {avatar ? (
-                    <img src={avatar} alt="Avatar" className="size-8 rounded-full object-cover border-2 border-slate-200" />
-                  ) : (
-                    <div className="size-8 rounded-full bg-gradient-to-br from-[#4876EF] to-[#6b8df7] flex items-center justify-center text-white font-semibold text-sm">
-                      {user?.email.charAt(0).toUpperCase()}
+            {/* Tất cả danh mục Button */}
+            <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors cursor-pointer group">
+              <Menu className="size-4" />
+              <span className="text-sm font-medium">Tất cả danh mục</span>
+              
+              {/* Dropdown for Tất cả danh mục */}
+              <div className="absolute left-0 right-0 top-full pt-[20px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 w-full cursor-default">
+                <div className="bg-white rounded-xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] border-4 border-[#0b1c47] p-0 text-gray-800 flex overflow-hidden text-left min-h-[400px]">
+                  
+                  {/* Left Panel (Categories) */}
+                  <div className="flex-[3] p-8 grid grid-cols-3 gap-8 bg-white">
+                    {/* Column 1 */}
+                    <div>
+                      <h3 className="text-[#0b1c47] font-bold text-lg mb-4">Việc làm</h3>
+                      <ul className="space-y-2">
+                        <li><Link href="/jobs" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Việc làm mới nhất</Link></li>
+                        <li><Link href="/jobs" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] bg-slate-100 hover:bg-slate-200 rounded px-2 -mx-2 transition-colors font-medium">Tìm việc làm</Link></li>
+                        <li><Link href="/jobs" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Việc làm quản lý</Link></li>
+                      </ul>
+                      
+                      <h3 className="text-[#0b1c47] font-bold text-lg mt-10 mb-4">Khám phá</h3>
+                      <ul className="space-y-2">
+                        <li><Link href="/wowcv" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">WowCV - Thư viện CV mẫu</Link></li>
+                        <li><Link href="/cv" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Quản lý CV</Link></li>
+                        <li><Link href="#" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Lộ trình sự nghiệp</Link></li>
+                      </ul>
                     </div>
-                  )}
-                  {user?.role !== "CANDIDATE" && (
-                    <span className="text-sm font-medium text-slate-700">{user?.email}</span>
-                  )}
-                </div>
-                {user?.role === "ADMIN" && (
-                  <Link href="/admin" className="text-xs font-bold bg-slate-900 text-white px-3 py-1.5 rounded-full hover:bg-slate-800 transition-colors">
-                    Admin
-                  </Link>
-                )}
-                {(user?.role === "RECRUITER" || user?.role === "COMPANY" || user?.role === "ADMIN") && (
-                  <Link href="/dashboard" className="text-xs font-bold bg-[#4876EF]/10 text-[#4876EF] px-3 py-1.5 rounded-full hover:bg-[#4876EF]/20 transition-colors">
-                    Dashboard
-                  </Link>
-                )}
-                <button onClick={logout} className="text-xs font-medium text-slate-400 hover:text-red-500 transition-colors">
-                  Đăng xuất
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Link href="/register?type=company" className="hidden lg:flex text-xs font-semibold text-[#4876EF] items-center gap-1.5 hover:text-[#3a62d4] transition-colors">
-                  <BriefcaseBusiness className="size-3.5" />
-                  Nhà tuyển dụng
-                </Link>
-                <span className="hidden lg:block w-px h-4 bg-slate-300"></span>
-                <Link href="/login" className="text-sm font-semibold text-[#4876EF] flex items-center gap-1.5 hover:text-[#3a62d4] transition-colors">
-                  <div className="size-5 bg-[#4876EF]/10 rounded-full flex items-center justify-center">
-                    <svg width="10" height="10" viewBox="0 0 14 14" fill="currentColor"><path d="M7 7.27c2 0 3.636-1.635 3.636-3.635S9 0 7 0 3.366 1.635 3.366 3.635 5 7.27 7 7.27z"/><path d="M13.24 10.175a7.5 7.5 0 0 0-.366-.667A5.3 5.3 0 0 0 9.747 7.54a.7.7 0 0 0-.46.111A4.3 4.3 0 0 1 7 8.397a4.3 4.3 0 0 1-2.285-.746.6.6 0 0 0-.46-.111 5.3 5.3 0 0 0-3.127 1.968c-.143.207-.27.445-.365.667a.4.4 0 0 0 .016.302c.127.222.286.444.429.635.222.302.46.572.73.826.222.222.476.429.667.572A7.35 7.35 0 0 0 7 14a7.35 7.35 0 0 0 4.395-1.428c.19-.159.445-.365.667-.572.27-.254.508-.524.73-.826.143-.19.302-.413.429-.635a.4.4 0 0 0 .016-.302z"/></svg>
+                    
+                    {/* Column 2 */}
+                    <div>
+                      <h3 className="text-[#0b1c47] font-bold text-lg mb-4">Việc của tôi</h3>
+                      <ul className="space-y-2">
+                        <li><Link href="/saved-jobs" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Việc đã lưu</Link></li>
+                        <li><Link href="/profile" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Việc đã ứng tuyển</Link></li>
+                        <li><Link href="/profile" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Thông báo việc làm</Link></li>
+                        <li><Link href="/profile" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Việc dành cho bạn</Link></li>
+                      </ul>
+                      
+                      <div className="mt-10">
+                        <ul className="space-y-2">
+                          <li><Link href="#" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Báo cáo lương</Link></li>
+                          <li><Link href="#" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Công cụ tính lương</Link></li>
+                          <li><Link href="#" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Trạm sạc</Link></li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    {/* Column 3 */}
+                    <div>
+                      <h3 className="text-[#0b1c47] font-bold text-lg mb-4">Công ty</h3>
+                      <ul className="space-y-2">
+                        <li><Link href="/companies" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Tất cả công ty</Link></li>
+                      </ul>
+                      
+                      <div className="mt-[168px]">
+                        <ul className="space-y-2">
+                          <li><Link href="#" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Câu hỏi phỏng vấn</Link></li>
+                          <li><Link href="#" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Nhân số học</Link></li>
+                          <li><Link href="#" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Career newbies</Link></li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
-                  Đăng nhập
-                </Link>
+
+                  {/* Right Panel (AI Recruitment inTECH) */}
+                  <div className="flex-[1.2] bg-[#f8fbff] border-l border-slate-200 p-8 flex flex-col relative overflow-hidden">
+                    <h3 className="text-[#0b1c47] font-bold text-lg mb-4">AI Recruitment inTECH</h3>
+                    <ul className="space-y-2 mb-8 relative z-10">
+                      <li><Link href="#" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-blue-50 rounded px-2 -mx-2 transition-colors">IT Jobs</Link></li>
+                      <li><Link href="#" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-blue-50 rounded px-2 -mx-2 transition-colors">IT Hub</Link></li>
+                    </ul>
+                    
+                    <div className="mt-auto rounded-xl overflow-hidden shadow-md relative group/banner cursor-pointer border border-[#0b1c47]/10 z-10">
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#031548] to-[#123185] z-0"></div>
+                      <div className="relative z-10 p-6 flex flex-col h-full justify-between min-h-[160px]">
+                         <div className="flex items-center gap-2 text-white/80 text-xs font-semibold uppercase tracking-wider mb-2">
+                            <span>AI Recruitment</span>
+                            <span className="font-black italic text-white">inTECH</span>
+                         </div>
+                         <h4 className="text-white text-xl font-bold leading-tight w-3/4">AI Recruitment inTECH</h4>
+                         <p className="text-blue-200 text-xs mt-1">Thương hiệu việc làm & tuyển dụng IT</p>
+                         <button className="bg-[#ff7d55] text-white text-xs font-bold py-1.5 px-4 rounded-full self-end mt-4 hover:bg-[#e66f00] transition-colors shadow-lg">XEM THÊM</button>
+                      </div>
+                    </div>
+                    
+                    {/* Decorative background circle */}
+                    <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-50 z-0"></div>
+                  </div>
+                  
+                </div>
               </div>
-            )}
+            </div>
+
+            {/* Right Action Button based on Role */}
+            {!isAuthenticated ? (
+              <Link href="/register?type=company" className="hidden sm:flex items-center px-4 py-2 rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors text-sm font-medium">
+                Dành cho Nhà tuyển dụng
+              </Link>
+            ) : user?.role === "ADMIN" ? (
+              <Link href="/admin" className="hidden sm:flex items-center px-4 py-2 rounded-full border border-[var(--vw-orange)] text-[var(--vw-orange)] hover:bg-orange-500/10 transition-colors text-sm font-bold bg-white/5">
+                <ShieldCheck className="size-4 mr-2" /> Bảng điều khiển Admin
+              </Link>
+            ) : (user?.role === "COMPANY" || user?.role === "RECRUITER") ? (
+              <Link href="/dashboard" className="hidden sm:flex items-center px-4 py-2 rounded-full border border-[var(--vw-blue)] text-blue-300 hover:bg-blue-500/10 transition-colors text-sm font-bold bg-white/5">
+                Bảng điều khiển NTD
+              </Link>
+            ) : null}
+
+            {/* Language Switch */}
+            <div className="size-9 rounded-full bg-[#1161ed] text-white flex items-center justify-center font-bold text-xs cursor-pointer hover:bg-blue-600 transition-colors">
+              Vi
+            </div>
+
+            {/* Notification */}
+            <div className="size-9 rounded-full bg-[#1161ed] text-white flex items-center justify-center cursor-pointer hover:bg-blue-600 transition-colors">
+              <Bell className="size-4" />
+            </div>
+
+            {/* User Account */}
+            <div className="group relative">
+              <div className="size-9 rounded-full bg-[#1161ed] text-white flex items-center justify-center cursor-pointer hover:bg-blue-600 transition-colors overflow-hidden">
+                {isAuthenticated && avatar ? (
+                  <img src={avatar} alt="Avatar" className="w-full h-full object-cover" />
+                ) : (
+                  <UserIcon className="size-5" />
+                )}
+              </div>
+
+              {/* User Dropdown */}
+              <div className="absolute right-0 top-full pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                {isAuthenticated ? (
+                  <div className="bg-white rounded-xl shadow-[0_4px_24px_rgba(0,0,0,0.15)] border border-gray-100 w-[320px] overflow-hidden flex flex-col">
+                    {/* Header */}
+                    <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+                      <div className="flex-1 min-w-0 pr-3">
+                        <h4 className="font-bold text-gray-800 text-[15px] truncate">{fullName || "Ứng viên"}</h4>
+                        <p className="text-gray-500 text-[13px] truncate">{typeof window !== "undefined" ? localStorage.getItem("userEmail") || "user@email.com" : ""}</p>
+                      </div>
+                      <Link href="/profile" className="px-3 py-1.5 rounded border border-[var(--vw-orange)] text-[var(--vw-orange)] text-[13px] font-semibold hover:bg-orange-50 transition-colors whitespace-nowrap">
+                        Cập nhật hồ sơ
+                      </Link>
+                    </div>
+                    
+                    {/* Menu Items */}
+                    <div className="py-2 flex flex-col">
+                      <Link href="/dashboard" className="flex items-center px-5 py-2.5 hover:bg-gray-50 transition-colors text-gray-700 group">
+                        <LayoutDashboard className="size-[18px] mr-4 text-gray-500 group-hover:text-[var(--vw-blue)]" />
+                        <span className="text-[14px] font-medium group-hover:text-[var(--vw-blue)]">Tổng Quan</span>
+                      </Link>
+                      <Link href="/profile" className="flex items-center px-5 py-2.5 hover:bg-gray-50 transition-colors text-gray-700 group">
+                        <FileText className="size-[18px] mr-4 text-gray-500 group-hover:text-[var(--vw-blue)]" />
+                        <span className="text-[14px] font-medium group-hover:text-[var(--vw-blue)]">Hồ Sơ Của Tôi</span>
+                      </Link>
+                      {(user?.role === "RECRUITER" || user?.role === "COMPANY" || user?.role === "ADMIN") && (
+                        <Link href="/company-profile" className="flex items-center px-5 py-2.5 hover:bg-gray-50 transition-colors text-gray-700 group">
+                          <Building2 className="size-[18px] mr-4 text-gray-500 group-hover:text-[var(--vw-blue)]" />
+                          <span className="text-[14px] font-medium group-hover:text-[var(--vw-blue)]">Công Ty Của Tôi</span>
+                        </Link>
+                      )}
+                      <Link href="/my-jobs" className="flex items-center px-5 py-2.5 hover:bg-gray-50 transition-colors text-gray-700 group">
+                        <Briefcase className="size-[18px] mr-4 text-gray-500 group-hover:text-[var(--vw-blue)]" />
+                        <span className="text-[14px] font-medium group-hover:text-[var(--vw-blue)]">Việc Làm Của Tôi</span>
+                      </Link>
+                      <Link href="/job-alerts" className="flex items-center px-5 py-2.5 hover:bg-gray-50 transition-colors text-gray-700 group">
+                        <Bell className="size-[18px] mr-4 text-gray-500 group-hover:text-[var(--vw-blue)]" />
+                        <span className="text-[14px] font-medium group-hover:text-[var(--vw-blue)]">Thông Báo Việc Làm</span>
+                      </Link>
+                      <Link href="/orders" className="flex items-center px-5 py-2.5 hover:bg-gray-50 transition-colors text-gray-700 group">
+                        <ShoppingCart className="size-[18px] mr-4 text-gray-500 group-hover:text-[var(--vw-blue)]" />
+                        <span className="text-[14px] font-medium group-hover:text-[var(--vw-blue)]">Quản Lý Đơn Hàng</span>
+                      </Link>
+                      <Link href="/settings" className="flex items-center px-5 py-2.5 hover:bg-gray-50 transition-colors text-gray-700 group">
+                        <Settings className="size-[18px] mr-4 text-gray-500 group-hover:text-[var(--vw-blue)]" />
+                        <span className="text-[14px] font-medium group-hover:text-[var(--vw-blue)]">Quản Lý Tài Khoản</span>
+                      </Link>
+                      <button onClick={logout} className="w-full text-left flex items-center px-5 py-2.5 hover:bg-gray-50 transition-colors text-gray-700 group">
+                        <LogOut className="size-[18px] mr-4 text-gray-500 group-hover:text-red-500" />
+                        <span className="text-[14px] font-medium group-hover:text-red-500">Thoát</span>
+                      </button>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="p-4 border-t border-gray-100 flex items-center justify-between hover:bg-blue-50 cursor-pointer transition-colors group">
+                      <span className="text-[14px] text-[var(--vw-blue)] font-medium">Tham khảo những câu hỏi thường gặp</span>
+                      <ChevronRight className="size-4 text-[var(--vw-blue)] group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-white rounded-lg shadow-lg border border-gray-100 py-2 w-48">
+                    <Link href="/login" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[var(--vw-blue)]">Đăng nhập</Link>
+                    <Link href="/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[var(--vw-blue)]">Đăng ký</Link>
+                  </div>
+                )}
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
-
-      {/* Tier 2: Navigation Menu */}
-      <div className="shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
-        <div className="container mx-auto px-4 flex items-center gap-1">
-          {/* Nav Items */}
-          <NavItem href="/" icon={<Flame className="size-3.5" />} label="Công việc hot" active={pathname === '/'} hasDropdown>
-            <DropdownMenu>
-              <DropdownItem href="/jobs?ordering=salary_desc" label="Top việc lương cao" />
-              <DropdownItem href="/jobs?location=Hà Nội" label="Việc làm Hà Nội" />
-              <DropdownItem href="/jobs?location=Hồ Chí Minh" label="Việc làm Hồ Chí Minh" />
-              <DropdownItem href="/jobs?location=Đà Nẵng" label="Việc làm Đà Nẵng" />
-            </DropdownMenu>
-          </NavItem>
-          <NavItem href="/jobs" label="Việc làm" active={isActive('/jobs')} />
-          <NavItem href="/companies" icon={<Building2 className="size-3.5" />} label="Công ty" active={isActive('/companies')} />
-          <NavItem href="/cv" icon={<FileText className="size-3.5" />} label="Hồ sơ & CV" active={isActive('/cv') || isActive('/profile') || isActive('/templates')} hasDropdown>
-            <DropdownMenu>
-              <DropdownItem href="/cv" label="Quản lý CV" />
-              <DropdownItem href="/templates" label="Tạo CV từ mẫu" />
-              <DropdownItem href="/profile" label="Hồ sơ Online" />
-            </DropdownMenu>
-          </NavItem>
-          <NavItem href="#" icon={<Wrench className="size-3.5" />} label="Công cụ" active={isActive('/tools')} hasDropdown>
-            <DropdownMenu>
-              <DropdownItem href="/tools/tax" label="Tính thuế thu nhập cá nhân" />
-            </DropdownMenu>
-          </NavItem>
-        </div>
-      </div>
     </header>
-  );
-}
-
-/* Sub-components */
-function NavItem({ href, icon, label, active, hasDropdown, children }: {
-  href: string; icon?: React.ReactNode; label: string; active: boolean; hasDropdown?: boolean; children?: React.ReactNode;
-}) {
-  return (
-    <div className="group relative">
-      <Link
-        href={href}
-        className={`flex items-center gap-1.5 px-4 py-3 text-sm font-medium transition-colors border-b-2 ${
-          active
-            ? 'text-[#E52329] border-[#E52329]'
-            : 'text-slate-600 border-transparent hover:text-[#E52329] hover:border-[#E52329]'
-        }`}
-      >
-        {icon && <span className={active ? 'text-[#E52329]' : 'text-[#4876EF]'}>{icon}</span>}
-        {label}
-        {hasDropdown && <ChevronDown className="size-3.5 ml-0.5 opacity-50" />}
-      </Link>
-      {children}
-    </div>
-  );
-}
-
-function DropdownMenu({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="absolute left-0 top-full pt-0.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-      <div className="bg-white rounded-xl shadow-xl border border-slate-100 p-2 min-w-[220px]">
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function DropdownItem({ href, label }: { href: string; label: string }) {
-  return (
-    <Link
-      href={href}
-      className="block px-4 py-2.5 text-sm text-slate-600 hover:text-[#E52329] hover:bg-red-50 rounded-lg font-medium transition-colors"
-    >
-      {label}
-    </Link>
   );
 }

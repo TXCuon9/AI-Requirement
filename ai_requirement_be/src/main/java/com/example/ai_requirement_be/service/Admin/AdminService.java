@@ -1,5 +1,8 @@
 package com.example.ai_requirement_be.service.Admin;
 
+import com.example.ai_requirement_be.dto.Admin.CompanyAdminDTO;
+import com.example.ai_requirement_be.dto.Admin.JobAdminDTO;
+import com.example.ai_requirement_be.dto.Admin.UserAdminDTO;
 import com.example.ai_requirement_be.entity.UserManager.User;
 import com.example.ai_requirement_be.entity.UserManager.UserStatus;
 import com.example.ai_requirement_be.repository.IUserRepository;
@@ -16,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AdminService {
@@ -33,12 +37,10 @@ public class AdminService {
     }
 
     public void approveCompany(Long userId) {
-
         User user =  userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản yêu cầu!"));
         if(user.getStatus() != UserStatus.PENDING) {
             throw new RuntimeException("Tài khoản này đã được kích hoạt hoặc không ở trạng thái chờ duyệt!");
         }
-
         user.setStatus(UserStatus.ACTIVE);
         userRepository.save(user);
     }
@@ -52,11 +54,32 @@ public class AdminService {
         return new com.example.ai_requirement_be.dto.Admin.AdminDashboardStatsDTO(totalCompanies, pendingCompanies, totalUsers, totalJobs);
     }
 
-    public java.util.List<com.example.ai_requirement_be.dto.Admin.CompanyAdminDTO> getAllCompanies() {
-        java.util.List<User> companies = userRepository.findByRole(com.example.ai_requirement_be.entity.UserManager.UserRole.COMPANY);
+    // --- USERS CRUD ---
+    public List<UserAdminDTO> getAllUsers() {
+        return userRepository.findAll().stream().map(user -> 
+            new UserAdminDTO(user.getId(), user.getEmail(), user.getRole(), user.getStatus())
+        ).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void updateUser(Long id, UserAdminDTO dto) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        user.setRole(dto.getRole());
+        user.setStatus(dto.getStatus());
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    // --- COMPANIES CRUD ---
+    public List<CompanyAdminDTO> getAllCompanies() {
+        List<User> companies = userRepository.findByRole(com.example.ai_requirement_be.entity.UserManager.UserRole.COMPANY);
         return companies.stream().map(user -> {
-            com.example.ai_requirement_be.dto.Admin.CompanyAdminDTO dto = new com.example.ai_requirement_be.dto.Admin.CompanyAdminDTO();
-            dto.setId(user.getId());
+            CompanyAdminDTO dto = new CompanyAdminDTO();
+            dto.setId(user.getId()); // using User ID since companies are tied to users
             dto.setEmail(user.getEmail());
             dto.setStatus(user.getStatus());
             if (user.getCompanies() != null) {
@@ -70,7 +93,21 @@ public class AdminService {
                 dto.setVerified(false);
             }
             return dto;
-        }).collect(java.util.stream.Collectors.toList());
+        }).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void updateCompany(Long id, CompanyAdminDTO dto) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy công ty"));
+        if (user.getCompanies() != null) {
+            Companies comp = user.getCompanies();
+            comp.setName(dto.getName());
+            comp.setIndustry(dto.getIndustry());
+            comp.setCompanySize(dto.getCompanySize());
+            comp.setLocation(dto.getLocation());
+            comp.setVerified(dto.getVerified());
+            companyRepository.save(comp);
+        }
     }
 
     public void toggleCompanyStatus(Long userId) {
@@ -84,16 +121,42 @@ public class AdminService {
     }
 
     @Transactional
+    public void deleteCompany(Long id) {
+        // Deleting the user will cascade delete Companies, Jobs, and RecruiterProfiles
+        userRepository.deleteById(id);
+    }
+
+    // --- JOBS CRUD ---
+    public List<JobAdminDTO> getAllJobs() {
+        return jobRepository.findAll().stream().map(job -> {
+            String companyName = job.getCompany() != null ? job.getCompany().getName() : "Unknown";
+            String industry = job.getCompany() != null ? job.getCompany().getIndustry() : "Unknown";
+            return new JobAdminDTO(job.getId(), job.getTitle(), companyName, industry, job.getStatus());
+        }).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void updateJob(Long id, JobAdminDTO dto) {
+        JobDescription job = jobRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy việc làm"));
+        job.setTitle(dto.getTitle());
+        job.setStatus(dto.getStatus());
+        jobRepository.save(job);
+    }
+
+    @Transactional
+    public void deleteJob(Long id) {
+        jobRepository.deleteById(id);
+    }
+
+
+    @Transactional
     public void seedJobs(List<SeedJobDTO> dtos) {
         for (SeedJobDTO dto : dtos) {
-            // Check if company exists
             Companies company = companyRepository.findByName(dto.getCompanyName()).orElse(null);
             if (company == null) {
-                // Create company user
                 User companyUser = new User();
                 String emailPrefix = dto.getCompanyName().toLowerCase().replaceAll("[^a-z0-9]", "");
                 companyUser.setEmail("contact@" + emailPrefix + ".com");
-                // Avoid email collision
                 if (userRepository.existsByEmail(companyUser.getEmail())) {
                     companyUser.setEmail("contact+" + System.currentTimeMillis() + "@" + emailPrefix + ".com");
                 }
@@ -111,7 +174,6 @@ public class AdminService {
 
                 userRepository.save(companyUser);
 
-                // Create recruiter user for this company
                 User recruiterUser = new User();
                 recruiterUser.setEmail("hr@" + emailPrefix + ".com");
                 if (userRepository.existsByEmail(recruiterUser.getEmail())) {
@@ -131,19 +193,17 @@ public class AdminService {
                 userRepository.save(recruiterUser);
             }
 
-            // Create Job
             JobDescription job = new JobDescription();
             job.setCompany(company);
             job.setTitle(dto.getJobTitle());
             job.setDescription(dto.getJobDescription());
             job.setRequirements(dto.getJobRequirement());
             String benefits = dto.getJobBenefit() != null ? dto.getJobBenefit() : "";
-            job.setResponsibilities("Quyền lợi: " + benefits); // Save benefits in responsibilities if needed
+            job.setResponsibilities("Quyền lợi: " + benefits);
             job.setLocation(dto.getLocation());
             job.setJobType(JobType.FULL_TIME);
             job.setStatus(com.example.ai_requirement_be.entity.RecruiterManager.JobStatus.OPEN);
             
-            // Extract salary min/max from string (simplified)
             try {
                 if (dto.getSalary() != null && !dto.getSalary().isEmpty()) {
                     String cleanSalary = dto.getSalary().replaceAll("[^0-9\\-]", "");
@@ -159,7 +219,6 @@ public class AdminService {
                     }
                 }
             } catch (Exception e) {
-                // Ignore salary parsing error
             }
 
             jobRepository.save(job);
@@ -172,7 +231,7 @@ public class AdminService {
             .filter(u -> u.getEmail() != null && 
                 (u.getEmail().startsWith("contact@") || u.getEmail().startsWith("contact+") || 
                  u.getEmail().startsWith("hr@") || u.getEmail().startsWith("hr+")))
-            .collect(java.util.stream.Collectors.toList());
+            .collect(Collectors.toList());
         
         int count = mockUsers.size();
         userRepository.deleteAll(mockUsers);

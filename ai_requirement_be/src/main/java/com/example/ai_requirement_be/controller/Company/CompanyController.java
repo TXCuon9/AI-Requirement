@@ -22,10 +22,15 @@ public class CompanyController {
        this.companyService = companyService;
        this.userService = userService;
    }
-   @GetMapping("/profile")
-   public ResponseEntity<UpdateCompanyDTO> getProfile(Principal principal) {
-       return ResponseEntity.ok(companyService.getCompanyProfile(principal.getName()));
-   }
+    @GetMapping("/profile")
+    public ResponseEntity<UpdateCompanyDTO> getProfile(Principal principal) {
+        return ResponseEntity.ok(companyService.getCompanyProfile(principal.getName()));
+    }
+
+    @GetMapping("/dashboard-stats")
+    public ResponseEntity<com.example.ai_requirement_be.dto.Company.DashboardStatsDTO> getDashboardStats(Principal principal) {
+        return ResponseEntity.ok(companyService.getDashboardStats(principal.getName()));
+    }
    @PutMapping("/profile")
     public ResponseEntity<String> updateProfile(Principal principal , @Valid @RequestBody UpdateCompanyDTO updateCompanyDTO) {
        String email = principal.getName();

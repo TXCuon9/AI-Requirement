@@ -273,7 +273,10 @@ export default function CVManagementPage() {
               <div className="p-6">
                 {resumes.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {resumes.map((resume: any, idx: number) => (
+                    {resumes.map((resume: any, idx: number) => {
+                      const aiScore = resume.aiAnalysisResult?.overall_score;
+                      
+                      return (
                       <div key={resume.id || idx} className="group flex flex-col bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-md transition-shadow relative">
                         {/* CV Preview Placeholder */}
                         <div className="aspect-[1/1.4] bg-slate-100 relative p-4 flex flex-col">
@@ -319,14 +322,23 @@ export default function CVManagementPage() {
                           </div>
                         </div>
 
-                        <div className="absolute top-2 left-2 z-10">
-                          <button
-                            onClick={() => window.location.href = `/cv/analyze/${resume.id}`}
-                            className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-[10px] font-bold px-2.5 py-1 rounded shadow-sm flex items-center gap-1 hover:shadow-md hover:scale-105 transition-all"
-                            title="AI Chấm Điểm"
-                          >
-                            <Sparkles className="size-3" /> AI Đánh Giá
-                          </button>
+                        <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
+                          {aiScore ? (
+                            <div className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-[11px] font-bold px-2.5 py-1 rounded shadow-sm flex items-center gap-1 cursor-pointer hover:scale-105 transition-transform"
+                                 onClick={() => window.location.href = `/cv/analyze/${resume.id}`}
+                                 title="Nhấn để xem chi tiết AI phân tích"
+                            >
+                              <Sparkles className="size-3" /> Điểm AI: <span className="text-sm ml-0.5">{aiScore}/100</span>
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => window.location.href = `/cv/analyze/${resume.id}`}
+                              className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-[10px] font-bold px-2.5 py-1 rounded shadow-sm flex items-center gap-1 hover:shadow-md hover:scale-105 transition-all"
+                              title="Nhấn để AI chấm điểm CV này"
+                            >
+                              <Sparkles className="size-3" /> AI Đánh Giá
+                            </button>
+                          )}
                         </div>
 
                         <div className="p-4 border-t border-slate-100">
@@ -349,7 +361,7 @@ export default function CVManagementPage() {
                           </p>
                         </div>
                       </div>
-                    ))}
+                    )})}
                   </div>
                 ) : (
                   <div className="text-center py-10 bg-slate-50 rounded-xl border border-slate-200 border-dashed">

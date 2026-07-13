@@ -106,7 +106,8 @@ public class JobController {
                     emailService.sendEmail(
                             result.getCandidateEmail(),
                             result.getCandidateName(),
-                            result.getCompanyName()
+                            result.getCompanyName(),
+                            result.getJobTitle()
                     );
                 }
 
@@ -174,7 +175,7 @@ public class JobController {
             try {
                 if(result.getCandidateEmail() != null) {
 
-                        emailService.sendInterviewRejectionEmail(result.getCandidateEmail() , result.getCandidateName() , result.getCompanyName());
+                        emailService.sendInterviewRejectionEmail(result.getCandidateEmail() , result.getCandidateName() , result.getCompanyName(), result.getJobTitle());
 
                 }
             } catch (Exception mailEx) {

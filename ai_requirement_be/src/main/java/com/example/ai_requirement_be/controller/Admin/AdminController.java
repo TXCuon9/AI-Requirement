@@ -1,15 +1,14 @@
 package com.example.ai_requirement_be.controller.Admin;
 
+import com.example.ai_requirement_be.dto.Admin.CompanyAdminDTO;
+import com.example.ai_requirement_be.dto.Admin.JobAdminDTO;
+import com.example.ai_requirement_be.dto.Admin.UserAdminDTO;
 import com.example.ai_requirement_be.dto.User.UserPendingResponseDTO;
-import com.example.ai_requirement_be.entity.UserManager.User;
 import com.example.ai_requirement_be.service.Admin.AdminService;
 import com.example.ai_requirement_be.service.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,13 +22,12 @@ public class AdminController {
     @Autowired
     public AdminController(AdminService adminService, UserService userService,
             com.example.ai_requirement_be.repository.IJobdepRepository jobRepository) {
-
         this.adminService = adminService;
         this.userService = userService;
         this.jobRepository = jobRepository;
     }
 
-    @RequestMapping("/user/pending")
+    @GetMapping("/user/pending")
     public List<UserPendingResponseDTO> getUser() {
         return userService.findAllPendingUsers();
     }
@@ -40,19 +38,68 @@ public class AdminController {
         return ResponseEntity.ok("Đã duyệt tài khoản thành công sang trạng thái ACTIVE!");
     }
 
-    @org.springframework.web.bind.annotation.GetMapping("/dashboard-stats")
+    @GetMapping("/dashboard-stats")
     public ResponseEntity<com.example.ai_requirement_be.dto.Admin.AdminDashboardStatsDTO> getDashboardStats() {
         return ResponseEntity.ok(adminService.getDashboardStats(jobRepository));
     }
 
-    @org.springframework.web.bind.annotation.GetMapping("/companies")
-    public ResponseEntity<List<com.example.ai_requirement_be.dto.Admin.CompanyAdminDTO>> getAllCompanies() {
+    // --- USERS CRUD ---
+    @GetMapping("/users")
+    public ResponseEntity<List<UserAdminDTO>> getAllUsers() {
+        return ResponseEntity.ok(adminService.getAllUsers());
+    }
+
+    @PutMapping("/users/{id}")
+    public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody UserAdminDTO dto) {
+        adminService.updateUser(id, dto);
+        return ResponseEntity.ok("Cập nhật người dùng thành công");
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        adminService.deleteUser(id);
+        return ResponseEntity.ok("Xóa người dùng thành công");
+    }
+
+    // --- COMPANIES CRUD ---
+    @GetMapping("/companies")
+    public ResponseEntity<List<CompanyAdminDTO>> getAllCompanies() {
         return ResponseEntity.ok(adminService.getAllCompanies());
+    }
+
+    @PutMapping("/companies/{id}")
+    public ResponseEntity<String> updateCompany(@PathVariable Long id, @RequestBody CompanyAdminDTO dto) {
+        adminService.updateCompany(id, dto);
+        return ResponseEntity.ok("Cập nhật công ty thành công");
     }
 
     @PutMapping("/companies/{id}/toggle-status")
     public ResponseEntity<String> toggleCompanyStatus(@PathVariable Long id) {
         adminService.toggleCompanyStatus(id);
         return ResponseEntity.ok("Đã cập nhật trạng thái hoạt động của công ty");
+    }
+
+    @DeleteMapping("/companies/{id}")
+    public ResponseEntity<String> deleteCompany(@PathVariable Long id) {
+        adminService.deleteCompany(id);
+        return ResponseEntity.ok("Xóa công ty thành công");
+    }
+
+    // --- JOBS CRUD ---
+    @GetMapping("/jobs")
+    public ResponseEntity<List<JobAdminDTO>> getAllJobs() {
+        return ResponseEntity.ok(adminService.getAllJobs());
+    }
+
+    @PutMapping("/jobs/{id}")
+    public ResponseEntity<String> updateJob(@PathVariable Long id, @RequestBody JobAdminDTO dto) {
+        adminService.updateJob(id, dto);
+        return ResponseEntity.ok("Cập nhật việc làm thành công");
+    }
+
+    @DeleteMapping("/jobs/{id}")
+    public ResponseEntity<String> deleteJob(@PathVariable Long id) {
+        adminService.deleteJob(id);
+        return ResponseEntity.ok("Xóa việc làm thành công");
     }
 }

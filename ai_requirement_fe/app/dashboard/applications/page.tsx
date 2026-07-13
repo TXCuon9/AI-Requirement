@@ -71,18 +71,26 @@ export default function ApplicationsManagementPage() {
     }
   }, [applications, loading, autorankParam]);
 
-  const handleInvite = async (id: number) => {
-    if (!confirm("Bạn muốn gửi email mời ứng viên này phỏng vấn?")) return;
+  const [updatingId, setUpdatingId] = useState<number | null>(null);
+
+  const handleStatusChange = async (id: number, status: string, actionName: string) => {
+    if (!confirm(`Bạn chắc chắn muốn ${actionName.toLowerCase()} ứng viên này?`)) return;
     
-    setInvitingId(id);
+    setUpdatingId(id);
     try {
-      await fetchApi(`/interview/${id}`, { method: "PUT" });
-      alert("Đã gửi email mời phỏng vấn thành công!");
-      await loadApplications();
+      await fetchApi(`/recruiter/applications/${id}/status`, { 
+        method: "PUT",
+        body: JSON.stringify({ status })
+      });
+      alert(`Đã cập nhật trạng thái thành công!`);
+      // Update local state without full reload
+      setApplications(applications.map(app => 
+        app.applicationId === id ? { ...app, status } : app
+      ));
     } catch (error: any) {
-      alert("Lỗi khi gửi thư mời: " + (error.message || "Unknown error"));
+      alert("Lỗi khi cập nhật trạng thái: " + (error.message || "Unknown error"));
     } finally {
-      setInvitingId(null);
+      setUpdatingId(null);
     }
   };
 
@@ -297,18 +305,37 @@ export default function ApplicationsManagementPage() {
                       )}
                     </td>
                     <td className="p-4 pr-6 text-right">
-                      {app.status === 'APPLIED' && (
-                        <button
-                          onClick={() => handleInvite(app.applicationId)}
-                          disabled={invitingId === app.applicationId}
-                          className="inline-flex items-center justify-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm disabled:opacity-50"
-                        >
-                          {invitingId === app.applicationId ? (
-                            <><Loader2 className="size-4 animate-spin mr-2" /> Đang gửi...</>
-                          ) : (
-                            "Mời phỏng vấn"
-                          )}
-                        </button>
+                      {app.status === 'APPLIED' || app.status === 'REVIEWING' || app.status === 'SHORTLISTED' ? (
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => handleStatusChange(app.applicationId, 'INTERVIEW', 'Mời phỏng vấn')}
+                            disabled={updatingId === app.applicationId}
+                            className="inline-flex items-center justify-center px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[13px] font-semibold rounded transition-colors shadow-sm disabled:opacity-50"
+                            title="Mời phỏng vấn"
+                          >
+                            {updatingId === app.applicationId ? <Loader2 className="size-3.5 animate-spin" /> : "Mời phỏng vấn"}
+                          </button>
+                          
+                          <button
+                            onClick={() => handleStatusChange(app.applicationId, 'SHORTLISTED', 'Đưa vào danh sách theo dõi thêm')}
+                            disabled={updatingId === app.applicationId}
+                            className="inline-flex items-center justify-center px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-[13px] font-semibold rounded transition-colors shadow-sm disabled:opacity-50"
+                            title="Theo dõi thêm"
+                          >
+                            Theo dõi
+                          </button>
+
+                          <button
+                            onClick={() => handleStatusChange(app.applicationId, 'REJECTED', 'Từ chối')}
+                            disabled={updatingId === app.applicationId}
+                            className="inline-flex items-center justify-center px-3 py-1.5 bg-rose-500 hover:bg-rose-600 text-white text-[13px] font-semibold rounded transition-colors shadow-sm disabled:opacity-50"
+                            title="Từ chối"
+                          >
+                            Từ chối
+                          </button>
+                        </div>
+                      ) : (
+                        <span className="text-sm font-medium text-slate-400">Đã xử lý</span>
                       )}
                     </td>
                   </tr>

@@ -343,4 +343,51 @@ public class JobApplicationService {
 
         return resumeRepository.findById(resumeId).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy CV!"));
     }
+
+    @Transactional
+    public JobApplicationResponseDTO updateApplicationStatus(Long applicationId, String newStatus, String recruiterEmail) {
+        User currentUser = userRepository.findByEmail(recruiterEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tài khoản Nhà tuyển dụng!"));
+
+        Long companyId;
+        RecruiterProfile recruiterProfile = recruiterProfileRepository.findByUserId(currentUser.getId()).orElse(null);
+
+        if (recruiterProfile != null && recruiterProfile.getCompany() != null) {
+            companyId = recruiterProfile.getCompany().getId();
+        } else if (currentUser.getCompanies() != null) {
+            companyId = currentUser.getCompanies().getId();
+        } else {
+            throw new IllegalArgumentException("Người dùng chưa liên kết với công ty nào.");
+        }
+
+        JobApplication application = jobApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy đơn ứng tuyển!"));
+
+        if (!application.getJobDescription().getCompany().getId().equals(companyId)) {
+            throw new IllegalArgumentException("Bạn không có quyền cập nhật đơn ứng tuyển này!");
+        }
+
+        try {
+            JobApplicationStatusEnum statusEnum = JobApplicationStatusEnum.valueOf(newStatus.toUpperCase());
+            application.setStatus(statusEnum);
+            jobApplicationRepository.save(application);
+
+            return new JobApplicationResponseDTO(
+                    application.getId(),
+                    application.getCandidate().getId(),
+                    application.getCandidate().getFullName(),
+                    application.getCandidate().getUser().getEmail(),
+                    application.getResume().getId(),
+                    application.getResume().getFileUrl(),
+                    application.getStatus().name(),
+                    application.getAppliedAt(),
+                    application.getJobDescription().getCompany().getName(),
+                    application.getJobDescription().getTitle(),
+                    "Sẽ thông báo sau",
+                    "Sẽ thông báo sau"
+            );
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Trạng thái không hợp lệ!");
+        }
+    }
 }

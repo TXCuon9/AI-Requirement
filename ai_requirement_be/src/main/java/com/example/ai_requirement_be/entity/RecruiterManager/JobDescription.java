@@ -27,8 +27,13 @@ public class JobDescription {
     @OneToMany(mappedBy = "jobDescription", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<JobApplication> applications = new ArrayList<>();
 
-// Thêm Getter/Setter cho applications...
+    public List<JobApplication> getApplications() {
+        return applications;
+    }
 
+    public void setApplications(List<JobApplication> applications) {
+        this.applications = applications;
+    }
     @OneToMany(mappedBy = "jobDescription" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private List<JobView> jobViews = new ArrayList<>();
 

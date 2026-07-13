@@ -11,6 +11,7 @@ export default function JobsManagementPage() {
   const [jobs, setJobs] = useState<JobResponse[]>([]);
   const [applicantCounts, setApplicantCounts] = useState<Record<number, number>>({});
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<"active" | "expired">("active");
 
   const loadData = async () => {
     setLoading(true);
@@ -68,6 +69,30 @@ export default function JobsManagementPage() {
         </Link>
       </div>
 
+      {/* Tabs */}
+      <div className="flex items-center gap-4 border-b border-slate-200">
+        <button
+          onClick={() => setActiveTab("active")}
+          className={`pb-3 text-sm font-semibold border-b-2 transition-colors ${
+            activeTab === "active"
+              ? "border-blue-600 text-blue-600"
+              : "border-transparent text-slate-500 hover:text-slate-700"
+          }`}
+        >
+          Đang hoạt động
+        </button>
+        <button
+          onClick={() => setActiveTab("expired")}
+          className={`pb-3 text-sm font-semibold border-b-2 transition-colors ${
+            activeTab === "expired"
+              ? "border-blue-600 text-blue-600"
+              : "border-transparent text-slate-500 hover:text-slate-700"
+          }`}
+        >
+          Đã hết hạn / Đóng
+        </button>
+      </div>
+
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 text-blue-600">
@@ -89,7 +114,12 @@ export default function JobsManagementPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+            {jobs.filter((job) => activeTab === "active" ? job.status === "OPEN" : job.status !== "OPEN").length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-16 text-center">
+                <div className="text-slate-400 mb-2">Không có tin tuyển dụng nào trong mục này</div>
+              </div>
+            ) : (
+              <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200 text-sm font-semibold text-slate-600">
                   <th className="p-4 pl-6">Vị trí tuyển dụng</th>
@@ -101,7 +131,13 @@ export default function JobsManagementPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {jobs.map((job) => {
+                {jobs
+                  .filter((job) =>
+                    activeTab === "active"
+                      ? job.status === "OPEN"
+                      : job.status !== "OPEN"
+                  )
+                  .map((job) => {
                   const count = applicantCounts[job.id] || 0;
                   return (
                     <tr key={job.id} className="hover:bg-slate-50/50 transition-colors">
@@ -166,6 +202,7 @@ export default function JobsManagementPage() {
                 })}
               </tbody>
             </table>
+            )}
           </div>
         )}
       </div>

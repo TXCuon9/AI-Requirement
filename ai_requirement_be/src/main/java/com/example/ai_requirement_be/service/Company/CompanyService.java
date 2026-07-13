@@ -61,6 +61,39 @@ public class CompanyService {
      dto.setLocation(companies.getLocation());
      return dto;
  }
+
+ @Transactional
+ public com.example.ai_requirement_be.dto.Company.DashboardStatsDTO getDashboardStats(String email) {
+     User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản!"));
+     Companies companies = user.getCompanies();
+     if (companies == null && user.getRecruiterProfile() != null) {
+         companies = user.getRecruiterProfile().getCompany();
+     }
+     
+     if (companies == null) {
+         return new com.example.ai_requirement_be.dto.Company.DashboardStatsDTO(0, 0);
+     }
+     
+     int activeJobsCount = 0;
+     int pendingApplicationsCount = 0;
+     
+     if (companies.getJobDescriptions() != null) {
+         for (var job : companies.getJobDescriptions()) {
+             if (job.getStatus() == com.example.ai_requirement_be.entity.RecruiterManager.JobStatus.OPEN) {
+                 activeJobsCount++;
+             }
+             if (job.getApplications() != null) {
+                 for (var app : job.getApplications()) {
+                     if (app.getStatus() == com.example.ai_requirement_be.entity.Job.JobApplicationStatusEnum.APPLIED) {
+                         pendingApplicationsCount++;
+                     }
+                 }
+             }
+         }
+     }
+     return new com.example.ai_requirement_be.dto.Company.DashboardStatsDTO(activeJobsCount, pendingApplicationsCount);
+ }
+
   public void approveRecruiter(Long userId) {
      User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản yêu cầu"));
 
