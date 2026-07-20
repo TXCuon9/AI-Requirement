@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { fetchApi } from "../../../lib/api";
 import { Building2, Search, Loader2, Edit, Trash2, CheckCircle2, XCircle, AlertCircle, X } from "lucide-react";
+import toast from "react-hot-toast";
+import { customConfirm } from "@/lib/customConfirm";
 
 interface CompanyAdminDTO {
   id: number;
@@ -44,27 +46,27 @@ export default function AdminCompaniesPage() {
   };
 
   const handleToggleStatus = async (id: number) => {
-    if (!window.confirm("Bạn có chắc chắn muốn thay đổi trạng thái hoạt động của doanh nghiệp này?")) return;
+    if (!(await customConfirm("Bạn có chắc chắn muốn thay đổi trạng thái hoạt động của doanh nghiệp này?"))) return;
     try {
       setProcessingId(id);
       await fetchApi(`/admin/companies/${id}/toggle-status`, { method: "PUT" });
       await loadCompanies(); 
     } catch (error) {
       console.error("Failed to toggle status:", error);
-      alert("Có lỗi xảy ra khi cập nhật trạng thái");
+      toast.error("Có lỗi xảy ra khi cập nhật trạng thái");
     } finally {
       setProcessingId(null);
     }
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm("CẢNH BÁO: Xóa công ty sẽ xóa toàn bộ Việc làm và Tài khoản nhân sự liên quan. Bạn có chắc chắn muốn xóa?")) return;
+    if (!(await customConfirm("CẢNH BÁO: Xóa công ty sẽ xóa toàn bộ Việc làm và Tài khoản nhân sự liên quan. Bạn có chắc chắn muốn xóa?"))) return;
     try {
       setProcessingId(id);
       await fetchApi(`/admin/companies/${id}`, { method: "DELETE" });
       setCompanies(companies.filter(c => c.id !== id));
     } catch (error: any) {
-      alert("Lỗi khi xóa: " + error.message);
+      toast.error("Lỗi khi xóa: " + error.message);
     } finally {
       setProcessingId(null);
     }
@@ -92,7 +94,7 @@ export default function AdminCompaniesPage() {
       setEditingCompany(null);
       loadCompanies();
     } catch (err: any) {
-      alert("Lỗi khi lưu: " + err.message);
+      toast.error("Lỗi khi lưu: " + err.message);
     } finally {
       setIsSaving(false);
     }

@@ -4,6 +4,8 @@ import { useEffect, useState, useRef } from "react";
 import { fetchApi } from "../../../lib/api";
 import { Loader2, Contact, Mail, FileText, CheckCircle2, Clock, Sparkles } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
+import { customConfirm } from "@/lib/customConfirm";
 
 interface Application {
   applicationId: number;
@@ -74,7 +76,7 @@ export default function ApplicationsManagementPage() {
   const [updatingId, setUpdatingId] = useState<number | null>(null);
 
   const handleStatusChange = async (id: number, status: string, actionName: string) => {
-    if (!confirm(`Bạn chắc chắn muốn ${actionName.toLowerCase()} ứng viên này?`)) return;
+    if (!(await customConfirm(`Bạn chắc chắn muốn ${actionName.toLowerCase()} ứng viên này?`))) return;
     
     setUpdatingId(id);
     try {
@@ -82,13 +84,13 @@ export default function ApplicationsManagementPage() {
         method: "PUT",
         body: JSON.stringify({ status })
       });
-      alert(`Đã cập nhật trạng thái thành công!`);
+      toast.success(`Đã cập nhật trạng thái thành công!`);
       // Update local state without full reload
       setApplications(applications.map(app => 
         app.applicationId === id ? { ...app, status } : app
       ));
     } catch (error: any) {
-      alert("Lỗi khi cập nhật trạng thái: " + (error.message || "Unknown error"));
+      toast.error("Lỗi khi cập nhật trạng thái: " + (error.message || "Unknown error"));
     } finally {
       setUpdatingId(null);
     }
@@ -97,7 +99,7 @@ export default function ApplicationsManagementPage() {
   const handleRankWithAI = async () => {
     const unrankedApps = applications.filter(app => app.matchScore == null);
     if (unrankedApps.length === 0) {
-      alert("Tất cả ứng viên hiện tại đã được xếp hạng!");
+      toast.success("Tất cả ứng viên hiện tại đã được xếp hạng!");
       return;
     }
 
@@ -182,10 +184,10 @@ export default function ApplicationsManagementPage() {
         return b.applicationId - a.applicationId;
       });
       setApplications(updatedApps);
-      alert("Đã hoàn tất việc tự động phân tích và xếp hạng bằng AI!");
+      toast.success("Đã hoàn tất việc tự động phân tích và xếp hạng bằng AI!");
 
     } catch (err: any) {
-      alert("Lỗi khi kết nối với AI: " + (err.message || "Unknown error"));
+      toast.error("Lỗi khi kết nối với AI: " + (err.message || "Unknown error"));
     } finally {
       setIsRanking(false);
     }

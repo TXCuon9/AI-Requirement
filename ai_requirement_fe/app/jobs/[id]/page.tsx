@@ -9,6 +9,7 @@ import { fetchApi } from "../../../lib/api";
 import { formatSalaryRange } from "../../../lib/utils";
 import { JobDetailResponse } from "../../../lib/types/job";
 import { useAuth } from "../../../lib/authContext";
+import toast from "react-hot-toast";
 
 export default function JobDetailPage() {
   const params = useParams();
@@ -131,9 +132,9 @@ export default function JobDetailPage() {
     try {
       await fetchApi(`/saveJob/${jobId}`, { method: "POST" });
       setSaveSuccess(true);
-      alert("Đã lưu việc làm thành công!");
+      toast.success("Đã lưu việc làm thành công!");
     } catch (error: any) {
-      alert(error.message || "Có lỗi xảy ra khi lưu việc làm");
+      toast.error(error.message || "Có lỗi xảy ra khi lưu việc làm");
     } finally {
       setIsSaving(false);
     }

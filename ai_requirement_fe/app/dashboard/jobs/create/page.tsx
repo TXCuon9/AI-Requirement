@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { fetchApi } from "../../../../lib/api";
 import { Save, Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function CreateJobPage() {
   const router = useRouter();
@@ -53,10 +54,10 @@ export default function CreateJobPage() {
         method: "POST",
         body: JSON.stringify(submitData)
       });
-      alert("Đăng tin tuyển dụng thành công!");
+      toast.success("Đăng tin tuyển dụng thành công!");
       router.push("/dashboard/jobs");
     } catch (error: any) {
-      alert("Lỗi khi đăng tin: " + (error.message || "Unknown error"));
+      toast.error("Lỗi khi đăng tin: " + (error.message || "Unknown error"));
     } finally {
       setSaving(false);
     }

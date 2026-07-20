@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { fetchApi } from "../../../lib/api";
 import { Edit, Trash2, Loader2, X } from "lucide-react";
+import toast from "react-hot-toast";
+import { customConfirm } from "@/lib/customConfirm";
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<any[]>([]);
@@ -31,12 +33,12 @@ export default function AdminUsersPage() {
   }, []);
 
   const handleDelete = async (id: number) => {
-    if (!confirm("Bạn có chắc chắn muốn xóa người dùng này?")) return;
+    if (!(await customConfirm("Bạn có chắc chắn muốn xóa người dùng này?"))) return;
     try {
       await fetchApi(`/admin/users/${id}`, { method: "DELETE" });
       setUsers(users.filter((u) => u.id !== id));
     } catch (err: any) {
-      alert("Lỗi: " + err.message);
+      toast.error("Lỗi: " + err.message);
     }
   };
 
@@ -56,7 +58,7 @@ export default function AdminUsersPage() {
       setEditingUser(null);
       loadUsers();
     } catch (err: any) {
-      alert("Lỗi: " + err.message);
+      toast.error("Lỗi: " + err.message);
     } finally {
       setIsSaving(false);
     }

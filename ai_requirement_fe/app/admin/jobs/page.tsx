@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { fetchApi } from "../../../lib/api";
 import { Briefcase, Search, Loader2, Edit, Trash2, X } from "lucide-react";
+import toast from "react-hot-toast";
+import { customConfirm } from "@/lib/customConfirm";
 
 interface JobAdminDTO {
   id: number;
@@ -40,12 +42,12 @@ export default function AdminJobsPage() {
   }, []);
 
   const handleDelete = async (id: number) => {
-    if (!confirm("Bạn có chắc chắn muốn xóa tin tuyển dụng này vĩnh viễn?")) return;
+    if (!(await customConfirm("Bạn có chắc chắn muốn xóa tin tuyển dụng này vĩnh viễn?"))) return;
     try {
       await fetchApi(`/admin/jobs/${id}`, { method: "DELETE" });
       setJobs(jobs.filter((j) => j.id !== id));
     } catch (err: any) {
-      alert("Lỗi: " + err.message);
+      toast.error("Lỗi: " + err.message);
     }
   };
 
@@ -65,7 +67,7 @@ export default function AdminJobsPage() {
       setEditingJob(null);
       loadJobs();
     } catch (err: any) {
-      alert("Lỗi: " + err.message);
+      toast.error("Lỗi: " + err.message);
     } finally {
       setIsSaving(false);
     }

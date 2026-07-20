@@ -6,6 +6,8 @@ import { JobResponse } from "../../../lib/types/job";
 import { Loader2, Plus, BriefcaseBusiness, MapPin, DollarSign, Clock, Pencil, Trash2, Users, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { formatSalaryRange } from "../../../lib/utils";
+import toast from "react-hot-toast";
+import { customConfirm } from "@/lib/customConfirm";
 
 export default function JobsManagementPage() {
   const [jobs, setJobs] = useState<JobResponse[]>([]);
@@ -43,14 +45,25 @@ export default function JobsManagementPage() {
     loadData();
   }, []);
 
+  const isJobActive = (job: JobResponse) => {
+    if (job.status !== "OPEN") return false;
+    if (job.expiredAt) {
+      const expiredDate = new Date(job.expiredAt);
+      if (expiredDate < new Date()) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleDelete = async (id: number) => {
-    if (!confirm("Bạn có chắc chắn muốn xóa tin tuyển dụng này?")) return;
+    if (!(await customConfirm("Bạn có chắc chắn muốn xóa tin tuyển dụng này?"))) return;
     try {
       await fetchApi(`/recruiter/${id}`, { method: "DELETE" });
       setJobs(jobs.filter(job => job.id !== id));
-      alert("Xóa tin tuyển dụng thành công!");
+      toast.success("Xóa tin tuyển dụng thành công!");
     } catch (error: any) {
-      alert("Lỗi khi xóa: " + (error.message || "Unknown error"));
+      toast.error("Lỗi khi xóa: " + (error.message || "Unknown error"));
     }
   };
 
@@ -114,7 +127,7 @@ export default function JobsManagementPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            {jobs.filter((job) => activeTab === "active" ? job.status === "OPEN" : job.status !== "OPEN").length === 0 ? (
+            {jobs.filter((job) => activeTab === "active" ? isJobActive(job) : !isJobActive(job)).length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-center">
                 <div className="text-slate-400 mb-2">Không có tin tuyển dụng nào trong mục này</div>
               </div>
@@ -134,8 +147,8 @@ export default function JobsManagementPage() {
                 {jobs
                   .filter((job) =>
                     activeTab === "active"
-                      ? job.status === "OPEN"
-                      : job.status !== "OPEN"
+                      ? isJobActive(job)
+                      : !isJobActive(job)
                   )
                   .map((job) => {
                   const count = applicantCounts[job.id] || 0;

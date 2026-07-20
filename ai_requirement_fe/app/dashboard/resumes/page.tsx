@@ -6,6 +6,8 @@ import { fetchApi } from "../../../lib/api";
 import Link from "next/link";
 import { useAuth } from "../../../lib/authContext";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { customConfirm } from "@/lib/customConfirm";
 
 export default function ResumesManagementPage() {
   const [isUploading, setIsUploading] = useState(false);
@@ -155,18 +157,18 @@ export default function ResumesManagementPage() {
       const updatedResumes = await fetchApi("/resume");
       if (Array.isArray(updatedResumes)) setResumes(updatedResumes);
     } catch (err: any) {
-      alert("Đổi tên thất bại: " + err.message);
+      toast.error("Đổi tên thất bại: " + err.message);
     }
   };
 
   const handleDeleteResume = async (resumeId: number) => {
-    if (!window.confirm("Bạn có chắc chắn muốn xoá CV này?")) return;
+    if (!(await customConfirm("Bạn có chắc chắn muốn xoá CV này?"))) return;
     try {
       await fetchApi(`/resume/${resumeId}`, { method: "DELETE" });
       const updatedResumes = await fetchApi("/resume");
       if (Array.isArray(updatedResumes)) setResumes(updatedResumes);
     } catch (err: any) {
-      alert("Xoá thất bại: " + err.message);
+      toast.error("Xoá thất bại: " + err.message);
     }
   };
 
@@ -176,7 +178,7 @@ export default function ResumesManagementPage() {
       const updatedResumes = await fetchApi("/resume");
       if (Array.isArray(updatedResumes)) setResumes(updatedResumes);
     } catch (err: any) {
-      alert("Đặt CV chính thất bại: " + err.message);
+      toast.error("Đặt CV chính thất bại: " + err.message);
     }
   };
 
@@ -190,7 +192,7 @@ export default function ResumesManagementPage() {
       });
     } catch (err: any) {
       setIsJobSearchActive(!newValue); // revert
-      alert("Không thể lưu trạng thái tìm việc: " + err.message);
+      toast.error("Không thể lưu trạng thái tìm việc: " + err.message);
     }
   };
 
@@ -268,94 +270,95 @@ export default function ResumesManagementPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {resumes.map((resume: any, idx: number) => {
                     const aiScore = resume.aiAnalysisResult?.overall_score;
-                    
-                    return (
-                    <div key={resume.id || idx} className="group flex flex-col bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-md transition-shadow relative">
-                      {/* CV Preview Placeholder */}
-                      <div className="aspect-[1/1.4] bg-slate-100 relative p-4 flex flex-col">
-                        {resume.isPrimary && (
-                          <div className="absolute top-2 right-2 bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider z-10 shadow-sm">
-                            CV Chính
-                          </div>
-                        )}
-                        <div className="w-full h-full bg-white shadow-sm border border-slate-200 p-3 rounded opacity-80 group-hover:opacity-100 transition-opacity flex flex-col">
-                          <div className="w-3/4 h-3 bg-slate-200 rounded mb-4"></div>
-                          <div className="w-full h-2 bg-slate-100 rounded mb-2"></div>
-                          <div className="w-5/6 h-2 bg-slate-100 rounded mb-2"></div>
-                          <div className="w-full h-2 bg-slate-100 rounded mb-6"></div>
-                          <div className="w-1/2 h-3 bg-slate-200 rounded mb-3"></div>
-                          <div className="w-full h-2 bg-slate-100 rounded mb-2"></div>
-                          <div className="w-4/5 h-2 bg-slate-100 rounded mb-2"></div>
 
-                          <div className="mt-auto flex justify-center">
-                            <FileText className="size-8 text-slate-300" />
+                    return (
+                      <div key={resume.id || idx} className="group flex flex-col bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-md transition-shadow relative">
+                        {/* CV Preview Placeholder */}
+                        <div className="aspect-[1/1.4] bg-slate-100 relative p-4 flex flex-col">
+                          {resume.isPrimary && (
+                            <div className="absolute top-2 right-2 bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider z-10 shadow-sm">
+                              CV Chính
+                            </div>
+                          )}
+                          <div className="w-full h-full bg-white shadow-sm border border-slate-200 p-3 rounded opacity-80 group-hover:opacity-100 transition-opacity flex flex-col">
+                            <div className="w-3/4 h-3 bg-slate-200 rounded mb-4"></div>
+                            <div className="w-full h-2 bg-slate-100 rounded mb-2"></div>
+                            <div className="w-5/6 h-2 bg-slate-100 rounded mb-2"></div>
+                            <div className="w-full h-2 bg-slate-100 rounded mb-6"></div>
+                            <div className="w-1/2 h-3 bg-slate-200 rounded mb-3"></div>
+                            <div className="w-full h-2 bg-slate-100 rounded mb-2"></div>
+                            <div className="w-4/5 h-2 bg-slate-100 rounded mb-2"></div>
+
+                            <div className="mt-auto flex justify-center">
+                              <FileText className="size-8 text-slate-300" />
+                            </div>
+                          </div>
+
+                          {/* Overlay actions on hover */}
+                          <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                            <button onClick={() => {
+                              if (resume.fileUrl?.startsWith('builder://')) {
+                                const template = resume.fileUrl.replace('builder://', '');
+                                window.location.href = `/cv/builder?template=${template}&resumeId=${resume.id}`;
+                              } else {
+                                window.open(getFileUrl(resume.fileUrl), '_blank');
+                              }
+                            }} className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition-colors" title="Xem CV">
+                              <Eye className="size-4" />
+                            </button>
+                            {!resume.isPrimary && (
+                              <button onClick={() => handleSetPrimaryResume(resume.id)} className="bg-amber-500 text-white p-2 rounded-full hover:bg-amber-600 transition-colors" title="Đặt làm CV Chính">
+                                <Star className="size-4" />
+                              </button>
+                            )}
+                            <button onClick={() => handleDeleteResume(resume.id)} className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors" title="Xoá CV">
+                              <Trash2 className="size-4" />
+                            </button>
                           </div>
                         </div>
 
-                        {/* Overlay actions on hover */}
-                        <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-                          <button onClick={() => {
-                            if (resume.fileUrl?.startsWith('builder://')) {
-                              const template = resume.fileUrl.replace('builder://', '');
-                              window.location.href = `/cv/builder?template=${template}&resumeId=${resume.id}`;
-                            } else {
-                              window.open(getFileUrl(resume.fileUrl), '_blank');
-                            }
-                          }} className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition-colors" title="Xem CV">
-                            <Eye className="size-4" />
-                          </button>
-                          {!resume.isPrimary && (
-                            <button onClick={() => handleSetPrimaryResume(resume.id)} className="bg-amber-500 text-white p-2 rounded-full hover:bg-amber-600 transition-colors" title="Đặt làm CV Chính">
-                              <Star className="size-4" />
+                        {/* AI SCORE DISPLAY OR BUTTON */}
+                        <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
+                          {aiScore ? (
+                            <div className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-[11px] font-bold px-2.5 py-1 rounded shadow-sm flex items-center gap-1 cursor-pointer hover:scale-105 transition-transform"
+                              onClick={() => window.location.href = `/cv/analyze/${resume.id}`}
+                              title="Nhấn để xem chi tiết AI phân tích"
+                            >
+                              <Sparkles className="size-3" /> Điểm AI: <span className="text-sm ml-0.5">{aiScore}/100</span>
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => window.location.href = `/cv/analyze/${resume.id}`}
+                              className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-[10px] font-bold px-2.5 py-1 rounded shadow-sm flex items-center gap-1 hover:shadow-md hover:scale-105 transition-all"
+                              title="Nhấn để AI chấm điểm CV này"
+                            >
+                              <Sparkles className="size-3" /> AI Đánh Giá
                             </button>
                           )}
-                          <button onClick={() => handleDeleteResume(resume.id)} className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors" title="Xoá CV">
-                            <Trash2 className="size-4" />
-                          </button>
+                        </div>
+
+                        <div className="p-4 border-t border-slate-100">
+                          <input
+                            type="text"
+                            defaultValue={resume.cvName || resume.fileUrl?.split('/').pop() || "CV.pdf"}
+                            onBlur={(e) => {
+                              if (e.target.value !== resume.cvName) {
+                                handleUpdateCvName(resume.id, e.target.value, resume);
+                              }
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') e.currentTarget.blur();
+                            }}
+                            className="text-sm font-semibold text-slate-800 bg-transparent border-b border-transparent hover:border-slate-300 focus:border-blue-500 outline-none w-full truncate cursor-text transition-colors mb-1"
+                            title="Nhấn để sửa tên CV"
+                          />
+                          <p className="text-[11px] text-slate-500 flex items-center gap-1">
+                            <CheckCircle2 className="size-3 text-blue-500" /> Cập nhật gần đây
+                          </p>
                         </div>
                       </div>
-
-                      {/* AI SCORE DISPLAY OR BUTTON */}
-                      <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
-                        {aiScore ? (
-                          <div className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-[11px] font-bold px-2.5 py-1 rounded shadow-sm flex items-center gap-1 cursor-pointer hover:scale-105 transition-transform"
-                               onClick={() => window.location.href = `/cv/analyze/${resume.id}`}
-                               title="Nhấn để xem chi tiết AI phân tích"
-                          >
-                            <Sparkles className="size-3" /> Điểm AI: <span className="text-sm ml-0.5">{aiScore}/100</span>
-                          </div>
-                        ) : (
-                          <button
-                            onClick={() => window.location.href = `/cv/analyze/${resume.id}`}
-                            className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-[10px] font-bold px-2.5 py-1 rounded shadow-sm flex items-center gap-1 hover:shadow-md hover:scale-105 transition-all"
-                            title="Nhấn để AI chấm điểm CV này"
-                          >
-                            <Sparkles className="size-3" /> AI Đánh Giá
-                          </button>
-                        )}
-                      </div>
-
-                      <div className="p-4 border-t border-slate-100">
-                        <input
-                          type="text"
-                          defaultValue={resume.cvName || resume.fileUrl?.split('/').pop() || "CV.pdf"}
-                          onBlur={(e) => {
-                            if (e.target.value !== resume.cvName) {
-                              handleUpdateCvName(resume.id, e.target.value, resume);
-                            }
-                          }}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') e.currentTarget.blur();
-                          }}
-                          className="text-sm font-semibold text-slate-800 bg-transparent border-b border-transparent hover:border-slate-300 focus:border-blue-500 outline-none w-full truncate cursor-text transition-colors mb-1"
-                          title="Nhấn để sửa tên CV"
-                        />
-                        <p className="text-[11px] text-slate-500 flex items-center gap-1">
-                          <CheckCircle2 className="size-3 text-blue-500" /> Cập nhật gần đây
-                        </p>
-                      </div>
-                    </div>
-                  )})}
+                    )
+                  })}
                 </div>
               ) : (
                 <div className="text-center py-10 bg-slate-50 rounded-xl border border-slate-200 border-dashed">

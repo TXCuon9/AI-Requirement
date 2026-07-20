@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { fetchApi } from "../../../lib/api";
 import { UserPendingResponse } from "../../../lib/types/admin";
 import { Loader2, CheckCircle2, Clock, Mail, Building2, AlertCircle } from "lucide-react";
+import toast from "react-hot-toast";
+import { customConfirm } from "@/lib/customConfirm";
 
 export default function ApprovalsPage() {
   const [users, setUsers] = useState<UserPendingResponse[]>([]);
@@ -28,15 +30,15 @@ export default function ApprovalsPage() {
   }, []);
 
   const handleApprove = async (id: number) => {
-    if (!confirm("Bạn có chắc chắn muốn duyệt tài khoản này?")) return;
+    if (!(await customConfirm("Bạn có chắc chắn muốn duyệt tài khoản này?"))) return;
     
     setActionLoadingId(id);
     try {
       await fetchApi(`/admin/approve/${id}`, { method: "PUT" });
-      alert("Đã duyệt tài khoản thành công!");
+      toast.success("Đã duyệt tài khoản thành công!");
       await loadPendingUsers();
     } catch (error: any) {
-      alert(error.message || "Lỗi khi duyệt tài khoản");
+      toast.error(error.message || "Lỗi khi duyệt tài khoản");
     } finally {
       setActionLoadingId(null);
     }

@@ -7,6 +7,8 @@ import { fetchApi } from "../../lib/api";
 import Link from "next/link";
 import { useAuth } from "../../lib/authContext";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { customConfirm } from "@/lib/customConfirm";
 
 export default function CVManagementPage() {
   const [isUploading, setIsUploading] = useState(false);
@@ -163,18 +165,18 @@ export default function CVManagementPage() {
       const updatedResumes = await fetchApi("/resume");
       if (Array.isArray(updatedResumes)) setResumes(updatedResumes);
     } catch (err: any) {
-      alert("Đổi tên thất bại: " + err.message);
+      toast.error("Đổi tên thất bại: " + err.message);
     }
   };
 
   const handleDeleteResume = async (resumeId: number) => {
-    if (!window.confirm("Bạn có chắc chắn muốn xoá CV này?")) return;
+    if (!(await customConfirm("Bạn có chắc chắn muốn xoá CV này?"))) return;
     try {
       await fetchApi(`/resume/${resumeId}`, { method: "DELETE" });
       const updatedResumes = await fetchApi("/resume");
       if (Array.isArray(updatedResumes)) setResumes(updatedResumes);
     } catch (err: any) {
-      alert("Xoá thất bại: " + err.message);
+      toast.error("Xoá thất bại: " + err.message);
     }
   };
 
@@ -184,7 +186,7 @@ export default function CVManagementPage() {
       const updatedResumes = await fetchApi("/resume");
       if (Array.isArray(updatedResumes)) setResumes(updatedResumes);
     } catch (err: any) {
-      alert("Đặt CV chính thất bại: " + err.message);
+      toast.error("Đặt CV chính thất bại: " + err.message);
     }
   };
 
@@ -198,7 +200,7 @@ export default function CVManagementPage() {
       });
     } catch (err: any) {
       setIsJobSearchActive(!newValue); // revert
-      alert("Không thể lưu trạng thái tìm việc: " + err.message);
+      toast.error("Không thể lưu trạng thái tìm việc: " + err.message);
     }
   };
 

@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { fetchApi } from "../../../../lib/api";
 import { Loader2, Plus, UserPlus, Users, AlertCircle, Ban } from "lucide-react";
+import toast from "react-hot-toast";
+import { customConfirm } from "@/lib/customConfirm";
 
 interface HRUser {
   userId: number;
@@ -45,29 +47,29 @@ export default function HRManagementPage() {
         method: "POST",
         body: JSON.stringify({ email: newEmail, password: newPassword })
       });
-      alert("Đã tạo tài khoản HR thành công!");
+      toast.success("Đã tạo tài khoản HR thành công!");
       setShowAddModal(false);
       setNewEmail("");
       setNewPassword("");
       await loadHRList();
     } catch (error: any) {
-      alert("Lỗi khi tạo HR: " + (error.message || "Unknown error"));
+      toast.error("Lỗi khi tạo HR: " + (error.message || "Unknown error"));
     } finally {
       setAdding(false);
     }
   };
 
   const handleBan = async (id: number) => {
-    if (!confirm("Bạn có chắc chắn muốn khóa tài khoản này? Người này sẽ không thể đăng nhập hoặc thao tác nữa.")) return;
+    if (!(await customConfirm("Bạn có chắc chắn muốn khóa tài khoản này? Người này sẽ không thể đăng nhập hoặc thao tác nữa."))) return;
     
     setBanningId(id);
     try {
       // API company/approve/{id} changes status to BANNED
       await fetchApi(`/company/approve/${id}`, { method: "PUT" });
-      alert("Đã khóa tài khoản thành công!");
+      toast.success("Đã khóa tài khoản thành công!");
       await loadHRList();
     } catch (error: any) {
-      alert("Lỗi khi khóa: " + error.message);
+      toast.error("Lỗi khi khóa: " + error.message);
     } finally {
       setBanningId(null);
     }

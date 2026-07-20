@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../lib/authContext";
 import { fetchApi } from "../lib/api";
 import { Loader2, Briefcase, MapPin, Target, DollarSign, X } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function CandidateOnboardingModal() {
   const { user, isAuthenticated } = useAuth();
@@ -54,7 +55,7 @@ export default function CandidateOnboardingModal() {
       window.location.reload();
     } catch (error) {
       console.error("Failed to submit onboarding", error);
-      alert("Có lỗi xảy ra khi lưu thông tin.");
+      toast.error("Có lỗi xảy ra khi lưu thông tin.");
     } finally {
       setSubmitting(false);
     }

@@ -6,6 +6,7 @@ import { ArrowLeft, Save, Download, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
+import toast from "react-hot-toast";
 
 function BuilderContent() {
   const searchParams = useSearchParams();
@@ -39,7 +40,7 @@ function BuilderContent() {
     setIsSaving(true);
     setTimeout(() => {
       setIsSaving(false);
-      alert("Đã lưu CV thành công!");
+      toast.success("Đã lưu CV thành công!");
     }, 1500);
   };
 

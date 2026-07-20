@@ -12,6 +12,7 @@ import ElegantTemplate from "../../../components/cv-templates/ElegantTemplate";
 import CreativeTemplate from "../../../components/cv-templates/CreativeTemplate";
 
 import { Suspense } from "react";
+import toast from "react-hot-toast";
 
 function CvBuilderContent() {
   const searchParams = useSearchParams();
@@ -295,7 +296,7 @@ function CvBuilderContent() {
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
     } catch (err: any) {
-      alert("Lỗi khi lưu CV: " + err.message);
+      toast.error("Lỗi khi lưu CV: " + err.message);
     } finally {
       setIsSaving(false);
     }

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { fetchApi } from "../../../../lib/api";
 import { Save, Loader2, UploadCloud } from "lucide-react";
+import toast from "react-hot-toast";
 
 interface CompanyProfile {
   name: string;
@@ -54,9 +55,9 @@ export default function CompanyProfilePage() {
         method: "PUT",
         body: JSON.stringify(profile)
       });
-      alert("Cập nhật thông tin công ty thành công!");
+      toast.success("Cập nhật thông tin công ty thành công!");
     } catch (error: any) {
-      alert("Lỗi khi cập nhật: " + (error.message || "Unknown error"));
+      toast.error("Lỗi khi cập nhật: " + (error.message || "Unknown error"));
     } finally {
       setSaving(false);
     }

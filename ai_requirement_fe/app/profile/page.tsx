@@ -5,6 +5,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { User, Mail, Phone, MapPin, Briefcase, DollarSign, Code2, Globe, Save, Loader2, FileText, CheckCircle2, Pencil, Trash2, Plus, UploadCloud, GraduationCap, Star, Info, Eye, Download, LayoutTemplate } from "lucide-react";
 import { fetchApi } from "../../lib/api";
+import toast from "react-hot-toast";
 
 export default function ProfilePage() {
   const [profileData, setProfileData] = useState({
@@ -62,9 +63,9 @@ export default function ProfilePage() {
         method: "PUT",
         body: JSON.stringify(profileData)
       });
-      alert("Cập nhật thông tin thành công!");
+      toast.success("Cập nhật thông tin thành công!");
     } catch (err: any) {
-      alert("Lỗi khi lưu hồ sơ: " + err.message);
+      toast.error("Lỗi khi lưu hồ sơ: " + err.message);
     } finally {
       setIsSavingProfile(false);
     }

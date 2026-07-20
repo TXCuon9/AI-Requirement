@@ -5,6 +5,8 @@ import { fetchApi } from "../../../../lib/api";
 import { Loader2, UserCheck, ShieldAlert, CheckCircle, Mail, Building, Clock } from "lucide-react";
 import { useAuth } from "../../../../lib/authContext";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { customConfirm } from "@/lib/customConfirm";
 
 interface PendingUser {
   id: number;
@@ -45,15 +47,15 @@ export default function AdminPendingUsersPage() {
   }, [isAuthenticated, user, router]);
 
   const handleApprove = async (id: number) => {
-    if (!confirm("Bạn có chắc chắn muốn duyệt tài khoản này?")) return;
+    if (!(await customConfirm("Bạn có chắc chắn muốn duyệt tài khoản này?"))) return;
     
     setApproving(id);
     try {
       await fetchApi(`/admin/approve/${id}`, { method: "PUT" });
-      alert("Đã duyệt tài khoản thành công!");
+      toast.success("Đã duyệt tài khoản thành công!");
       setUsers(users.filter(u => u.id !== id));
     } catch (error: any) {
-      alert("Lỗi khi duyệt: " + (error.message || "Unknown error"));
+      toast.error("Lỗi khi duyệt: " + (error.message || "Unknown error"));
     } finally {
       setApproving(null);
     }
