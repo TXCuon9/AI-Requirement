@@ -1,0 +1,25 @@
+{"kind":"deck","id":"pr/9h9e06","name":"Deck"}
+{"kind":"layout","layoutId":"fb1c0f6e-5158-4232-9061-1bcdf05d3629","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"87faad74-dd52-455c-82da-43c8d9953877","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/b41oj7","slide":1,"title":"AI hỗ trợ phân tích CV và gợi ý việc làm","textShapes":16}
+{"kind":"textbox","id":"sh/tkvaxwjm","slide":1,"text":"AI hỗ trợ phân tích CV và gợi ý việc làm","textPreview":"AI hỗ trợ phân tích CV và gợi ý việc làm","textChars":40,"textLines":1,"bbox":[72,52,930,58]}
+{"kind":"textbox","id":"sh/6hkb21kb","slide":1,"text":"Một quy trình đơn giản: đọc dữ liệu → xử lý → trả về thông tin tham khảo","textPreview":"Một quy trình đơn giản: đọc dữ liệu → xử lý → trả về thông tin tham khảo","textChars":72,"textLines":1,"bbox":[74,122,920,30]}
+{"kind":"textbox","id":"sh/7itsv61w","slide":1,"text":"PHẠM VI DEMO","textPreview":"PHẠM VI DEMO","textChars":12,"textLines":1,"bbox":[1030,62,170,24]}
+{"kind":"shape","id":"sh/kf2t0r25","slide":1,"bbox":[72,205,320,310]}
+{"kind":"shape","id":"sh/lgbatwjq","slide":1,"bbox":[480,205,320,310]}
+{"kind":"shape","id":"sh/ytkbyhkz","slide":1,"bbox":[888,205,320,310]}
+{"kind":"textbox","id":"sh/jutsrm1k","slide":1,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[98,232,42,32]}
+{"kind":"textbox","id":"sh/critwr29","slide":1,"text":"Đầu vào","textPreview":"Đầu vào","textChars":7,"textLines":1,"bbox":[98,270,220,40]}
+{"kind":"textbox","id":"sh/xsbapcju","slide":1,"text":"• CV dạng PDF\n• Thông tin ứng viên\n• Tin tuyển dụng","textPreview":"• CV dạng PDF | • Thông tin ứng viên | • Tin tuyển dụng","textChars":51,"textLines":3,"bbox":[98,337,240,120]}
+{"kind":"textbox","id":"sh/t8zalsjy","slide":1,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[506,232,42,32]}
+{"kind":"textbox","id":"sh/s7qtcn2d","slide":1,"text":"Xử lý","textPreview":"Xử lý","textChars":5,"textLines":1,"bbox":[506,270,220,40]}
+{"kind":"textbox","id":"sh/76hsji18","slide":1,"text":"Đọc nội dung CV\n→ Phân tích và chuẩn hóa\n→ Tính điểm theo quy tắc\n→ Tìm nội dung tương đồng","textPreview":"Đọc nội dung CV | → Phân tích và chuẩn hóa | → Tính điểm theo quy tắc | → Tìm nội dung tương đồng","textChars":91,"textLines":4,"bbox":[506,329,255,155]}
+{"kind":"textbox","id":"sh/658baxkn","slide":1,"text":"pypdf · Gemini · Embedding · ChromaDB","textPreview":"pypdf · Gemini · Embedding · ChromaDB","textChars":37,"textLines":1,"bbox":[506,476,270,20]}
+{"kind":"textbox","id":"sh/54fahsj2","slide":1,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[914,232,42,32]}
+{"kind":"textbox","id":"sh/k36t8n2h","slide":1,"text":"Đầu ra","textPreview":"Đầu ra","textChars":6,"textLines":1,"bbox":[914,270,220,40]}
+{"kind":"textbox","id":"sh/j2xsfi1w","slide":1,"text":"• Thông tin CV đã trích xuất\n• Kỹ năng phù hợp / còn thiếu\n• Điểm tham khảo\n• Một số việc làm gần với hồ sơ","textPreview":"• Thông tin CV đã trích xuất | • Kỹ năng phù hợp / còn thiếu | • Điểm tham khảo | • Một số việc làm gần với hồ sơ","textChars":107,"textLines":4,"bbox":[914,329,255,160]}
+{"kind":"textbox","id":"sh/ihob6dkb","slide":1,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[413,330,44,50]}
+{"kind":"textbox","id":"sh/xgfad83q","slide":1,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[821,330,44,50]}
+{"kind":"shape","id":"sh/wf6t432l","slide":1,"bbox":[72,575,1136,70]}
+{"kind":"textbox","id":"sh/ojatk3a1","slide":1,"text":"Lưu ý: kết quả dùng để tham khảo; không thay thế quyết định của người tuyển dụng.","textPreview":"Lưu ý: kết quả dùng để tham khảo; không thay thế quyết định của người tuyển dụng.","textChars":81,"textLines":1,"bbox":[98,596,1085,28]}
+{"kind":"notes","id":"nt/b41oj7","slide":1,"text":""}

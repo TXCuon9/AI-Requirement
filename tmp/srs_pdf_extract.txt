@@ -1,0 +1,886 @@
+AI Recruitment Platform - SRS
+SRS v1.0 | Trang 1
+ TÀI LIỆU ĐẶC TẢYÊU CẦU PHẦN MỀM
+ (Software Requirements Specification - SRS)
+ Nền tảng hỗ trợ tuyển dụngvà phân tích CV bằng AI
+Phiên bản 1.0.0
+Dự án
+AI Recruitment Platform
+Đơn vị
+Nhóm phát triển dự án AI-Requirement
+Ngày lập
+21 tháng 7 năm 2026
+Trạng thái
+Bản dự thảo dùng cho phát triển và kiểm thử
+Tài liệu được xây dựng theo bố cục SRS tham chiếu IEEE 830 và hiệu chỉnh theo phạm vi mã nguồn hiện tại
+của dự án.
+Mục lục
+1 Giới thiệu
+1.1 Mục đích
+1.2 Phạm vi
+1.3 Từ điển thuật ngữ
+1.4 Tài liệu tham khảo
+1.5 Tổng quát
+2 Các yêu cầu chức năng
+2.1 Các tác nhân
+2.2 Các chức năng của hệ thống
+2.3 Kiến trúc và tích hợp hệ thống
+2.4 Quy trình nghiệp vụ
+2.5 Đặc tả các use case
+3 Các yêu cầu phi chức năng
+3.1 Giao diện người dùng
+3.2 Tính bảo mật
+3.3 Hiệu năng và khả năng mở rộng
+\nAI Recruitment Platform - SRS
+SRS v1.0 | Trang 2
+3.4 Tính tin cậy và xử lý lỗi
+3.5 Ràng buộc
+4 Tiêu chí nghiệm thu
+Phụ lục A Ma trận truy xuất yêu cầu - chức năng
+Danh mục hình ảnh, bảng biểu
+Hình 2-1: Kiến trúc tổng quan của nền tảng
+Hình 2-2: Quy trình ứng viên tìm việc và phân tích CV
+Hình 2-3: Quy trình nhà tuyển dụng quản lý tin tuyển dụng
+Hình 2-4: Pipeline AI phân tích và gợi ý việc làm
+Bảng 1-1: Từ điển thuật ngữ
+Bảng 2-1: Tác nhân hệ thống
+Bảng 2-2: Danh sách nhóm chức năng
+Bảng 2-3: Tích hợp và công nghệ
+Bảng 3-1: Yêu cầu phi chức năng
+Bảng A-1: Ma trận truy xuất yêu cầu
+1 Giới thiệu
+1.1 Mục đích
+Tài liệu đặc tả yêu cầu phần mềm này mô tả mục tiêu, phạm vi, tác nhân, yêu cầu chức năng, yêu cầu phi
+chức năng, dữ liệu và các tiêu chí nghiệm thu của AI Recruitment Platform. Tài liệu là căn cứ chung cho phân
+tích, thiết kế, lập trình, kiểm thử, trình diễn và đánh giá đồ án.
+SRS này phản ánh trạng thái chức năng quan sát được từ mã nguồn frontend, backend Java Spring Boot và AI
+service FastAPI tại thời điểm lập tài liệu. Những mục chưa được hiện thực đầy đủ được ghi ở dạng yêu cầu
+mục tiêu hoặc ràng buộc để nhóm tiếp tục xác nhận.
+1.2 Phạm vi
+ Nền tảng hỗ trợ kết nối ứng viên và nhà tuyển dụng, cho phép
+người dùng tạo tài khoản, xây dựng hồ sơ/CV, tải lên và quản lý
+nhiều CV, tìm kiếm tin tuyển dụng, lưu việc làm, ứng tuyển, theo
+ dõi trạng thái hồ sơ và nhận phân tích CV/gợi ý việc làm bằng
+AI. Nhà tuyển dụng có thể quản lý công ty, đăng tin, xem ứng
+ viên và cập nhật trạng thái hồ sơ. Quản trị viên kiểm duyệt
+ người dùng, công ty và tin tuyển dụng.
+Ngoài phạm vi: hệ thống không tự động đưa ra quyết định tuyển dụng cuối cùng, không cam kết độ chính xác
+tuyệt đối của điểm AI, không bao gồm chấm công/tính lương và không thay thế quy trình phỏng vấn của doanh
+nghiệp.
+\nAI Recruitment Platform - SRS
+SRS v1.0 | Trang 3
+1.3 Từ điển thuật ngữ
+Thuật ngữ
+Giải thích
+SRS
+Software Requirements Specification - đặc tả yêu cầu phần mềm.
+CV / Resume
+Hồ sơ xin việc của ứng viên.
+Candidate
+Ứng viên tìm việc.
+Recruiter
+Nhà tuyển dụng hoặc người quản lý tuyển dụng của công ty.
+Admin
+Quản trị viên có quyền kiểm duyệt và quản trị dữ liệu.
+Job
+Tin tuyển dụng.
+Job fit / Match score
+Điểm và nhận xét về mức phù hợp giữa CV và tin tuyển dụng.
+Embedding
+Biểu diễn văn bản thành vector số để tìm kiếm ngữ nghĩa.
+ChromaDB
+Cơ sở dữ liệu vector phục vụ truy vấn các việc làm gần với hồ sơ.
+AI service
+Dịch vụ FastAPI xử lý phân tích, scoring, embedding và
+recommendation.
+JWT
+JSON Web Token dùng cho xác thực phiên truy cập API.
+1.4 Tài liệu tham khảo
+IEEE Recommended Practice for Software Requirements Specifications, IEEE Std 830-1998.
+Mã nguồn dự án AI-Requirement: frontend Next.js, backend Spring Boot và AI service FastAPI.
+Tài liệu mẫu SRS.pdf do người dùng cung cấp.
+Tài liệu API/OpenAPI được sinh từ FastAPI và các controller REST của backend.
+1.5 Tổng quát
+Tài liệu gồm bốn phần chính: phần 1 trình bày bối cảnh và phạm vi; phần 2 mô tả tác nhân, chức năng, kiến
+trúc, quy trình và use case; phần 3 quy định chất lượng và ràng buộc; phần 4 nêu tiêu chí nghiệm thu. Phụ lục
+A ánh xạ các yêu cầu đến nhóm chức năng để hỗ trợ kiểm thử và theo dõi phạm vi.
+2 Các yêu cầu chức năng
+2.1 Các tác nhân
+Tác nhân
+Mô tả
+Quyền chính
+Khách
+Người chưa đăng nhập.
+Xem trang giới thiệu, danh sách/tìm kiếm
+việc làm, xem chi tiết; đăng ký hoặc đăng
+nhập.
+Ứng viên
+Người tìm việc đã có tài khoản.
+Quản lý hồ sơ/CV, phân tích CV, xem gợi
+ý, lưu việc làm, ứng tuyển và theo dõi hồ
+sơ.
+Nhà tuyển dụng
+Người đại diện công ty.
+Quản lý hồ sơ công ty, tạo/sửa/xóa tin
+tuyển dụng, xem ứng viên và cập nhật
+trạng thái hồ sơ.
+Quản trị viên
+Người vận hành hệ thống.
+Xem dashboard, duyệt tài khoản/công ty,
+quản trị người dùng, công ty và tin tuyển
+dụng.
+AI service
+Tác nhân hệ thống bên ngoài.
+Phân tích CV, đánh giá CV/job-fit, tạo
+embedding và trả về gợi ý việc làm.
+\nAI Recruitment Platform - SRS
+SRS v1.0 | Trang 4
+2.2 Các chức năng của hệ thống
+Mã nhóm
+Nhóm chức năng
+Tác nhân
+AUTH
+Đăng ký, đăng nhập, refresh token.
+Khách, mọi người dùng
+CAND
+Hồ sơ ứng viên, onboarding, CV và phân
+tích.
+Ứng viên
+JOB
+Tìm kiếm, xem, lưu và ứng tuyển việc làm.
+Khách, Ứng viên
+RECR
+Hồ sơ công ty, tin tuyển dụng, quản lý ứng
+viên.
+Nhà tuyển dụng
+ADMIN
+Dashboard, duyệt và quản trị dữ liệu.
+Quản trị viên
+AI
+Phân tích CV, job-fit, scoring,
+recommendation.
+Ứng viên, Nhà tuyển dụng, hệ thống
+2.3 Kiến trúc và tích hợp hệ thống
+Hệ thống gồm giao diện web Next.js/React, backend nghiệp vụ Spring Boot, PostgreSQL, dịch vụ AI FastAPI
+và các dịch vụ AI/embedding của Google Gemini. File tải lên được lưu ở vùng uploads và được truy xuất qua
+endpoint file view. Backend chịu trách nhiệm xác thực JWT, nghiệp vụ người dùng/công ty/job/application; AI
+service chịu trách nhiệm xử lý nội dung AI.
+Thành phần
+Công nghệ / giao tiếp
+Trách nhiệm
+Frontend
+Next.js 16, React, TypeScript, Tailwind
+CSS; HTTP/JSON
+Hiển thị giao diện, quản lý phiên, gửi yêu
+cầu và trình bày kết quả.
+Backend
+Java Spring Boot, REST, Spring Data
+JPA, JWT
+Xác thực, phân quyền, nghiệp vụ tuyển
+dụng, persistence.
+CSDL nghiệp vụ
+PostgreSQL
+Lưu người dùng, ứng viên, CV, công ty,
+việc làm, ứng tuyển, việc đã lưu.
+AI service
+Python, FastAPI, Pydantic
+Phân tích CV, đánh giá CV/job-fit, scoring,
+recommendation.
+AI provider
+Google Gemini 2.5 Flash và Gemini
+Embedding
+Sinh nhận xét có cấu trúc và embedding
+ngữ nghĩa.
+Vector DB
+ChromaDB PersistentClient
+Lưu collection candidates/jobs và truy vấn
+top-k.
+Lưu file
+Multipart upload, PDF/DOCX extractor
+Lưu và đọc CV; giới hạn upload theo cấu
+hình hiện tại là 20 MB.
+Hình 2-1 - Kiến trúc tổng quan: Người dùng → Frontend → Backend → PostgreSQL/File storage; Backend hoặc Frontend → AI service
+→ Gemini/Embedding → ChromaDB → kết quả phân tích/gợi ý.
+2.4 Quy trình nghiệp vụ
+2.4.1 Quy trình sử dụng phần mềm
+Khách truy cập hệ thống và có thể xem việc làm. Để thực hiện chức năng cá nhân, khách đăng ký tài khoản,
+đăng nhập và nhận access token/refresh token. Hệ thống áp dụng quyền theo vai trò. Người dùng có thể cập
+nhật thông tin cá nhân; khi token hết hạn, frontend dùng refresh token hoặc yêu cầu đăng nhập lại.
+2.4.2 Quy trình ứng viên quản lý CV và tìm việc
+Ứng viên hoàn thành onboarding hoặc cập nhật hồ sơ cá nhân.
+Ứng viên tạo CV từ dữ liệu học vấn, kinh nghiệm, kỹ năng, dự án hoặc tải file CV.
+\nAI Recruitment Platform - SRS
+SRS v1.0 | Trang 5
+Hệ thống lưu CV, cho phép đặt CV chính và gửi dữ liệu đến AI service để phân tích.
+Ứng viên xem điểm, ưu điểm, hạn chế và khuyến nghị; có thể phân tích mức phù hợp với một tin cụ thể.
+Ứng viên tìm kiếm việc làm, xem chi tiết, lưu việc làm hoặc gửi đơn ứng tuyển.
+Ứng viên theo dõi danh sách đơn ứng tuyển và trạng thái do nhà tuyển dụng cập nhật.
+2.4.3 Quy trình nhà tuyển dụng quản lý tuyển dụng
+Nhà tuyển dụng đăng ký và tạo/cập nhật hồ sơ công ty.
+Nhà tuyển dụng tạo tin tuyển dụng với chức danh, mô tả, yêu cầu, địa điểm, loại việc làm và mức kinh nghiệm.
+Tin được hiển thị theo trạng thái được phép; nhà tuyển dụng có thể sửa hoặc xóa tin của mình.
+Nhà tuyển dụng xem danh sách ứng viên theo tin, xem CV và cập nhật trạng thái đơn: tiếp nhận, phỏng vấn
+hoặc từ chối.
+2.4.4 Quy trình AI phân tích và gợi ý
+Dữ liệu CV được chuẩn hóa thành biểu diễn văn bản gồm mục tiêu, kỹ năng, học vấn, kinh nghiệm và dự án.
+Gemini trả về JSON gồm điểm, ưu điểm, hạn chế và khuyến nghị; backend/AI service parse và trả về kết quả
+có cấu trúc.
+CV hoặc nội dung onboarding được embedding và tìm trong collection jobs bằng truy vấn top-k, hiện cấu hình
+tối đa 5 việc làm.
+Kết quả là tham khảo; hệ thống phải hiển thị giải thích và cảnh báo không thay thế quyết định con người.
+Hình 2-2 - Luồng ứng viên: Đăng nhập → Hồ sơ/CV → Phân tích AI → Gợi ý việc làm → Xem chi tiết → Lưu/Ứng tuyển → Theo dõi trạng
+thái.
+Hình 2-3 - Luồng nhà tuyển dụng: Đăng nhập → Hồ sơ công ty → Tạo tin → Quản lý tin → Xem ứng viên → Cập nhật trạng thái.
+Hình 2-4 - Pipeline AI: CV/hồ sơ → Extract/normalize → Gemini JSON → Rules/score → Embedding → ChromaDB →
+recommendation/job-fit.
+2.5 Đặc tả các use case
+UC-01 Đăng ký tài khoản
+Thuộc tính
+Đặc tả
+Tác nhân chính
+Khách
+Điều kiện trước
+Chưa có tài khoản; email chưa tồn tại.
+Luồng chính
+1. Chọn loại tài khoản ứng viên hoặc nhà tuyển dụng.2. Nhập
+email, mật khẩu và thông tin bắt buộc.3. Hệ thống kiểm tra dữ liệu
+và tạo tài khoản ở trạng thái phù hợp.4. Hệ thống trả thông báo
+đăng ký thành công hoặc yêu cầu chờ duyệt nếu áp dụng.
+Luồng thay thế / lỗi
+Email đã tồn tại, dữ liệu thiếu/không hợp lệ hoặc lỗi máy chủ: từ
+chối và hiển thị nguyên nhân.
+Điều kiện sau
+Tài khoản được tạo; người dùng có thể đăng nhập khi được
+phép.
+Dữ liệu đầu vào và đầu ra:
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu vào
+email - Chuỗi email duy nhất
+Bắt buộc, đúng định dạng
+Đầu vào
+password - Mật khẩu
+Bắt buộc, không hiển thị dạng rõ
+\nAI Recruitment Platform - SRS
+SRS v1.0 | Trang 6
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu vào
+role - CANDIDATE/RECRUITER
+Bắt buộc
+Đầu ra
+account - Tài khoản mới
+Có mã định danh và trạng thái
+Đầu ra
+message - Thông báo
+Hiển thị trên giao diện
+UC-02 Đăng nhập và làm mới phiên
+Thuộc tính
+Đặc tả
+Tác nhân chính
+Ứng viên / Nhà tuyển dụng / Admin
+Điều kiện trước
+Tài khoản tồn tại và không bị khóa.
+Luồng chính
+1. Nhập email và mật khẩu.2. Backend xác thực và phát access
+token cùng refresh token.3. Frontend lưu phiên và điều hướng
+theo vai trò.4. Khi access token hết hạn, frontend gửi refresh
+token để nhận token mới.
+Luồng thay thế / lỗi
+Sai thông tin hoặc token không hợp lệ: trả lỗi xác thực; tài khoản
+bị khóa/đang chờ duyệt: từ chối truy cập.
+Điều kiện sau
+Phiên hợp lệ được thiết lập hoặc kết thúc an toàn.
+Dữ liệu đầu vào và đầu ra:
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu vào
+email/password - Thông tin xác thực
+Bắt buộc
+Đầu vào
+refreshToken - Token làm mới
+Dùng ở endpoint refresh
+Đầu ra
+accessToken - JWT
+Dùng gọi API
+Đầu ra
+refreshToken - JWT
+Dùng cấp lại access token
+Đầu ra
+role - Vai trò
+Phục vụ phân quyền
+UC-03 Quản lý hồ sơ ứng viên
+Thuộc tính
+Đặc tả
+Tác nhân chính
+Ứng viên
+Điều kiện trước
+Đã đăng nhập với vai trò ứng viên.
+Luồng chính
+1. Xem hồ sơ hiện tại.2. Cập nhật thông tin cá nhân, mục tiêu, kỹ
+năng, học vấn, kinh nghiệm và dự án.3. Gửi dữ liệu; hệ thống
+validate và lưu PostgreSQL.4. Hiển thị dữ liệu mới nhất.
+Luồng thay thế / lỗi
+Dữ liệu thiếu hoặc lỗi lưu: không ghi một phần và hiển thị lỗi.
+Điều kiện sau
+Hồ sơ ứng viên được cập nhật.
+Dữ liệu đầu vào và đầu ra:
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu vào
+profile - Thông tin cá nhân
+Tên, liên hệ, mục tiêu, kỹ năng
+Đầu vào
+education/experience/project - Danh sách
+hồ sơ
+Có thể rỗng tùy giai đoạn
+\nAI Recruitment Platform - SRS
+SRS v1.0 | Trang 7
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu ra
+profile - Hồ sơ đã lưu
+Đồng bộ với CV
+UC-04 Tạo, sửa, xóa và đặt CV chính
+Thuộc tính
+Đặc tả
+Tác nhân chính
+Ứng viên
+Điều kiện trước
+Đã đăng nhập.
+Luồng chính
+1. Mở danh sách CV.2. Tạo CV bằng form hoặc tải file hỗ trợ.3.
+Nhập/cập nhật nội dung; lưu CV.4. Có thể đặt một CV làm CV
+chính hoặc xóa CV không còn dùng.
+Luồng thay thế / lỗi
+File vượt giới hạn/định dạng không hỗ trợ: từ chối upload; xóa CV
+đang là CV chính: yêu cầu chọn CV khác nếu cần.
+Điều kiện sau
+CV được lưu và trạng thái primary được cập nhật đúng.
+Dữ liệu đầu vào và đầu ra:
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu vào
+resume - Dữ liệu CV
+Summary, target position, skills,
+education, experience, projects
+Đầu vào
+file - PDF/DOCX
+Multipart, tối đa theo cấu hình
+Đầu ra
+resumeId - Mã CV
+Dùng phân tích/recommendation
+Đầu ra
+fileUrl - Đường dẫn file
+Chỉ trả khi upload thành công
+UC-05 Phân tích chất lượng CV bằng AI
+Thuộc tính
+Đặc tả
+Tác nhân chính
+Ứng viên
+Điều kiện trước
+Có CV hoặc dữ liệu hồ sơ hợp lệ; AI service sẵn sàng.
+Luồng chính
+1. Chọn CV và yêu cầu phân tích.2. Hệ thống dựng nội dung đầu
+vào từ CV.3. AI service gọi Gemini và yêu cầu JSON.4. Hệ thống
+parse kết quả, hiển thị điểm 0-100, ưu điểm, hạn chế, khuyến
+nghị.
+Luồng thay thế / lỗi
+AI timeout, JSON không hợp lệ hoặc provider lỗi: trả lỗi có kiểm
+soát và không lưu kết quả dở dang.
+Điều kiện sau
+Kết quả phân tích được trả về ở dạng có cấu trúc.
+Dữ liệu đầu vào và đầu ra:
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu vào
+cv_data - Dữ liệu hồ sơ
+Skills, education, experience, projects,
+summary, target position
+Đầu ra
+overall_score - Số nguyên 0-100
+Điểm tham khảo
+Đầu ra
+pros/cons - Mảng chuỗi
+Nhận xét chi tiết
+\nAI Recruitment Platform - SRS
+SRS v1.0 | Trang 8
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu ra
+recommendations - Mảng chuỗi
+Gợi ý cải thiện
+UC-06 Đánh giá mức phù hợp CV - việc làm
+Thuộc tính
+Đặc tả
+Tác nhân chính
+Ứng viên / Nhà tuyển dụng
+Điều kiện trước
+CV và tin tuyển dụng có dữ liệu.
+Luồng chính
+1. Chọn CV và tin tuyển dụng.2. Hệ thống gửi cv_data và
+job_data tới AI service.3. Gemini đánh giá kỹ năng, kinh nghiệm
+và yêu cầu.4. Hiển thị match score, điểm mạnh, điểm yếu và
+khuyến nghị.
+Luồng thay thế / lỗi
+Thiếu CV/job hoặc AI lỗi: yêu cầu bổ sung dữ liệu hoặc báo lỗi.
+Điều kiện sau
+Một kết quả job-fit được hiển thị, không phải quyết định tuyển
+dụng cuối cùng.
+Dữ liệu đầu vào và đầu ra:
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu vào
+cv_data - Hồ sơ ứng viên
+Dữ liệu cấu trúc
+Đầu vào
+job_data - Tin tuyển dụng
+Title, description, requirements,
+responsibilities
+Đầu ra
+match_score - Số nguyên 0-100
+Mức phù hợp tham khảo
+Đầu ra
+pros/cons/recommendations - Mảng chuỗi
+Giải thích
+UC-07 Tìm kiếm và xem tin tuyển dụng
+Thuộc tính
+Đặc tả
+Tác nhân chính
+Khách / Ứng viên
+Điều kiện trước
+Hệ thống có tin được phép hiển thị.
+Luồng chính
+1. Nhập từ khóa, địa điểm, loại việc hoặc bộ lọc.2. Hệ thống trả
+danh sách phù hợp.3. Người dùng mở chi tiết tin.4. Hệ thống
+tăng lượt xem nếu áp dụng.
+Luồng thay thế / lỗi
+Không có kết quả: hiển thị trạng thái rỗng; tham số không hợp lệ:
+trả lỗi validation.
+Điều kiện sau
+Danh sách/chi tiết tin được hiển thị đúng quyền và trạng thái.
+Dữ liệu đầu vào và đầu ra:
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu vào
+keyword/filter - Từ khóa và bộ lọc
+Tùy chọn
+Đầu vào
+jobId - Mã tin
+Bắt buộc khi xem chi tiết
+Đầu ra
+jobs - Danh sách tin
+Có thông tin tóm tắt
+Đầu ra
+jobDetail - Chi tiết tin
+Mô tả, yêu cầu, công ty
+\nAI Recruitment Platform - SRS
+SRS v1.0 | Trang 9
+UC-08 Lưu việc làm và quản lý việc đã lưu
+Thuộc tính
+Đặc tả
+Tác nhân chính
+Ứng viên
+Điều kiện trước
+Đã đăng nhập và tin tồn tại.
+Luồng chính
+1. Chọn lưu trên tin tuyển dụng.2. Backend tạo hoặc cập nhật
+bản ghi saved job.3. Ứng viên mở trang việc đã lưu.4. Có thể bỏ
+lưu.
+Luồng thay thế / lỗi
+Tin không tồn tại hoặc thao tác trùng: hệ thống giữ trạng thái nhất
+quán và trả thông báo.
+Điều kiện sau
+Danh sách việc đã lưu phản ánh thao tác cuối.
+Dữ liệu đầu vào và đầu ra:
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu vào
+jobId - Mã tin
+Bắt buộc
+Đầu vào
+candidateId - Mã ứng viên
+Lấy từ token
+Đầu ra
+savedJob - Bản ghi đã lưu
+Có thời điểm lưu
+Đầu ra
+savedJobs - Danh sách
+Theo ứng viên
+UC-09 Ứng tuyển việc làm
+Thuộc tính
+Đặc tả
+Tác nhân chính
+Ứng viên
+Điều kiện trước
+Đã đăng nhập, có CV hợp lệ, tin đang nhận hồ sơ.
+Luồng chính
+1. Mở chi tiết tin và chọn ứng tuyển.2. Chọn CV sử dụng hoặc CV
+chính.3. Hệ thống kiểm tra trùng đơn và trạng thái tin.4. Tạo đơn
+ứng tuyển và thông báo kết quả.
+Luồng thay thế / lỗi
+Đã ứng tuyển trước đó, thiếu CV hoặc tin đã đóng: từ chối.
+Điều kiện sau
+Đơn ứng tuyển mới được lưu với trạng thái ban đầu.
+Dữ liệu đầu vào và đầu ra:
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu vào
+jobId - Mã tin
+Bắt buộc
+Đầu vào
+resumeId - Mã CV
+Bắt buộc/mặc định CV chính
+Đầu ra
+applicationId - Mã đơn
+Dùng theo dõi
+Đầu ra
+status - Trạng thái
+Ví dụ: PENDING
+UC-10 Tạo và quản lý tin tuyển dụng
+Thuộc tính
+Đặc tả
+Tác nhân chính
+Nhà tuyển dụng
+\nAI Recruitment Platform - SRS
+SRS v1.0 | Trang 10
+Thuộc tính
+Đặc tả
+Điều kiện trước
+Đã đăng nhập; hồ sơ công ty hợp lệ.
+Luồng chính
+1. Mở dashboard tuyển dụng.2. Tạo tin với chức danh, mô tả, yêu
+cầu, địa điểm, loại việc và kinh nghiệm.3. Lưu hoặc cập nhật
+tin.4. Xóa tin khi không còn nhu cầu.
+Luồng thay thế / lỗi
+Thiếu trường bắt buộc hoặc không có quyền trên tin: từ chối.
+Điều kiện sau
+Tin được tạo/cập nhật/xóa theo quyền sở hữu và trạng thái.
+Dữ liệu đầu vào và đầu ra:
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu vào
+job - Dữ liệu tin
+Title, description, requirements, location,
+type, experience
+Đầu ra
+job - Tin tuyển dụng
+Có mã và trạng thái
+Đầu ra
+jobs - Danh sách tin
+Theo recruiter/company
+UC-11 Quản lý hồ sơ ứng viên và trạng thái ứng tuyển
+Thuộc tính
+Đặc tả
+Tác nhân chính
+Nhà tuyển dụng
+Điều kiện trước
+Có tin tuyển dụng và đơn ứng tuyển.
+Luồng chính
+1. Chọn tin và xem danh sách ứng viên.2. Mở CV/hồ sơ ứng
+viên.3. Cập nhật trạng thái đơn.4. Hệ thống lưu trạng thái và hiển
+thị cho ứng viên.
+Luồng thay thế / lỗi
+Không có quyền hoặc trạng thái chuyển không hợp lệ: từ chối.
+Điều kiện sau
+Trạng thái ứng tuyển mới được lưu và truy vấn nhất quán.
+Dữ liệu đầu vào và đầu ra:
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu vào
+applicationId - Mã đơn
+Bắt buộc
+Đầu vào
+status - Trạng thái mới
+Theo enum nghiệp vụ
+Đầu ra
+application - Đơn ứng tuyển
+Có trạng thái mới
+Đầu ra
+candidateResume - CV
+Chỉ trả theo quyền
+UC-12 Quản lý hồ sơ công ty
+Thuộc tính
+Đặc tả
+Tác nhân chính
+Nhà tuyển dụng
+Điều kiện trước
+Đã đăng nhập.
+Luồng chính
+1. Xem hồ sơ công ty.2. Cập nhật tên, mô tả, logo/thông tin liên
+hệ nếu có.3. Lưu dữ liệu và hiển thị dashboard.
+Luồng thay thế / lỗi
+Hồ sơ chưa được duyệt hoặc dữ liệu không hợp lệ: báo lỗi/giới
+hạn thao tác.
+\nAI Recruitment Platform - SRS
+SRS v1.0 | Trang 11
+Thuộc tính
+Đặc tả
+Điều kiện sau
+Thông tin công ty được cập nhật.
+Dữ liệu đầu vào và đầu ra:
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu vào
+company - Thông tin công ty
+Tên, mô tả, thông tin liên hệ
+Đầu ra
+company - Hồ sơ công ty
+Được dùng trong tin tuyển dụng
+UC-13 Duyệt và quản trị người dùng/công ty/tin
+Thuộc tính
+Đặc tả
+Tác nhân chính
+Admin
+Điều kiện trước
+Đã đăng nhập với vai trò admin.
+Luồng chính
+1. Xem dashboard và danh sách chờ duyệt.2. Xem chi tiết bản
+ghi.3. Duyệt, chỉnh sửa, khóa hoặc xóa theo quyền.4. Hệ thống
+ghi nhận trạng thái mới.
+Luồng thay thế / lỗi
+Bản ghi không tồn tại hoặc thao tác không hợp lệ: trả lỗi.
+Điều kiện sau
+Dữ liệu quản trị thay đổi và phản ánh trên các màn hình liên
+quan.
+Dữ liệu đầu vào và đầu ra:
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu vào
+entityId - Mã bản ghi
+User/company/job
+Đầu vào
+action - Thao tác
+Approve/update/toggle/delete
+Đầu ra
+entity - Bản ghi sau cập nhật
+Trạng thái mới
+Đầu ra
+stats - Thống kê
+Tổng số/đang chờ nếu có
+UC-14 Gợi ý việc làm bằng semantic search
+Thuộc tính
+Đặc tả
+Tác nhân chính
+Ứng viên
+Điều kiện trước
+Có resume_id hoặc onboarding_text.
+Luồng chính
+1. Chọn yêu cầu gợi ý.2. Hệ thống lấy embedding của CV hoặc
+tạo embedding từ onboarding text.3. ChromaDB truy vấn
+collection jobs với top_k=5.4. Trả về danh sách mã việc làm để
+frontend lấy chi tiết.
+Luồng thay thế / lỗi
+Không có vector hoặc lỗi truy vấn: trả danh sách rỗng và log lỗi.
+Điều kiện sau
+Danh sách tối đa 5 job id được trả về.
+Dữ liệu đầu vào và đầu ra:
+\nAI Recruitment Platform - SRS
+SRS v1.0 | Trang 12
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu vào
+resume_id - Mã CV
+Ưu tiên nếu có
+Đầu vào
+onboarding_text - Văn bản onboarding
+Dùng khi chưa có CV
+Đầu ra
+recommended_job_ids - Mảng mã tin
+Top-k theo độ tương đồng
+UC-15 Tải lên và xem file CV
+Thuộc tính
+Đặc tả
+Tác nhân chính
+Ứng viên / hệ thống
+Điều kiện trước
+File đúng định dạng và trong giới hạn.
+Luồng chính
+1. Chọn file.2. Backend nhận multipart và lưu file.3. Trả
+mã/đường dẫn file.4. Người có quyền xem yêu cầu file view theo
+tên.
+Luồng thay thế / lỗi
+File lỗi hoặc không an toàn: từ chối; không lộ đường dẫn nội bộ.
+Điều kiện sau
+File được lưu và truy cập theo quyền.
+Dữ liệu đầu vào và đầu ra:
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu vào
+file - PDF/DOCX/image nếu được cấu
+hình
+Multipart; tối đa 20 MB theo backend
+Đầu ra
+fileId/fileUrl - Định danh file
+Dùng gắn vào CV
+UC-16 Xem dashboard và thống kê
+Thuộc tính
+Đặc tả
+Tác nhân chính
+Ứng viên / Nhà tuyển dụng / Admin
+Điều kiện trước
+Đã đăng nhập.
+Luồng chính
+1. Mở dashboard.2. Frontend gọi endpoint thống kê theo vai trò.3.
+Hiển thị số liệu và các hành động gần đây nếu có.
+Luồng thay thế / lỗi
+Không đủ quyền hoặc lỗi API: hiển thị trạng thái lỗi.
+Điều kiện sau
+Người dùng xem được thống kê trong phạm vi quyền.
+Dữ liệu đầu vào và đầu ra:
+Loại
+Dữ liệu
+Quy tắc / ý nghĩa
+Đầu vào
+role - Vai trò
+Lấy từ JWT
+Đầu ra
+stats - Đối tượng thống kê
+Số CV, tin, đơn, user/company/job tùy vai
+trò
+3 Các yêu cầu phi chức năng
+3.1 Giao diện người dùng
+\nAI Recruitment Platform - SRS
+SRS v1.0 | Trang 13
+Giao diện web responsive, dùng tiếng Việt là ngôn ngữ chính và có trạng thái loading, empty, success, error
+cho thao tác gọi API.
+Người dùng phải nhận biết rõ vai trò, trạng thái duyệt, trạng thái đơn ứng tuyển và nguồn gốc điểm AI.
+Form phải đánh dấu trường bắt buộc, kiểm tra dữ liệu ở client và hiển thị lỗi gần trường nhập.
+Kết quả AI cần hiển thị điểm, ưu điểm, hạn chế, khuyến nghị và cảnh báo rằng đây là tham khảo.
+Trang chi tiết việc làm phải cung cấp hành động xem, lưu và ứng tuyển phù hợp với trạng thái đăng nhập.
+3.2 Tính bảo mật
+Mọi API nghiệp vụ phải kiểm tra JWT và phân quyền theo role; người dùng chỉ được sửa tài nguyên thuộc
+phạm vi của mình.
+Mật khẩu không được lưu dạng rõ; token và thông tin nhạy cảm không hiển thị trong log hoặc thông báo lỗi.
+File CV và dữ liệu cá nhân phải được kiểm tra loại/kích thước; endpoint xem file phải giới hạn quyền.
+Secret, API key, thông tin email và chuỗi kết nối phải được đưa ra khỏi mã nguồn/cấu hình public trước
+production.
+Kết quả AI không được dùng như quyết định tự động duy nhất; phải cho phép con người kiểm tra và cân nhắc.
+3.3 Hiệu năng và khả năng mở rộng
+Mã
+Yêu cầu đo được / mục tiêu
+Cách kiểm thử
+NFR-P01
+API CRUD thông thường p95 <= 2 giây
+trong môi trường demo với 20 người dùng
+đồng thời.
+Load test backend, loại trừ thời gian gọi
+Gemini.
+NFR-P02
+Phân tích AI hoàn tất hoặc trả lỗi có kiểm
+soát trong <= 30 giây cho CV thông
+thường.
+Đo từ lúc gửi request đến khi nhận JSON.
+NFR-P03
+Gợi ý việc làm trả tối đa 5 mã job và không
+làm lộ embedding.
+API contract test.
+NFR-P04
+Có thể thay provider AI hoặc vector DB mà
+không thay đổi contract frontend.
+Kiểm thử adapter/provider và integration
+test.
+NFR-P05
+Upload tuân thủ giới hạn 20 MB và không
+làm treo request khác.
+Upload boundary/concurrency test.
+3.4 Tính tin cậy và xử lý lỗi
+Lỗi validation trả HTTP 4xx với thông tin đủ để frontend xử lý; lỗi hệ thống trả 5xx với mã/thông báo an toàn.
+AI service phải parse JSON có kiểm soát; JSON không hợp lệ, timeout, rate limit hoặc provider lỗi không được
+làm sập backend.
+Các thao tác tạo đơn, lưu CV và cập nhật trạng thái phải tránh tạo bản ghi trùng khi người dùng bấm lặp.
+Dữ liệu nghiệp vụ phải có backup theo môi trường triển khai; quy trình phục hồi cần được xác nhận trước
+production.
+Log cần có correlation/request id ở các luồng quan trọng và không chứa nội dung CV đầy đủ nếu không cần
+thiết.
+3.5 Ràng buộc
+Frontend: Next.js/React/TypeScript; backend nghiệp vụ: Java Spring Boot; AI service: Python FastAPI.
+CSDL nghiệp vụ: PostgreSQL; vector database hiện tại: ChromaDB PersistentClient.
+\nAI Recruitment Platform - SRS
+SRS v1.0 | Trang 14
+AI phụ thuộc Google Gemini API và API key; triển khai thực tế cần quản lý quota, timeout, retry, chi phí và
+chính sách dữ liệu.
+PDF scan/image có thể cần OCR; pypdf chỉ phù hợp khi tài liệu có text layer.
+Bản SRS này không giả định khả năng scale production lớn của ChromaDB local hoặc AI provider hiện tại.
+4 Tiêu chí nghiệm thu
+Một phiên bản được xem là đạt phạm vi SRS khi các kịch bản sau được thực hiện thành công trên môi trường
+kiểm thử với dữ liệu mẫu và quyền đúng vai trò:
+Khách đăng ký, đăng nhập và được điều hướng đúng theo vai trò; token refresh hoạt động hoặc lỗi được xử lý
+rõ.
+Ứng viên tạo/cập nhật hồ sơ, tạo CV, tải file, đặt CV chính, phân tích CV và xem kết quả có cấu trúc.
+Ứng viên tìm kiếm, xem chi tiết, lưu, bỏ lưu và ứng tuyển một tin; không thể ứng tuyển trùng hoặc vào tin
+không nhận hồ sơ.
+Ứng viên nhận gợi ý tối đa 5 việc làm từ CV/onboarding và thấy thông tin job tương ứng.
+Nhà tuyển dụng cập nhật công ty, tạo/sửa/xóa tin, xem ứng viên và chuyển trạng thái đơn ứng tuyển.
+Admin xem dashboard, duyệt và quản trị user/company/job trong phạm vi được cấp.
+Các lỗi file, validation, unauthorized, AI timeout và dữ liệu không tồn tại đều có phản hồi an toàn, không làm lộ
+secret hoặc stack trace.
+Phụ lục A. Ma trận truy xuất yêu cầu - chức năng
+Yêu cầu
+Use case liên quan
+Đối tượng kiểm thử
+FR-AUTH-01 Đăng ký/đăng nhập
+UC-01, UC-02
+Khách, tất cả vai trò
+FR-CAND-01 Hồ sơ/CV
+UC-03, UC-04, UC-15
+Ứng viên
+FR-AI-01 Phân tích CV
+UC-05
+Ứng viên, AI service
+FR-AI-02 Job fit
+UC-06
+Ứng viên, nhà tuyển dụng
+FR-JOB-01 Tìm kiếm/chi tiết
+UC-07
+Khách, ứng viên
+FR-JOB-02 Lưu/ứng tuyển
+UC-08, UC-09
+Ứng viên
+FR-RECR-01 Quản lý tin
+UC-10
+Nhà tuyển dụng
+FR-RECR-02 Ứng viên/trạng thái
+UC-11
+Nhà tuyển dụng
+FR-ADMIN-01 Quản trị
+UC-13, UC-16
+Admin
+FR-AI-03 Recommendation
+UC-14
+Ứng viên, AI service
+NFR-SEC
+UC-02, UC-11, UC-13, UC-15
+Kiểm thử bảo mật/phân quyền
+NFR-PERF
+UC-05, UC-06, UC-14
+Load/integration test
+Ghi chú kiểm soát phiên bản
+Phiên bản
+Ngày
+Người lập
+Nội dung
+1.0.0
+21/07/2026
+Codex / nhóm AI-Requirement
+Phát hành bản SRS dự thảo
+theo mẫu SRS.pdf, tổng hợp
+từ mã nguồn hiện tại.

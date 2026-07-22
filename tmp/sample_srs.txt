@@ -1,0 +1,1436 @@
+Copyright © 2020 by Dinh Quang Nguyen. 
+ 
+TÀI LIỆU ĐẶC TẢ YÊU CẦU PHẦN MỀM 
+(Software Requirement Specification – SRS) 
+ 
+Phát triển hệ thống E-learning 
+phục vụ công việc giảng dạy 
+và học tập 
+ 
+Phiên bản 1.0.1 
+ 
+                                 Hướng dẫn bởi: TS. Nguyễn Nhật Quang 
+Được soạn bởi: Nguyễn Đình Quang 
+ 
+Hà Nội, tháng 8, năm 2020\n\n 
+1 
+Mục lục 
+Mục lục ............................................................................................................................... 1 
+Danh mục hình ảnh, bảng biểu ........................................................................................... 3 
+1 Giới thiệu ...................................................................................................................... 5 
+1.1 Mục đích ................................................................................................................ 5 
+1.2 Phạm vi .................................................................................................................. 5 
+1.3 Từ điển thuật ngữ................................................................................................... 5 
+1.4 Tài liệu tham khảo ................................................................................................. 6 
+1.5 Tổng quát ............................................................................................................... 6 
+2 Các yêu cầu chức năng ................................................................................................. 7 
+2.1 Các tác nhân ........................................................................................................... 7 
+2.2 Các chức năng của hệ thống .................................................................................. 7 
+2.3 Biểu đồ use case tổng quan .................................................................................... 8 
+2.4 Biểu đồ use case phân rã ........................................................................................ 9 
+2.4.1 Phân rã use case “Quản trị viên”..................................................................... 9 
+2.4.2 Phân rã use case “Giảng viên” ...................................................................... 10 
+2.5 Quy trình nghiệp vụ ............................................................................................. 11 
+2.5.1 Quy trình sử dụng phần mềm ........................................................................ 11 
+2.5.2 Quy trình quản lý giảng viên ........................................................................ 12 
+2.5.3 Quy trình quản lý khóa học ........................................................................... 13 
+2.5.4 Quy trình quản lý bài giảng .......................................................................... 14 
+2.5.5 Quy trình quản lý học viên ............................................................................ 15 
+2.5.6 Quy trình quản lý tin tức ............................................................................... 16 
+2.5.7 Quy trình quản lý câu hỏi thường gặp .......................................................... 17 
+2.5.8 Quy trình sử dụng phần mềm của học viên .................................................. 18 
+2.6 Đặc tả các usecase ............................................................................................... 19 
+2.6.1 Đăng nhập ..................................................................................................... 19 
+2.6.2 Thay đổi mật khẩu ........................................................................................ 20 \n\n 
+2 
+2.6.3 Thiết lập lại mật khẩu ................................................................................... 20 
+2.6.4 Đăng ký ......................................................................................................... 21 
+2.6.5 Cập nhật thông tin cá nhân ............................................................................ 22 
+2.6.6 Tìm kiếm giảng viên, học viên ..................................................................... 23 
+2.6.7 Tìm kiếm tin tức, câu hỏi thường gặp, khóa học, lịch sử khóa học, bài giảng 
+(UC 007) ..................................................................................................................... 24 
+2.6.8 Quản lý giảng viên ........................................................................................ 26 
+2.6.9 Quản lý khóa học .......................................................................................... 28 
+2.6.10 Quản lý học viên ........................................................................................ 30 
+2.6.11 Quản lý bài giảng ....................................................................................... 31 
+2.6.12 Quản lý tin tức ........................................................................................... 35 
+2.6.13 Quản lý câu hỏi thường gặp ....................................................................... 37 
+2.6.14 Xem lịch sử khóa học và thông tin học viên ............................................. 39 
+2.6.15 Quản lý thể loại khóa học .......................................................................... 40 
+2.6.16 Sử dụng chức năng hệ thống của học viên ................................................ 42 
+3 Các yêu cầu phi chức năng ......................................................................................... 44 
+3.1 Giao diện người dùng .......................................................................................... 44 
+3.2 Tính bảo mật ........................................................................................................ 44 
+3.3 Ràng buộc ............................................................................................................ 44 
+ 
+ \n\n 
+3 
+Danh mục hình ảnh, bảng biểu 
+Hình  2-1: Biểu đồ use case tổng quan ............................................................................... 8 
+Hình  2-2: Biểu đồ use case Quản trị viên .......................................................................... 9 
+Hình  2-3: Biểu đồ use case Giảng viên ............................................................................ 10 
+Hình  2-4: Biểu đồ hoạt động sử dụng phần mềm ............................................................ 11 
+Hình  2-5: Biểu đồ hoạt động quản lý giảng viên ............................................................. 12 
+Hình  2-6: Biểu đồ hoạt động quản lý khóa học ............................................................... 13 
+Hình  2-7: Biểu đồ hoạt động quản lý bài giảng ............................................................... 14 
+Hình  2-8: Biểu đồ hoạt động quản lý học viên ................................................................ 15 
+Hình  2-9: Biểu đồ hoạt động quản lý tin tức ................................................................... 16 
+Hình  2-10: Biểu đồ hoạt động quản lý câu hỏi thường gặp ............................................. 17 
+Hình  2-11: Biểu đồ quy trình sử dụng phần mềm của học viên ...................................... 18 
+ 
+Bảng 1-1: Từ điển thuật ngữ ............................................................................................... 5 
+Bảng 2-1: Đặc tả chức năng “Đăng nhập” ........................................................................ 19 
+Bảng 2-2: Dữ liệu chức năng “Đăng nhập” ...................................................................... 19 
+Bảng 2-3: Đặc tả chức năng “Thay đổi mật khẩu” ........................................................... 20 
+Bảng 2-4: Đặc tả chức năng “Thiết lập lại mật khẩu” ...................................................... 21 
+Bảng 2-5: Đặc tả chức năng “Đăng ký” ............................................................................ 22 
+Bảng 2-6: Dữ liệu chức năng “Đăng ký” .......................................................................... 22 
+Bảng 2-7: Đặc tả chức năng “Cập nhật thông tin cá nhân” .............................................. 23 
+Bảng 2-8: Dữ liệu chức năng “Cập nhật thông tin cá nhân”............................................. 23 
+Bảng 2-9: Đặc tả chức năng “Tìm kiếm giảng viên, học viên” ........................................ 24 
+Bảng 2-10: Dữ liệu đầu vào chức năng Tìm kiếm ............................................................ 24 
+Bảng 2-11: Dữ liệu tìm kiếm tin tức ................................................................................. 25 
+Bảng 2-12: Dữ liệu tìm kiếm faqs ..................................................................................... 25 
+Bảng 2-13: Dữ liệu tìm kiếm khóa học ............................................................................. 25 
+Bảng 2-14: Dữ liệu tìm kiếm lịch sử khóa học ................................................................. 25 \n\n 
+4 
+Bảng 2-15: Dữ liệu tìm kiếm bài giảng ............................................................................ 26 
+Bảng 2-16: Đặc tả chức năng “Quản lý giảng viên” ......................................................... 27 
+Bảng 2-17: Dữ liệu đầu vào chức năng “Quản lý giảng viên” ......................................... 28 
+Bảng 2-18: Đặc tả chức năng “Quản lý khóa học” ........................................................... 30 
+Bảng 2-19: Dữ liệu chức năng “Quản lý khóa học” ......................................................... 30 
+Bảng 2-20: Đặc tả chức năng “Quản lý học viên” ............................................................ 31 
+Bảng 2-21: Đặc tả chức năng “Quản lý bài giảng” ........................................................... 34 
+Bảng 2-22: Dữ liệu đầu vào chức năng “Quản lý bài giảng” ........................................... 34 
+Bảng 2-23: Dữ liệu bài tập của bài giảng ......................................................................... 35 
+Bảng 2-24: Dữ liệu câu hỏi cho bài tập ............................................................................ 35 
+Bảng 2-25: Dữ liệu đầu vào đáp án cho câu hỏi ............................................................... 35 
+Bảng 2-26: Đặc tả chức năng “Quản lý tin tức” ............................................................... 37 
+Bảng 2-27: Dữ liệu đầu vào khi thêm, sửa tin tức ............................................................ 37 
+Bảng 2-28: Đặc tả chức năng “Quản lý câu hỏi thường gặp” ........................................... 39 
+Bảng 2-29: Dữ liệu đầu vào khi thêm, sửa faqs ................................................................ 39 
+Bảng 2-30: Đặc tả chức năng “Xem lịch sử khóa học và thông tin học viên” ................. 40 
+Bảng 2-31: Đặc tả chức năng “Quản lý thể loại khóa học” .............................................. 41 
+Bảng 2-32: Dữ liệu đầu vào khi thêm, sửa đổi thể loại khóa học ..................................... 41 
+Bảng 2-33: Đặc tả sử dụng các chức năng hệ thống của học viên .................................... 43 
+ 
+ 
+ 
+ 
+ 
+ 
+ \n\n 
+5 
+1 Giới thiệu 
+1.1 Mục đích 
+Mục đích của tài liệu đặc tả yêu cầu phần mềm này là cung cấp một cái nhìn tổng quan, dễ 
+hiểu về các yêu cầu, thành phần của dự án. 
+Tài liệu này được cung cấp như một tài liệu tham khảo cho  sinh viên trực tiếp tham gia 
+phát triển dự án phục vụ cho việc hoàn thành đồ án tốt nghiệp. Ngoài ra trong môi trường 
+thực tế bên ngoài tài liệu này còn phục vụ cho  những nhà phát triển phần mềm, kiểm thử 
+viên, nhà quản lý dự án cũng như các bên liên quan. 
+1.2 Phạm vi 
+Tài liệu đặc tả yêu cầu phần mềm này được xây dựng nhằm phục vụ cho dự án Phát triển 
+hệ thống E-learning phục vụ công việc giảng dạy và học tập (ELCs – E-learning Courses). 
+Với việc phát triển hệ thống học trực tuyến cung cấp cho khách hàng, tổ chức cá nhân một 
+công cụ đi kèm với cách dạy và học truyền thống. Mang lại nhiều lợi ích về kinh tế với chi 
+phí thấp nhưng vẫn đảm bảo được nội dung cũng như chất lượng của việc học trực tuyến. 
+1.3 Từ điển thuật ngữ 
+ 
+Software Requirements  Specifications-
+SRS 
+Đặc tả yêu cầu phần mềm 
+Use Case(s) Biểu đồ mô tả những yêu cầu của hệ thống 
+E-learning Phương thức học tập trực tuyến sử dụng 
+kết nối mạng 
+Web server Phần mềm máy chủ cung cấp các chức 
+năng, tài nguyên cho máy khách 
+JavaScript Ngôn ngữ lập trình sử dụng trên các trình 
+duyệt web 
+Hypertext Markup Language (HTML) Ngôn ngữ đánh dấu siêu văn bản 
+GV-QTV Giảng viên, Quản trị viên 
+Bảng 1-1: Từ điển thuật ngữ \n\n 
+6 
+1.4 Tài liệu tham khảo  
+ IEEE Recommended Practice for Software Requirements Specifications," in IEEE 
+Std 830-1998, vol., no., pp.1-40, 20 Oct. 1998. 
+ IEEE Guide for Developing System Requirements Specif ications," in IEEE Std 
+1233-1996, vol., no., pp.1-30, 22 Dec. 1996. 
+ Custom Soft ware Requirements Specification Document Example (International 
+Standard) - Software Development Company. 
+ IT4490: Software Design and Construction  - Nguyen Thi Thu Trang, 
+trangntt@soict.hust.edu.vn. 
+1.5 Tổng quát 
+Tài liệu này được viết dựa theo chuẩn của Tài liệu đặc tả yêu cầu phần mềm (Software 
+Requirements Specifications - SRS) được giải thích trong "IEEE Recommended Practice 
+for Software Requirements Specifications"  và " IEEE Guide for Developing Syst em 
+Requirements Specifications".  
+Với cấu trúc được chia làm ba phần: 
+1. Phần 1: Cung cấp cái nhìn tổng quan về các thành phần của SRS. 
+2. Phần 2: Mô tả tổng quan các nhân tố, ràng buộc, đặc điểm người dùng, môi trường 
+thực thi tác động lên hệ thống  và các yêu cầu của nó. Cung cấp  thông tin chi tiết 
+các yêu cầu chức năng, cung cấp cho các nhà phát triển phần mềm thông tin để phát 
+triển phần mềm đáp ứng được các yêu cầu đó. 
+3. Phần 3: Các yêu cầu phi chức năng. \n\n 
+7 
+2 Các yêu cầu chức năng 
+2.1 Các tác nhân 
+Hệ thống gồm có các tác nhân là Khách, Học viên, Giảng viên và Quản trị viên. Khách có 
+vai trò là người dùng khi chưa đăng nhập vào hệ thống. Học viên đăng nhập vào hệ thống. 
+Giảng viên được cung cấp các chức năng giảng dạy và hướng dẫn học tập. Quản trị viê n 
+có vai trò quản trị hoạt động của hệ thống. 
+2.2 Các chức năng của hệ thống 
+1. Đăng nhập: Chức năng này nhằm mục đínch xác thực người dùng khi tương tác với 
+hệ thống nhằm cung cấp quyền cũng như phạm vi truy cập hệ thống. 
+2. Đăng ký: Để truy cập sử dụng hệ thống thì Người dùng trước  hết cần đăng ký tài 
+khoản. 
+3. Quản trị người dùng: Quản trị viên có vai trò quản trị những người dùng trong hệ 
+thống. 
+4. Các nhóm chức năng quản lý khóa học, bài giảng, bài tập: Công việc quản trị khóa 
+học của Giảng viên. 
+5. Đăng ký khóa học: Người dùng sử dụng chức năng nhằm mục đích ghi danh, truy 
+cập đến nguồn kiến thức từ những khóa học do Giảng viên tạo ra. 
+ 
+Để có thể hình dung rõ hơn về các tác nhân cũng như yêu cầu chức năng của hệ thống bằng 
+cách mô hình hóa chúng dưới các sơ đồ use cases, các sơ đồ sẽ được trình bày phía sau. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ \n\n 
+8 
+2.3 Biểu đồ use case tổng quan 
+ 
+ 
+Hình  2-1: Biểu đồ use case tổng quan 
+\n\n 
+9 
+2.4 Biểu đồ use case phân rã 
+2.4.1 Phân rã use case “Quản trị viên” 
+ 
+Hình  2-2: Biểu đồ use case Quản trị viên 
+\n\n 
+10 
+2.4.2 Phân rã use case “Giảng viên” 
+ 
+Hình  2-3: Biểu đồ use case Giảng viên 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+\n\n 
+11 
+2.5 Quy trình nghiệp vụ 
+2.5.1 Quy trình sử dụng phần mềm 
+Khách có thể đăng ký để tạo ra tài khoản cho m ình. Sau đó có thể đăng nhập để sử dụng 
+các chức năng của phần mềm. Nếu khách quên mật khẩu, khách có thể yêu cầu hệ thống 
+cho phép mình thiết lập lại mật khẩu. Lúc này, hệ thống sẽ gửi liên kết qua email đã đăng 
+ký và có thể vào liên kết đó để thực hiện việc thiết lập lại mật khẩu. 
+Sau khi đăng nhập thành công vào hệ thống, người dùng có thể sử dụng các chức năng như 
+Xem và cập nhật thông tin cá nhân của mình, Thay đổi mật khẩu , và các chức năng trong 
+phạm vi của mình mà hệ thống đã cấp phát. 
+ 
+ 
+Hình  2-4: Biểu đồ hoạt động sử dụng phần mềm 
+ 
+\n\n 
+12 
+2.5.2 Quy trình quản lý giảng viên 
+Quản trị viên có thể quản lý người dùng theo theo các bước: Quản trị viên tìm kiếm người 
+dùng, cung cấp thông tin tìm kiếm và xem thông tin người dùng đó. Quản trị viên có thể  
+thêm mới người dùng là Giảng viên. 
+ 
+Hình  2-5: Biểu đồ hoạt động quản lý giảng viên 
+\n\n 
+13 
+2.5.3 Quy trình quản lý khóa học 
+Giảng viên trước tiên cần đăng nhập hệ thống để xác thực người dùng. Sau đó, giảng viên 
+yêu cầu chức năng tạo thông tin khóa học và cung cấp thông tin cần có cho khóa học và tạo 
+mới. Các quy trình cập nhật, xóa thông tin khóa học có các bước thực hiện tương tự. 
+ 
+Hình  2-6: Biểu đồ hoạt động quản lý khóa học 
+\n\n 
+14 
+2.5.4 Quy trình quản lý bài giảng 
+Giảng viên có thể quản lý bài giảng theo các bước tương tự như quy trình quản lý khóa 
+học. 
+ 
+Hình  2-7: Biểu đồ hoạt động quản lý bài giảng 
+\n\n 
+15 
+2.5.5 Quy trình quản lý học viên 
+ 
+Hình  2-8: Biểu đồ hoạt động quản lý học viên 
+ 
+ 
+ 
+ 
+\n\n 
+16 
+2.5.6 Quy trình quản lý tin tức 
+ 
+Hình  2-9: Biểu đồ hoạt động quản lý tin tức 
+ 
+ 
+ 
+\n\n 
+17 
+2.5.7 Quy trình quản lý câu hỏi thường gặp 
+ 
+Hình  2-10: Biểu đồ hoạt động quản lý câu hỏi thường gặp 
+ 
+ 
+ 
+\n\n 
+18 
+2.5.8 Quy trình sử dụng phần mềm của học viên 
+ 
+Hình  2-11: Biểu đồ quy trình sử dụng phần mềm của học viên 
+ 
+\n\n 
+19 
+2.6 Đặc tả các usecase 
+2.6.1 Đăng nhập 
+Mã Use case UC001 Tên Use case Đăng nhập 
+Tác nhân Khách 
+Mô tả Tác nhân đăng nhập vào hệ thống để sử dụng các chức năng hệ thống 
+Sự kiện kích hoạt Click vào nút đăng nhập trên giao diện website 
+Tiền điều kiện Tác nhân đã có tài khoản trên hệ thống 
+Luồng sự kiện chính 
+(Thành công) 
+STT Thực hiện bởi Hành động 
+1. Khách Chọn chức năng Đăng nhập 
+2. Hệ thống Hiển thị giao diện đăng nhập 
+3. Khách Nhập email và mật khẩu (mô tả phía dưới *) 
+4. Khách Yêu cầu đăng nhập 
+5. Hệ thống Kiểm tra xem khách đã nhập các trường bắt buộc 
+nhập hay chưa 
+6. Hệ thống Kiểm tra email và mật khẩu có hợp lệ do khách nhập 
+trong hệ thống hay không 
+7. Hệ thống Hiển thị chức năng tương ứng đối với Người dùng  
+ 
+Luồng sự kiện thay 
+thế 
+STT Thực hiện bởi Hành động 
+6a. Hệ thống Thông báo lỗi: Cần nhập các trường bắt buộc nhập  
+nếu khách nhập thiếu 
+7a. Hệ thống Thông báo lỗi: Email và/hoặc mật khẩu chưa đúng  
+nếu không tìm thấy email và mật khẩu trong hệ thống 
+ 
+Hậu điều kiện Tác nhân đăng nhập được vào hệ thống 
+Bảng 2-1: Đặc tả chức năng “Đăng nhập” 
+* Dữ liệu đầu vào gồm các trường dữ liệu sau: 
+STT Trường    
+dữ liệu Mô tả Bắt buộc? Điều kiện hợp lệ Ví dụ 
+1. Email Input email field Có Đúng định dạng email qndev@gmail.com 
+2. Mật khẩu Pasword field Có Tối thiểu 6 kí tự Password 
+Bảng 2-2: Dữ liệu chức năng “Đăng nhập” \n\n 
+20 
+2.6.2 Thay đổi mật khẩu 
+Mã Use case UC002 Tên Use case Thay đổi mật khẩu 
+Tác nhân Học viên, Quản trị viên, Giảng viên 
+Mô tả Tác nhân muốn thay đổi mật khẩu để bảo vệ tài khoản  
+Sự kiện kích hoạt Click vào dropbox Profile item, đối với QTV và GV, dropbox liên kết “Change 
+Passwork” đối với Học viên trên phần đầu trang   
+Tiền điều kiện Tác nhân đăng nhập thành công vào hệ thống 
+Luồng sự kiện chính 
+(Thành công) 
+STT Thực hiện bởi Hành động 
+1. Người dùng Chọn chức năng Thay đổi mật khẩu 
+2. Hệ thống Hiển thị giao diện chức năng thay đổi mật khẩu 
+3. Người dùng Điền thông tin mật khẩ u cũ để xác minh, mật khẩu 
+mới để thay đổi và xác minh lại mật khẩu mới trùng 
+khớp với mật khẩu cần thay đổi 
+4. Người dùng Yêu cầu thay đổi mật khẩu 
+5. Hệ thống Kiểm tra mật khẩu cũ, mật khẩu mới và xác nhận 
+mật khẩu mới có trùng khớp  và tiến hành thay đ ổi 
+mật khẩu 
+ 
+Luồng sự kiện thay thế STT Thực hiện bởi Hành động 
+5a. Hệ thống Thông báo lỗi nếu thông tin mật khẩu đối tượng  
+cung cấp không đúng hoặc không trùng khớp 
+ 
+Hậu điều kiện Cập nhật mật khẩu mới vào hệ thống 
+Bảng 2-3: Đặc tả chức năng “Thay đổi mật khẩu” 
+*Ghi chú: Đối với tác nhân là Quản trị viên và Giảng viên thì use case thay đổi mật khẩu 
+sẽ tích hợp vào use case cập nhật thông tin cá nhân với hai trường Input field là Password 
+và Password Confirm. Đối với tác nhân là Học viên thì cần cung cấp thông tin  mật khẩu 
+cũ để xác minh. 
+2.6.3 Thiết lập lại mật khẩu 
+Mã Use case UC003 Tên Use case Thiết lập lại mật khẩu 
+Tác nhân Học viên, Quản trị viên, Giảng viên (Người sử dụng hệ thống – Người dùng) 
+Mô tả Tác nhân muốn thiết lập lại mật khẩu khi quên mật khẩu 
+Sự kiện kích hoạt Click vào liên kết “Lost your password?” đối với QTV, GV và “Forgot password?” 
+đối với Học viên tại trang đăng nhập 
+Tiền điều kiện Tồn tại tài khoản cần thiết lập lại mật khẩu trên hệ thống \n\n 
+21 
+Luồng sự kiện chính 
+(Thành công) 
+STT Thực hiện bởi Hành động 
+1. Người dùng Chọn chức năng Thiết lập lại mật khẩu (sự kiện kích 
+hoạt bên trên) 
+2. Hệ thống Hiển thị giao diện chức năng thiết lập lại mật khẩu 
+3. Người dùng Nhập email tương ứng với tài khoản cần thiết lập lại 
+mật khẩu 
+4. Người dùng Yêu cầu thiết lập lại mật khẩu (submit nút để gửi yêu 
+cầu) 
+5. Hệ thống Kiểm tra định dạng email có đúng không và có tồn 
+tại tài khoản ứng với email mà Người dùng nhập 
+không, nếu thỏa mãn hệ thống sẽ gửi l iên kết thiết 
+lập lại mật khẩu đến email cho Người dùng 
+ 
+Luồng sự kiện thay thế STT Thực hiện bởi Hành động 
+5a. Hệ thống Thông báo lỗi nếu thông tin mật khẩu đối tượng  
+cung cấp không đúng hoặc không trùng khớp 
+5b. Hệ thống Thông báo thành công nếu gửi được liên kết đến cho 
+Người dùng 
+ 
+Hậu điều kiện Hệ thống gửi được liên kết thiết lập lại mật khẩu đến email người yêu cầu thiết lập lại 
+mật khẩu (liên kết thiết lập lại mật khẩu chỉ tồn tại trong vòng 60 phút) 
+Bảng 2-4: Đặc tả chức năng “Thiết lập lại mật khẩu” 
+2.6.4 Đăng ký 
+Mã Use case UC004 Tên Use case Đăng ký 
+Tác nhân Khách 
+Mô tả Tác nhân đăng ký tài khoản để sử dụng chức năng của hệ thống 
+Sự kiện kích hoạt Click vào nút đăng ký trên thanh tiêu đề 
+Tiền điều kiện Không 
+Luồng sự kiện chính 
+(Thành công) 
+STT Thực hiện bởi Hành động 
+1. Khách Chọn chức năng Đăng ký 
+2. Hệ thống Hiển thị giao diện đăng ký 
+3. Khách Nhập các thông tin tài khoản (mô tả phía dưới *) 
+4. Khách Yêu cầu đăng ký 
+5. Hệ thống Kiểm tra xem khách đã nhập các trường bắt buộc 
+nhập hay chưa \n\n 
+22 
+6. Hệ thống Kiểm tra địa chỉ email của khách có hợp lệ không 
+7. Hệ thống Kiểm tra mật khẩu nhập lại và mật khẩu có trùng 
+nhau hay không 
+8. Hệ thống Kiểm tra mật khẩu có đủ mức độ an toàn hay không 
+9. Hệ thống Lưu thông tin tài khoản và thông báo đăng ký thành 
+công  
+ 
+Luồng sự kiện thay thế STT Thực hiện bởi Hành động 
+6a. Hệ thống Thông báo lỗi: Cần nhập các trường bắt buộc nhập  
+nếu khách nhập thiếu 
+7a. Hệ thống Thông báo lỗi: Địa chỉ email không hợp l ệ nếu địa 
+chỉ email không hợp lệ 
+8a. Hệ thống Thông báo lỗi: Mật khẩu xác nhận không trùng với 
+Mật khẩu nếu hai mật khẩu không trùng nhau 
+9a. Hệ thống Thông báo lỗi: Mật khẩu cần đảm bảo độ an toàn   
+nếu mật khẩu không đảm bảo độ an toàn được quy 
+định bởi hệ thống (có ít nhất 6 ký tứ) 
+ 
+Hậu điều kiện Tài khoản được tạo và lưu trữ vào hệ thống 
+Bảng 2-5: Đặc tả chức năng “Đăng ký” 
+ 
+ 
+* Dữ liệu đầu vào của chức năng Đăng ký gồm các trường dữ liệu sau: 
+STT Trường    
+dữ liệu Mô tả Bắt buộc? Điều kiện hợp lệ Ví dụ 
+1. Email Input email field Có Địa chỉ email hợp lệ qndev@gmail.com 
+2. Mật khẩu Pasword field Có Ít nhất 6 ký tự 123456 
+3. Xác nhận 
+mật khẩu 
+Pasword field Có Trùng với Mật khẩu 123456 
+Bảng 2-6: Dữ liệu chức năng “Đăng ký” 
+2.6.5 Cập nhật thông tin cá nhân 
+Mã Use case UC005 Tên Use case Cập nhật thông tin cá nhân 
+Tác nhân Học viên, Giảng viên, Quản trị viên (Người dùng) 
+Mô tả Tác nhân cập nhật thông tin cá nhân 
+Sự kiện kích hoạt Click vào dropbox Profile item đối với GV và QTV, “My Profile” với Học viên trên phần \n\n 
+23 
+đầu trang (header) 
+Tiền điều kiện Tác nhân đăng nhập thành công 
+Luồng sự kiện 
+chính 
+(Thành công) 
+STT Thực hiện bởi Hành động 
+1. Người dùng Chọn chức năng Cập nhật thông tin cá nhân 
+2. Hệ thống Hiển thị giao diện cập nhật thông tin cá nhân 
+3. Người dùng Điền thông tin cần cập nhật (mô tả phía dưới *) 
+4. Người dùng Yêu cầu cập nhật 
+5. Hệ thống Kiểm tra thông tin nhập liệu của người dùng 
+6. Hệ thống Cập nhật và thông báo thành công 
+ 
+Luồng sự kiện 
+thay thế 
+STT Thực hiện bởi Hành động 
+5a. Hệ thống Thông báo lỗi nếu k iểm tra thông tin nhập liệu không đúng 
+định dạng 
+6a. Hệ thống Thông báo lỗi nếu hệ thống không thể cập nhật thông tin 
+ 
+Hậu điều kiện Cập nhật thành công, thông tin mới sẽ được lưu trữ vào hệ thống 
+Bảng 2-7: Đặc tả chức năng “Cập nhật thông tin cá nhân” 
+* Dữ liệu đầu vào chức năng Cập nhật thông tin cá nhân: 
+STT Trường    
+dữ liệu Mô tả Bắt buộc? Điều kiện hợp lệ Ví dụ 
+1. Họ tên Input text field Không Không quá 255 kí 
+tự 
+Nguyễn Đình Quang 
+2. Email Input email field Có Đúng định dạng 
+email 
+qndev@gmail.com 
+3. Ngày sinh DatePicker Không Ngày tháng hợp lệ 04/15/1996 
+4. Điện thoại Input text field Không Kí tự số 0989123456 
+5. Giới tính Male, Female, Other Không Chọn Male, 
+Female, Other 
+Male 
+6. Ảnh Ảnh đại diện Không Định dạng png, 
+gif, jpeg, jpg 
+ 
+Bảng 2-8: Dữ liệu chức năng “Cập nhật thông tin cá nhân” 
+2.6.6 Tìm kiếm giảng viên, học viên 
+Mã Use case UC006 Tên Use case Tìm kiếm Giảng viên, Học 
+viên 
+Tác nhân Quản trị viên, (QTV) \n\n 
+24 
+Mô tả Tìm kiếm tài khoản có trên hệ thống 
+Sự kiện kích hoạt Click search box hoặc dropbox với các thông tin tìm kiếm 
+Tiền điều kiện Đăng nhập thành công vào hệ thống 
+Luồng sự kiện 
+chính 
+(Thành công) 
+STT Thực hiện bởi Hành động 
+1. QTV Chọn chức năng Tìm kiếm 
+2. Hệ thống Hiển thị giao diện chức năng tìm kiếm 
+3. QTV Nhập tên, email, số điện thoại hoặc giới tính người dùng muốn 
+tìm kiếm (mô tả phía dưới *) 
+4. QTV Yêu cầu tìm kiếm 
+5. Hệ thống Tìm và lấy về thông tin những người dùng thoả mãn các tiêu 
+chí tìm kiếm 
+6. Hệ thống Hiển thị danh sách những người dùng thoả mãn điều kiện tìm 
+kiếm nếu có ít nhất một người dùng được tìm thấy 
+ 
+Luồng sự kiện 
+thay thế 
+STT Thực hiện bởi Hành động 
+6a. Hệ thống Thông báo: Không tìm thấy thông tin người dùng nào thoả 
+mãn tiêu chí tìm kiếm nếu trả về danh sách rỗng 
+ 
+Hậu điều kiện Hiển thị những tài khoản tương ứng với thông tin cần tìm kiếm 
+Bảng 2-9: Đặc tả chức năng “Tìm kiếm giảng viên, học viên” 
+* Dữ liệu đầu vào khi tìm kiếm: 
+STT Trường    
+dữ liệu Mô tả Bắt buộc? Điều kiện hợp lệ Ví dụ 
+1. Tên Input text field Không Chuỗi kí tự Nguyễn Văn A 
+2. Email Input text field Không Định dạng email testmail@gmail.com 
+3. Điện thoại Input text field Không Kí tự số 0989123456 
+4. Giới tính Select box Không Male/Female/Not
+hing 
+Male 
+Bảng 2-10: Dữ liệu đầu vào chức năng Tìm kiếm 
+2.6.7 Tìm kiếm tin tức, câu hỏi thường gặp, khóa học, lịch sử khóa học, bài giảng 
+(UC 007) 
+Tương tự như đặc tả use case “Tìm kiếm giảng viên, học viên”  ta có luồng sự kiện tìm  
+kiếm giữa tác nhân Quản trị viên, Giảng viên với hệ thống với dữ liệu tìm kiếm ở các use 
+case này tương ứng dưới bảng sau: \n\n 
+25 
+* Dữ liệu đầu vào khi tìm kiếm tin tức: 
+STT Trường    
+dữ liệu Mô tả Bắt buộc? Điều kiện hợp lệ Ví dụ 
+1. Tiêu đề Input text field Không Chuỗi kí tự Đại học Bách Khoa Hà Nội 
+Bảng 2-11: Dữ liệu tìm kiếm tin tức 
+** Dữ liệu đầu vào khi tìm kiếm câu hỏi thường gặp (faqs): 
+STT Trường    
+dữ liệu Mô tả Bắt buộc? Điều kiện hợp lệ Ví dụ 
+1. Nội dung câu 
+hỏi 
+Input text field Không Chuỗi kí tự Các yêu cầu kỹ thuật để xem 
+tài liệu trên hệ thống là gì ? 
+Bảng 2-12: Dữ liệu tìm kiếm faqs 
+*** Dữ liệu đầu vào khi tìm kiếm khóa học: 
+STT Trường    
+dữ liệu Mô tả Bắt buộc? Điều kiện hợp lệ Ví dụ 
+1. Mã khóa học Input text field Không Chuỗi kí tự CO123456 
+2. Tên khóa học Input text field Không Chuỗi kí tự Math 
+3. Giá Input text field Không Kí tự số 100 
+4. Thời gian bắt 
+đầu 
+Lựa chọn thời gian 
+(Datetime Picker) 
+Không Ngày tháng hợp lệ 2020/07/28 
+5. Thời gian kết 
+thúc 
+Lựa chọn thời gian 
+(Datetime Picker) 
+Không Ngày tháng hợp lệ 2020/08/28 
+6. Trạng thái 
+khóa học 
+Select dropbox Không Private/Public/Null Chọn trạng thái Private tại 
+dropbox 
+Bảng 2-13: Dữ liệu tìm kiếm khóa học 
+**** Dữ liệu đầu vào khi tìm kiếm lịch sử khóa học: 
+STT Trường    
+dữ liệu Mô tả Bắt buộc? Điều kiện hợp lệ Ví dụ 
+1. Tên khóa học Input text field Không Chuỗi kí tự Math 
+2. Mã khóa học Input text field Không Chuỗi kí tự CO258369 
+Bảng 2-14: Dữ liệu tìm kiếm lịch sử khóa học 
+ 
+ 
+ \n\n 
+26 
+***** Dữ liệu đầu vào khi tìm kiếm bài giảng: 
+STT Trường    dữ 
+liệu Mô tả Bắt buộc? Điều kiện hợp lệ Ví dụ 
+1. Tên bài giảng Input text field Không Chuỗi kí tự Lecture 1 
+Bảng 2-15: Dữ liệu tìm kiếm bài giảng 
+2.6.8 Quản lý giảng viên 
+Mã Use case UC008 Tên Use case Quản lý giảng viên 
+Tác nhân Quản trị viên 
+Mô tả Thực hiện các tác vụ như thêm, sửa, xóa, tìm kiếm tài khoản giảng viên 
+Sự kiện kích hoạt Click nút “Create Teacher”, “Delete”, “Teachers”, “Teacher Detail, “Edit Teacher” tương 
+ứng với các sự kiện thêm mới, xóa, xem danh sách, xem chi tiết, thay đổi thông tin giảng 
+viên. 
+Tiền điều kiện Đăng nhập thành công 
+ 
+Tìm kiếm (S - Search): UC006 
+ 
+Xem (R - Read): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. Quản trị viên Yêu cầu Xem danh sách giảng viên 
+2. Hệ thống Hiển thị danh sách giảng viên 
+3. Quản trị viên Yêu cầu xem chi tiết thông tin giảng viên 
+4. Hệ thống Hiển thị chi tiết thông tin giảng viên 
+Luồng sự kiện 
+thay thế 
+2a. Hệ thống Thông báo nếu không có ít nhất một giảng viên nào 
+ 
+Sửa (U - Update): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. Quản trị viên Chọn xem chi tiết giảng viên và yêu cầu sửa 
+2. Hệ thống Lấy thông tin chi tiết giảng viên và hiển thị thông tin lên giao 
+diện của chức năng sửa 
+3. Quản trị viên Chỉnh sửa các thông tin giảng viên (mô tả phía dưới **) và 
+yêu cầu sửa 
+4. Hệ thống Kiểm tra các trường nhập liệu 
+5. Hệ thống Cập nhật các thông tin cần chỉnh sửa và thông báo chỉnh sửa 
+thành công. 
+4a. Hệ thống Thông báo lỗi  nếu các trường nhập liệu không đúng định           \n\n 
+27 
+Luồng sự kiện 
+thay thế 
+dạng 
+5a. Hệ thống Thông báo lỗi nếu cập nhật không thành công 
+ 
+Xoá (D - Delete): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1.   Quản trị viên Chọn giảng viên cần xóa yêu cầu xoá 
+2. Hệ thống Hiển thị thông báo yêu cầu quản trị viên xác nhận việc xoá 
+3. Người dùng Xác nhận xoá giảng viên 
+4. Hệ thống Xoá và thông báo xoá thành công 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi nếu xóa không thành công 
+ 
+Thêm (C - Create): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. Quản trị viên Yêu cầu chức năng thêm mới giảng viên 
+2. Hệ thống Hiển thị chức năng thêm mới giảng viên 
+3. Quản trị viên Nhập các thông tin giảng viên (mô tả phía dưới **) và yêu 
+cầu thêm mới 
+4. Hệ thống Kiểm tra các trường nhập liệu 
+5. Hệ thống Thêm mới thông tin giảng viên 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi nếu dữ liệu nhập vào không đúng định dạng 
+5a. Hệ thống Thông báo lỗi nếu thêm mới không thành công 
+ 
+Hậu điều kiện Hiển thị danh sách tương ứng với thông tin cần tìm kiếm; Cập nhật thành công, thông tin 
+mới sẽ được lưu trữ vào hệ thống; Xóa thành công giảng viên; Giảng viên khi tạo mới được 
+lưu trữ trong cơ sở dữ liệ u của hệ thống kèm theo trạng thái của giảng viên (Locked hay 
+Unlocked) tương ứng với chức năng Mở khóa hay Khóa giảng viên 
+Bảng 2-16: Đặc tả chức năng “Quản lý giảng viên” 
+** Dữ liệu đầu vào khi thêm/sửa: 
+STT Trường dữ liệu Mô tả Bắt 
+buộc? 
+Điều kiện hợp 
+lệ Ví dụ 
+1. Tên  Text field Có Tối đa 255 kí tự  
+2. Email Email giảng viên: input 
+email field 
+Có Định dạng email teacher@gmail.com 
+3. Kiểu Người dùng Giảng viên Có Số nguyên 1: Admin 
+2: Giảng viên \n\n 
+28 
+4. Ngày sinh DatePicker Không Định dạng ngày 04/15/1980 
+5. Điện thoại  Không Kí tự số 0989123456 
+6. Giới tính Lựa chọn Male, Female 
+hoặc Other 
+Không  Female 
+7. Ảnh đại diện  Không Định dạng ảnh: 
+png, jpeg, jpg, 
+gif 
+ 
+8. Mật khẩu  Có Độ dài tối thiểu 6 
+kí tự  
+123456 
+9. Trạng thái Tài khoản bị khóa hay 
+không 
+Có Đã lựa chọn 
+trạng thái 
+Unlocked (không bị khóa) 
+Bảng 2-17: Dữ liệu đầu vào chức năng “Quản lý giảng viên” 
+2.6.9 Quản lý khóa học 
+Mã Use case UC009 Tên Use case Quản lý khóa học 
+Tác nhân Giảng viên (GV) 
+Mô tả Thực hiện các tác vụ như thêm, sửa, xóa, tìm kiếm khóa học 
+Sự kiện kích hoạt Click nút “Create Course”, “Delete”, “Show Course”, “Courses”, “Edit Course” 
+Tiền điều kiện Đăng nhập thành công 
+ 
+Tìm kiếm (S - Search): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. GV Chọn chức năng tìm kiếm khóa học 
+2. Hệ thống Hiển thị giao diện chức năng tìm kiếm 
+3. GV Nhập tên, trạng thái khóa học, mã khóa học, thời gian khóa 
+học muốn tìm kiếm 
+4. GV Yêu cầu tìm kiếm 
+5. Hệ thống Tìm và lấy về thông tin những người dùng thoả mãn các tiêu 
+chí tìm kiếm 
+Luồng sự kiện 
+thay thế 
+5a. Hệ thống Thông báo: Không tìm thấy thông tin người dùng nào thoả     
+mãn tiêu chí tìm kiếm nếu trả về danh sách rỗng 
+ 
+ 
+Xem (R - Read): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. GV Yêu cầu Xem danh sách khóa học \n\n 
+29 
+2. Hệ thống Hiển thị danh sách khóa học của giảng viên 
+3. GV Yêu cầu xem chi tiết một khóa học 
+4. Hệ thống Hiển thị chi tiết khóa học 
+Luồng sự kiện 
+thay thế 
+2a. Hệ thống Thông báo nếu không có ít nhất một khóa học nào 
+ 
+Sửa (U - Update): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. GV Chọn một chức năng và yêu cầu sửa 
+2. Hệ thống Lấy thông tin chi tiết khóa học và hiển thị thông tin hiện tại 
+lên giao diện của chức năng sửa 
+3. GV Chỉnh sửa các thông tin khóa học (mô tả phía dưới **) và 
+yêu cầu sửa 
+4. Hệ thống Kiểm tra các trường nhập liệu 
+5. Hệ thống Cập nhật các thông tin cần chỉnh sửa và thông báo chỉnh sửa 
+thành công. 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi  nếu các trường nhập liệu không đúng định           
+dạng 
+5a. Hệ thống Thông báo lỗi nếu cập nhật không thành công 
+ 
+Xoá (D - Delete): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. GV Chọn khóa học cần xóa yêu cầu xoá 
+2. Hệ thống Hiển thị thông báo yêu cầu người dùng xác nhận việc xoá 
+3. Người dùng Xác nhận xoá khóa học 
+4. Hệ thống Xoá và thông báo xoá thành công 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi nếu xóa không thành công 
+ 
+Thêm (C - Create): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. GV  Yêu cầu chức năng thêm mới khóa học 
+2. Hệ thống Hiển thị chức năng thêm mới khóa học 
+3. GV Nhập các thông tin khóa học (mô tả phía dưới **) và yêu cầu 
+thêm mới \n\n 
+30 
+4. Hệ thống Kiểm tra các trường nhập liệu 
+5. Hệ thống Thêm mới thông tin khóa học 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi nếu dữ liệu nhập vào không đúng định dạng 
+5a. Hệ thống Thông báo lỗi nếu thêm mới không thành công 
+ 
+Hậu điều kiện Hiển thị những khóa học tương ứng với thông tin cần tìm kiếm; Cập nhật thành công, thông 
+tin mới sẽ được lưu trữ vào hệ thống; Xóa thành công khóa học khi không cần thiết; Khóa 
+học khi tạo mới được lưu trữ trong cơ sở dữ liệu của hệ thống  kèm theo trạng thái của khóa 
+học (Public hay Private) tương ứng với chức năng Mở khóa hay Khóa khóa học 
+Bảng 2-18: Đặc tả chức năng “Quản lý khóa học” 
+** Dữ liệu đầu vào khi thêm/sửa: 
+STT Trường dữ liệu Mô tả Bắt 
+buộc? 
+Điều kiện 
+hợp lệ Ví dụ 
+1. Tên khóa học Input text field Có  Đại số tuyến tính 
+2. Miêu tả Text field Có   
+3. Thời gian bắt dầu DatePicker Có Đúng ngày 15/04/2020 
+4. Thời gian kết thúc DatePicker Có Đúng ngày 
+sau thời gian 
+bắt dầu 
+30/04/2020 
+5. Trạng thái Radio button Có  Public hoặc Private 
+6. Ảnh Ảnh minh họa Không Định dạng 
+ảnh: png, gif, 
+jpg, jpeg 
+ 
+7. Tài liệu tham khảo Thông tin hoặc các đường dẫn 
+đến tài liệu tham khảo 
+Không   
+Bảng 2-19: Dữ liệu chức năng “Quản lý khóa học” 
+2.6.10 Quản lý học viên 
+Mã Use case UC010 Tên Use case Quản lý học viên 
+Tác nhân Quản trị viên (QTV ) 
+Mô tả Thực hiện các tác vụ như thêm, sửa, xóa, tìm kiếm tài khoản giảng viên 
+Sự kiện kích hoạt Click nút “Delete”, “ Users”, “User Detail tương ứng với các sự kiện xóa, xem danh sách, 
+xem chi tiết học viên. 
+Tiền điều kiện Đăng nhập thành công 
+ 
+Tìm kiếm (S - Search): UC006 
+ 
+Xem (R - Read): \n\n 
+31 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. QTV Yêu cầu Xem danh sách học viên 
+2. Hệ thống Hiển thị danh sách họcviên 
+3. QTV Yêu cầu xem chi tiết thông tin học viên 
+4. Hệ thống Hiển thị chi tiết thông tin học viên 
+Luồng sự kiện 
+thay thế 
+2a. Hệ thống Thông báo nếu không có ít nhất một học viên nào 
+ 
+Xoá (D - Delete): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1.   QTV Chọn học viên cần xóa yêu cầu xoá 
+2. Hệ thống Hiển thị thông báo yêu cầu quản trị viên, giảng viên xác nhận 
+việc xoá 
+3. QTV Xác nhận xoá học viên 
+4. Hệ thống Xoá và thông báo xoá thành công 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi nếu xóa không thành công 
+ 
+Hậu điều kiện Hiển thị danh sách tương ứng với thông tin cần tìm kiếm; Xóa thành công học viên khỏi hệ 
+thống; Mở khóa cho học viên sử dụng chức năng hệ thống hay khi Khóa học viên, sẽ không 
+thể sử dụng được chức năng hệ thống. 
+Bảng 2-20: Đặc tả chức năng “Quản lý học viên” 
+2.6.11 Quản lý bài giảng 
+Mã Use case UC011 Tên Use case Quản lý bài giảng 
+Tác nhân Giảng viên (GV) 
+Mô tả Thực hiện các tác vụ như thêm, sửa, xóa, tìm kiếm bài giảng; thêm, sửa, xóa bài tập cho bài 
+giảng. 
+Sự kiện kích hoạt Click nút “Create Lecture”, “Delete”, “Show Lecture”, “Lectures”, “Edit Lecture”, “Create 
+Exercises”, “Delete Exercise”, “Edit Exercise” 
+Tiền điều kiện Đăng nhập thành công 
+ 
+Tìm kiếm (S - Search): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. GV Chọn chức năng tìm kiếm bài giảng 
+2. Hệ thống Hiển thị giao diện chức năng tìm kiếm 
+3. GV Nhập tên bài giảng muốn tìm kiếm \n\n 
+32 
+4. GV Yêu cầu tìm kiếm 
+5. Hệ thống Tìm và lấy về thông tin bài giảng 
+Luồng sự kiện 
+thay thế 
+5a. Hệ thống Thông báo: Không tìm thấy bài giảng nào trùng khớp với tên 
+cần tìm kiếm nếu trả về danh sách rỗng 
+ 
+ 
+Xem (R - Read): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. GV Yêu cầu Xem danh sách bài giảng 
+2. Hệ thống Hiển thị danh sách bài giảng 
+3. GV Yêu cầu xem chi tiết một bài giảng 
+4. Hệ thống Hiển thị chi tiết bài giảng với danh sách bài tập của bài   
+giảng đó 
+5.1. GV Yêu cầu xóa bài tập của bài giảng đó 
+5.2. Hệ thống Hiển thị thông báo yêu cầu xác nhận việc xoá 
+5.3. GV Xác nhận xoá 
+5.4. Hệ thống Xoá và thông báo xoá thành công 
+6.1. GV Yêu cầu xem chi tiết bài tập 
+6.2. Hệ thống Hiển thị chi tiết bài tập của bài giảng đó 
+6.3. GV Yêu cầu cập nhật thông tin bài tập 
+6.4. Hệ thống Hiển thị giao diện cập nhật bài tập 
+6.5. GV Chỉnh sửa các thông tin cần cập nhật cho bài tập 
+6.6. Hệ thống Kiểm tra thông tin mới cần chỉnh sửa  và cập nhật lại cơ sở 
+dữ liệu của hệ thống 
+Luồng sự kiện 
+thay thế 
+2a. Hệ thống Thông báo nếu không có ít nhất một bài giảng nào 
+4a. Hệ thống Thông báo nếu không có ít nhất bài tập nào của bài giảng 
+5.4a. Hệ thống Thông báo lỗi nếu xóa không thành công 
+6.6a. Hệ thống Thông báo lỗi  nếu thông tin mới cần cập nhật không đings 
+định dạng hoặc thông báo lỗi nếu cập nhật không thành công 
+vào hệ thống 
+ 
+Thêm bài tập cho bài giảng (CE – Create Exercises): 
+Luồng sự kiện STT Thực hiện bởi Hành động \n\n 
+33 
+chính 
+1. GV Yêu cầu Xem chi tiết bài giảng 
+2. Hệ thống Hiển thị chi tiết bài giảng 
+3. GV Yêu cầu thêm mới bài tập cho bài giảng đó 
+4. Hệ thống Hiển thị giao diện chức năng thêm mới bài tập 
+5. GV Nhập thông tin bài tập vào form và thực hiện thêm mới (mô 
+tả phía dưới **) 
+6. Hệ thống Kiểm tra định dạng thông tin GV nhập liệu trước khi lưu trữ 
+vào hệ thống 
+7. Hệ thống Thêm mới bài tập cho bài giảng  vào cơ sở dữ liệu c ủa hệ 
+thống 
+Luồng sự kiện 
+thay thế 
+6a. Hệ thống Thông báo nếu dữ liệu nhập liệu không đúng định dạng  
+7a. Hệ thống Thông báo lỗi nếu việc lưu trữ không thành công 
+ 
+Sửa (U - Update): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. GV Chọn xem chi tiết bài giảng và yêu cầu sửa 
+2. Hệ thống Lấy thông tin chi tiết bài giảng và hiển thị thông tin hiện tại 
+lên giao diện của chức năng sửa 
+3. GV Chỉnh sửa các thông tin bài giảng (mô tả phía dưới *) và yêu 
+cầu sửa 
+4. Hệ thống Kiểm tra các trường nhập liệu 
+5. Hệ thống Cập nhật các thông tin cần chỉnh sửa và thông báo chỉnh sửa 
+thành công. 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi  nếu các trường nhập liệu không đúng định           
+dạng 
+5a. Hệ thống Thông báo lỗi nếu cập nhật không thành công 
+ 
+Xoá (D - Delete): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. GV Chọn bài giảng cần xóa yêu cầu xoá 
+2. Hệ thống Hiển thị thông báo yêu cầu xác nhận việc xoá 
+3. GV Xác nhận xoá khóa học 
+4. Hệ thống Xoá và thông báo xoá thành công \n\n 
+34 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi nếu xóa không thành công 
+ 
+Thêm (C - Create): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. GV Yêu cầu chức năng thêm mới bài giảng 
+2. Hệ thống Hiển thị chức năng thêm mới bài giảng 
+3. GV Nhập các thông tin bài giảng (mô tả phía dưới *) và yêu cầu 
+thêm mới 
+4. Hệ thống Kiểm tra các trường nhập liệu 
+5. Hệ thống Thêm mới thông tin bài giảng 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi nếu dữ liệu nhập vào không đúng định dạng 
+5a. Hệ thống Thông báo lỗi nếu thêm mới không thành công 
+ 
+Hậu điều kiện Hiển thị danh sách bài giảng  tương ứng với thông tin cần tìm kiếm; Cập nhật thành công, 
+thông tin mới sẽ được lưu trữ vào hệ thống; Xóa thành công khỏi cơ sở dữ liệu  khi không 
+cần thiết; 
+Bảng 2-21: Đặc tả chức năng “Quản lý bài giảng” 
+*Dữ liệu đầu vào khi thêm/sửa: 
+STT Trường dữ liệu Mô tả Bắt 
+buộc? 
+Điều kiện 
+hợp lệ Ví dụ 
+1. Id bài giảng Định danh để phân biệt các bài 
+giảng 
+Có Số nguyên, 
+duy nhất 
+1 
+2. Tên bài giảng Input text field Có Chuỗi kí tự Chapter1: Hệ tuyến tính 
+3. Miêu tả Text field Không Chuỗi kí tự  
+4. Đường dẫn đến tài 
+liệu 
+Text field Có URL https://storageserver/lect
+ure.mp4 
+5. Người tạo ID Giảng viên, Quản trị viên Có Số nguyên 20 
+Bảng 2-22: Dữ liệu đầu vào chức năng “Quản lý bài giảng” 
+**Dữ liệu đầu vào khi thêm/sửa: 
+STT Trường dữ liệu Mô tả Bắt 
+buộc? 
+Điều kiện 
+hợp lệ Ví dụ 
+1. Id của bài tập Định danh để phân biệt các bài 
+tập 
+Có Số nguyên, 
+duy nhất 
+2 
+2. Id bài giảng Xác định bài tập thuộc bài giảng 
+nào 
+Có Số nguyên 1 \n\n 
+35 
+3. Tên bài tập Input text field Có Chuỗi kí tự Bài tập 1: Hệ tuyến tính 
+4. Miêu tả Text field Có Chuỗi kí tự  
+5. Người tạo ID Giảng viên, Quản trị viên Có Số nguyên 20 
+Bảng 2-23: Dữ liệu bài tập của bài giảng 
+***Dữ liệu câu hỏi: 
+STT Trường dữ liệu Mô tả Bắt 
+buộc? 
+Điều kiện 
+hợp lệ Ví dụ 
+1. Id câu hỏi Định danh để phân biệt các câu 
+hỏi 
+Có Số nguyên, 
+duy nhất 
+3 
+2. Id của bài tập Xác định câu hỏi thuộc bài tập 
+nào 
+Có Số nguyên 2 
+3. Nội dung câu hỏi Text field Có Chuỗi kí tự Hệ PT tuyến tính là gì? 
+Bảng 2-24: Dữ liệu câu hỏi cho bài tập 
+****Dữ liệu đáp án cho câu hỏi: 
+STT Trường dữ liệu Mô tả Bắt 
+buộc? 
+Điều 
+kiện hợp 
+lệ 
+Ví dụ 
+1. Nội dung đáp án Text field Có Chuỗi kí 
+tự 
+ Hệ PT tuyến tính là A (1) 
+ Hệ PT tuyến tính là B (0) 
+ Hệ  PT tuyến tính là C (0) 
+ Hệ  PT tuyến tính là D (0) 
+2. Id câu hỏi Xác định câu trả lời thuộc câu 
+hỏi nào 
+Có Số 
+nguyên 
+3 
+3. Đáp án đúng Đáp án đúng trong 4 đáp án 
+trên: nếu đáp án được đánh 
+dấu flag là 1 và 0 là các đáp án 
+sai. 
+Có 1 hoặc 0 1 
+Bảng 2-25: Dữ liệu đầu vào đáp án cho câu hỏi 
+2.6.12 Quản lý tin tức 
+Mã Use case UC012 Tên Use case Quản lý tin tức 
+Tác nhân Quản trị viên 
+Mô tả Thực hiện các tác vụ như thêm, sửa, xóa, tìm kiếm tin tức 
+Sự kiện kích hoạt Click nút “Create News”, “Delete” , “News Detail, “Edit News”, “Search Button” , menu 
+“News” tương ứng với các sự kiện thêm mới,  xóa, xem chi tiết, thay đổi, tìm kiếm, danh 
+sách tin tức. \n\n 
+36 
+Tiền điều kiện Đăng nhập thành công 
+ 
+Tìm kiếm (S - Search): UC007 
+ 
+Xem (R - Read): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. Quản trị viên Yêu cầu Xem danh sách tin tức (click menu News) 
+2. Hệ thống Hiển thị danh sách tin tức 
+3. Quản trị viên Yêu cầu xem chi tiết thông tin tin tức 
+4. Hệ thống Hiển thị chi tiết thông tin tin tức 
+Luồng sự kiện 
+thay thế 
+2a. Hệ thống Thông báo nếu không có ít nhất tin tức nào 
+ 
+Sửa (U - Update): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. Quản trị viên Chọn xem chi tiết tin tức và yêu cầu sửa 
+2. Hệ thống Lấy thông tin chi tiết tin tức và hiển thị thông tin lên giao 
+diện của chức năng sửa 
+3. Quản trị viên Chỉnh sửa các thông tin (mô tả phía dưới **) và yêu cầu sửa 
+4. Hệ thống Kiểm tra các trường nhập liệu 
+5. Hệ thống Cập nhật các thông tin cần chỉnh sửa và thông báo chỉnh sửa 
+thành công. 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi  nếu các trường nhập liệu không đúng định           
+dạng 
+5a. Hệ thống Thông báo lỗi nếu cập nhật không thành công 
+ 
+Xoá (D - Delete): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1.   Quản trị viên Chọn tin tức cần xóa yêu cầu xoá 
+2. Hệ thống Hiển thị thông báo yêu cầu quản trị viên xác nhận việc xoá 
+3. Người dùng Xác nhận xoá tin tức 
+4. Hệ thống Xoá và thông báo xoá thành công 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi nếu xóa không thành công 
+ 
+Thêm (C - Create): 
+Luồng sự kiện STT Thực hiện bởi Hành động \n\n 
+37 
+chính 
+1. Quản trị viên Yêu cầu chức năng thêm mới tin tức 
+2. Hệ thống Hiển thị chức năng thêm mới tin tức 
+3. Quản trị viên Nhập các thông tin tin tức (mô tả phía dưới **) và yêu cầu 
+thêm mới 
+4. Hệ thống Kiểm tra các trường nhập liệu 
+5. Hệ thống Thêm mới tin tức 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi nếu dữ liệu nhập vào không đúng định dạng 
+5a. Hệ thống Thông báo lỗi nếu thêm mới không thành công 
+ 
+Hậu điều kiện Hiển thị danh sách tương ứng với thông tin cần tìm kiếm; Cập nhật thành công, thông tin 
+mới sẽ được lưu trữ vào hệ thống; Xóa thành công tin tức; Tin tức khi tạo mới được lưu trữ 
+trong cơ sở dữ liệu của hệ thống. Thông báo lỗi khi thực hiện các chức năng không thành 
+công. 
+Bảng 2-26: Đặc tả chức năng “Quản lý tin tức” 
+**Dữ liệu tin tức: 
+STT Trường dữ liệu Mô tả Bắt 
+buộc? 
+Điều kiện 
+hợp lệ Ví dụ 
+1. Tiêu đề Tiêu đề tin tức (Input field) Có Chuỗi kí tự Linear Algebra 
+2. Nội dung Nội dung tin tức (textarea) Có Text Linear Algebra course 
+released in 2011 
+Bảng 2-27: Dữ liệu đầu vào khi thêm, sửa tin tức 
+2.6.13 Quản lý câu hỏi thường gặp 
+Mã Use case UC013 Tên Use case Quản lý câu hỏi thường gặp 
+(faqs) 
+Tác nhân Quản trị viên 
+Mô tả Thực hiện các tác vụ như thêm, sửa, xóa, tìm kiếm faqs 
+Sự kiện kích hoạt Click nút “Create News”, “Delete”, “News Detail, “Edit News”, “Search Button”, menu 
+“News” tương ứng với các sự kiện thêm mới, xóa, xem chi tiết, thay đổi, tìm kiếm, danh 
+sách tin tức. 
+Tiền điều kiện Đăng nhập thành công 
+ 
+Tìm kiếm (S - Search): UC007 
+ 
+Xem (R - Read): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. Quản trị viên Yêu cầu Xem danh sách tin tức (click menu News) \n\n 
+38 
+2. Hệ thống Hiển thị danh sách tin tức 
+3. Quản trị viên Yêu cầu xem chi tiết thông tin tin tức 
+4. Hệ thống Hiển thị chi tiết thông tin tin tức 
+Luồng sự kiện 
+thay thế 
+2a. Hệ thống Thông báo nếu không có ít nhất tin tức nào 
+ 
+Sửa (U - Update): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. Quản trị viên Chọn xem chi tiết tin tức và yêu cầu sửa 
+2. Hệ thống Lấy thông tin chi tiết tin tức và hiển thị thông tin lên giao 
+diện của chức năng sửa 
+3. Quản trị viên Chỉnh sửa các thông tin (mô tả phía dưới **) và yêu cầu sửa 
+4. Hệ thống Kiểm tra các trường nhập liệu 
+5. Hệ thống Cập nhật các thông tin cần chỉnh sửa và thông báo chỉnh sửa 
+thành công. 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi  nếu các trường nhập liệu không đúng định           
+dạng 
+5a. Hệ thống Thông báo lỗi nếu cập nhật không thành công 
+ 
+Xoá (D - Delete): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1.   Quản trị viên Chọn tin tức cần xóa yêu cầu xoá 
+2. Hệ thống Hiển thị thông báo yêu cầu quản trị viên xác nhận việc xoá 
+3. Quản trị viên Xác nhận xoá tin tức 
+4. Hệ thống Xoá và thông báo xoá thành công 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi nếu xóa không thành công 
+ 
+Thêm (C - Create): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. Quản trị viên Yêu cầu chức năng thêm mới tin tức 
+2. Hệ thống Hiển thị chức năng thêm mới tin tức 
+3. Quản trị viên Nhập các thông tin tin tức (mô tả phía dưới **) và yêu cầu 
+thêm mới 
+4. Hệ thống Kiểm tra các trường nhập liệu \n\n 
+39 
+5. Hệ thống Thêm mới tin tức 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi nếu dữ liệu nhập vào không đúng định dạng 
+5a. Hệ thống Thông báo lỗi nếu thêm mới không thành công 
+ 
+Hậu điều kiện Hiển thị danh sách tương ứng với thông tin cần tìm kiếm; Cập nhật thành công, thông tin 
+mới sẽ được lưu trữ vào hệ thống; Xóa thành công tin tức; Tin tức khi tạo mới được lưu trữ 
+trong cơ sở dữ liệu của hệ thống. Thông báo lỗi khi thực hiện các chức năng không thành 
+công. 
+Bảng 2-28: Đặc tả chức năng “Quản lý câu hỏi thường gặp” 
+**Dữ liệu câu hỏi thường gặp: 
+STT Trường dữ liệu Mô tả Bắt 
+buộc? 
+Điều kiện 
+hợp lệ Ví dụ 
+1. Câu hỏi Nội dung câu hỏi (Input field) Có Chuỗi kí tự What are the technical 
+requirements for viewing 
+E-Learning course 
+materials? 
+2. Câu trả lời Nội dung câu trả lời (textarea) Có Text ELearning is best viewed 
+in the following 
+browsers: Chrome, 
+Safari, Firefox, Internet 
+Explorer, Edge. 
+Bảng 2-29: Dữ liệu đầu vào khi thêm, sửa faqs 
+2.6.14 Xem lịch sử khóa học và thông tin học viên 
+Mã Use case UC014 Tên Use case Xem lịch  sử khóa học và 
+thông tin học viên 
+Tác nhân Quản trị viên, Giảng viên (GV – QTV) 
+Mô tả Thực hiện các tác vụ như xem danh sách khóa học, danh sách sinh viên đăng ký khóa học 
+tương ứng 
+Sự kiện kích hoạt Click menu “History Courses”, dropdown item “User list”  tương ứng với các sự kiện xem 
+danh sách khóa học, danh sách học viên của từng khóa học 
+Tiền điều kiện Đăng nhập thành công 
+ 
+Tìm kiếm (S - Search): UC007 
+ 
+Xem (R - Read): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. GV – QTV Yêu cầu Xem lịch sử khóa học 
+2. Hệ thống Hiển thị danh sách khóa học, mỗi khóa học sẽ có liên kết 
+(dropdown item “User list”) đến danh sách học viên của từng 
+khóa học đó \n\n 
+40 
+3. GV – QTV Yêu cầu xem danh sách học viên (click liên kết “User list”) 
+4. Hệ thống Hiển thị danh sách học viên  
+Luồng sự kiện 
+thay thế 
+2a. Hệ thống Thông báo nếu không có ít nhất khóa học nào 
+ 4a. Hệ thống Thông báo nếu không có ít nhất học viên nào 
+ 
+Hậu điều kiện Hiển thị danh sách tương ứng với thông tin cần tìm kiếm 
+Bảng 2-30: Đặc tả chức năng “Xem lịch sử khóa học và thông tin học viên” 
+* Ghi chú: Đối với GV thì sẽ chỉ hiển thị danh sách khóa học kèm theo danh sách học viên 
+đăng ký khóa học của GV đó. 
+2.6.15 Quản lý thể loại khóa học 
+Mã Use case UC015 Tên Use case Quản lý thể loại khóa họ c 
+(subject, category) 
+Tác nhân Giảng viên (GV) 
+Mô tả Thực hiện các tác vụ như thêm, sửa, xóa, tìm kiếm 
+Sự kiện kích hoạt Click nút “Create Subject”, drop down button “Subject edit ” - “Delete”, “Search button 
+icon”, menu “Subjects” tương ứng với các sự kiện thêm mới, thay đổi, xóa, tìm kiếm, danh 
+sách thể loại khóa học. 
+Tiền điều kiện Đăng nhập thành công với quyền là Giảng viên 
+Tìm kiếm (S - Search): UC007 
+ 
+Xem (R - Read): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. GV Yêu cầu Xem danh sách subjects (click menu Subjects) 
+2. Hệ thống Hiển thị danh sách subjects 
+Luồng sự kiện 
+thay thế 
+2a. Hệ thống Thông báo nếu không có ít nhất một subject nào 
+ 
+Sửa (U - Update): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. GV Chọn xem chi tiết subject và yêu cầu sửa 
+2. Hệ thống Lấy thông tin chi tiết subject và hiển thị thông tin lên giao 
+diện của chức năng sửa 
+3.   GV Chỉnh sửa các thông tin (mô tả phía dưới **) và yêu cầu sửa 
+4. Hệ thống Kiểm tra các trường nhập liệu 
+5. Hệ thống Cập nhật các thông tin cần chỉnh sửa và thông báo chỉnh sửa \n\n 
+41 
+thành công. 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi  nếu các trường nhập liệu không đúng định           
+dạng 
+5a. Hệ thống Thông báo lỗi nếu cập nhật không thành công 
+ 
+Xoá (D - Delete): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1.   GV Chọn subject cần xóa yêu cầu xoá 
+2. Hệ thống Hiển thị thông báo yêu cầu giảng viên xác nhận việc xoá 
+3. GV Xác nhận xoá subject 
+4. Hệ thống Xoá và thông báo xoá thành công 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi nếu xóa không thành công 
+ 
+Thêm (C - Create): 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. GV Yêu cầu chức năng thêm mới subject 
+2. Hệ thống Hiển thị chức năng thêm mới 
+3. GV Nhập các thông tin về subject (mô tả phía dưới ** ) và yêu 
+cầu thêm mới 
+4. Hệ thống Kiểm tra các trường nhập liệu 
+5. Hệ thống Thực hiện thêm mới subject vào cơ sở dữ liệu 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Thông báo lỗi nếu dữ liệu nhập vào không đúng định dạng 
+5a. Hệ thống Thông báo lỗi nếu thêm mới không thành công 
+ 
+Hậu điều kiện Hiển thị danh sách tương ứng với thông tin cần tìm kiếm; Cập nhật thành công, thông tin 
+mới sẽ được lưu trữ vào hệ thống; Xóa thành công subject; Subject khi tạo mới được lưu trữ 
+trong cơ sở dữ liệu của hệ thống. Thông  báo lỗi khi thực hiện các chức năng không thành 
+công. 
+Bảng 2-31: Đặc tả chức năng “Quản lý thể loại khóa học” 
+**Dữ liệu câu hỏi thường gặp: 
+STT Trường dữ liệu Mô tả Bắt 
+buộc? 
+Điều kiện 
+hợp lệ Ví dụ 
+1. Tên thể loại Input field để nhập nội dung tên 
+subject 
+Có Chuỗi kí tự Math and Logic 
+ Bảng 2-32: Dữ liệu đầu vào khi thêm, sửa đổi thể loại khóa học  \n\n 
+42 
+* Ghi chú: Đối với những subjects của giảng viên nào thì giảng viên đó mới có quyền sửa 
+đổi, xóa (chỉ xóa được khi subject không có khóa học nào thuộc về). 
+2.6.16 Sử dụng chức năng hệ thống của học viên 
+Use case này là tập hợp các use cases: “Xem thông tin khóa học”, “Đăng ký khóa học”, 
+“Tham gia bình luận về bài giảng trong khóa học”, “Trả lời các câu hỏi trong các bài giảng 
+(Nộp bài tập)”. 
+Mã Use case UC016 Tên Use case Sử dụng chức năng hệ thống 
+của học viên 
+Tác nhân Học viên 
+Mô tả Thực hiện các tác vụ như Đăng nhập hệ thống; Tìm kiếm khóa học; Xem thông tin khóa học; 
+Đăng ký khóa học; Tiến hành học tập, nộp bài tập; Xác nhận hoàn thành bài giảng trong 
+khóa học; Tham gia thảo luận về bài giảng trong khóa học. 
+Sự kiện kích hoạt Click nút “Login”, “Search icon button”, liên kết “Forgot password”, nút“Send Password 
+Reset”, liên kết “Change Pasword ”, nút “Update Password”, liên kết “My profile”,  nút 
+“Update Profile”, liên kết  “My courses” tương ứng với các sự kiện Đăng nhập, Tìm kiếm, 
+Yêu cầu Thiết lập lại mật khẩu, Xác nhận Thiết lập lại mật khẩu, Yêu cầu thay đổi mật khẩu, 
+Xác nhận Thay đổi mật khẩu, Xem thông tin cá nhân, Xác nhận  Cập nhật thông tin cá nhân, 
+Xem danh sách khóa học đã đăng ký. 
+Tiền điều kiện Đăng nhập thành công 
+ 
+Đăng nhập, Thay đổi mật khẩu, Thiết lập lại mật khẩu: UC001-002-003 
+ 
+Cập nhật thông tin cá nhân: UC006 
+ 
+Tìm kiếm khóa học (S - Search): UC007 
+ 
+Xem thônng tin và Đăng ký khóa học 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. Học viên Xem thông tin khóa học và Đăng ký khóa học sau khi đã tìm 
+thấy khóa học cần học 
+2. Hệ thống Kiểm tra xem khóa học đã được học viên đăng ký chưa (nếu 
+học viên đăng ký rồi thì có thể tiến hành học tập), sau đó 
+thêm học viên vào khóa học. 
+Luồng sự kiện 
+thay thế 
+3 Hệ thống Điều hướng và hiển thị danh sách khóa học đã đăng ký của 
+Học viên bao gồm khóa học vừa mới đăng ký. 
+ 
+Xem danh sách khóa học đã đăng ký và Tiến hành học tập, thảo luận 
+Luồng sự kiện 
+chính 
+STT Thực hiện bởi Hành động 
+1. Học viên Yêu cầu xem danh sách khóa học đã đăng ký 
+2. Hệ thống Lấy danh sách khóa học đã đăng ký và hiển thị cho Học viên 
+3.   Học viên Tìm kiếm khóa học muốn học và tiến hành học tập \n\n 
+43 
+4. Hệ thống Hiển thị danh sách các bài giảng của khóa học (nếu thời gian 
+bắt đầu khóa học đã đến) 
+5. Học viên Xem nội dung bài giảng (video, document file) 
+ 6. Học viên Trả lời các câu hỏi trắc nghiệm nếu có của bài giảng 
+ 7. Hệ thống Lưu tạm các đáp án trả lời của học viên 
+ 8. Học viên Trả lời hết các câu hỏi của bài giảng và xác nhận nộp bài 
+ 
+9. Hệ thống Lưu trạng thái hoàn thành nộp bài của học viên  và hiển thị 
+kết quả cho học viên có thể xem 
+ 10. Học viên Xác nhận hoàn thành bài giảng sau khi đã học xong bài giảng 
+ 11. Hệ thống Lưu trạng thái học viên đã hoàn thành bài giảng 
+ 
+12. Học viên Thảo luận về bài giảng bằng cách đưa ra các comments trên 
+từng bài giảng  (có thể xóa, thay đổi các nọi dung các 
+comments thuộc về học viên đó, trả lời các comments của 
+các học viên khác trong khóa học). 
+ 
+13. Hệ thống Lưu trữ, cập nhật, xóa các comments trong bài giảng của học 
+viên vào hệ thống. 
+Luồng sự kiện 
+thay thế 
+4a. Hệ thống Không hiển thị bài giảng Nếu thời gian học chưa bắt đầu 
+7a. Hệ thống Thông báo lỗi nếu dữ liệu tạm câu trả lời của học viên chưa 
+được lưu lại 
+ 9a Hệ thống Thông báo lỗi nếu không lưu được trạng thái xác nhận nộp 
+bài của học viên 
+ 11a. Hệ thống Thông báo lỗi nếu không lưu đ ược trạng thái học viên xác 
+nhận hoàn thành bài giảng 
+ 13a. Hệ thống Thông báo lỗi nếu xảy ra lỗi trong quá trình hệ thống thao 
+tác với dữ liệu comments của học viên 
+ 
+Hậu điều kiện Hiển thị thông tin tương ứng các khóa học (nếu có) phù hợp với thông tin tìm kiếm, sau khi 
+đăng ký học tập hệ thống cập nhật học viên mới vào khóa học đó, trong quá trình học tập 
+đáp án trả lời của học viên được lưu thành công vào hệ thống  khi học viên trả lời các câu 
+hỏi, dữ liệu về các cuộc thảo luận trên từng bài giảng lưu thành công trên cơ sở dữ liệu của 
+hệ thống. Trong quá trình xử lý của hệ thống nếu có lỗi cần thông báo thông tin cho học viên   
+Bảng 2-33: Đặc tả sử dụng các chức năng hệ thống của học viên   \n\n 
+44 
+3 Các yêu cầu phi chức năng 
+3.1 Giao diện người dùng 
+Giao diện hiển thị tốt trên các thiết bị khác nhau. 
+Đối với khách khi truy cập sử dụng hệ thống thông qua trình duyệt web, hệ thống sẽ nhận 
+yêu cầu truy cập từ phí a máy khách thông qua trình duyệt và gửi trae về cho trình duy ệt 
+các menu chức năng tương ứng với phạm vi của từng người dùng. 
+Trong trường hợp này Khách có thể tương tác với hệ thống thông qua cửa sổ màn hình trên 
+trình duyệt với cấu trúc trang gồm có: 
+ phần tiêu đề trang cung cấp tên hệ thống, nút bấm đăng nhập hệ thống 
+ phần thân trang cung cấp thông tin về danh sách các khóa học 
+ thông tin khóa học bao gồm tên khóa học, giảng viên, danh sách bài giảng 
+ phần cuối trang cung cấp thông tin liên quan đến hệ thống 
+Khi Người dùng truy cập hệ thống và đăng ký khóa học và tiế n hành học thì phần thân 
+trang được chia thành hai phần trái – phải với bên trái gồm danh sách các bài học của khóa 
+học, bên phải là nội dung của từng bài học đó. 
+Khi quản trị viên truy cập sử dụng chức năng hệ thống thì phần thân trang cũng sẽ phân bổ 
+theo cấu trúc trái -phải hay sidebar menu, với mỗi phần tử trong menu sẽ tương ứng với 
+từng chức năng quản lý của quản trị viên. 
+3.2 Tính bảo mật 
+Người dùng chỉ có thể sử dụng các chức năng và truy cập các dữ liệu phù hợp với vai trò 
+của người dùng đó. 
+3.3  Ràng buộc 
+ ELCs là hệ thống dựa trên Web do vậy người dùng cần có các thiết bị có kết nối 
+với internet như máy vi tính và được cung cấp các dịch vụ như thư điện tử, hình 
+ảnh, văn bản, đa phương tiện, giao thức truyền thông siêu văn bản để có thể gửi và 
+nhận thông tin, dữ liệu giữa máy khách và web server. 
+ Bên phía máy khách – người dùng cần có phần mềm ứng dụng duyệt Web như 
+Google Chrome, Internet Explore, Mozilla Firefox, Opera với phiên bản mới nhất 
+có hỗ trợ JavaScript. 

@@ -93,6 +93,7 @@ public class JobApplicationService {
         responseDTO.setStatus(savedApp.getStatus().name());
         responseDTO.setAppliedAt(savedApp.getAppliedAt());
         responseDTO.setCandidateEmail(candidateEmail);
+        responseDTO.setJobTitle(jobDescription.getTitle());
 
         if(jobDescription.getCompany() != null) {
             responseDTO.setCompanyName(jobDescription.getCompany().getName());
@@ -142,7 +143,9 @@ public class JobApplicationService {
         responseDTO.setStatus(updatedApp.getStatus().name()); // Sẽ hiển thị là "INTERVIEW"
         responseDTO.setAppliedAt(updatedApp.getAppliedAt());
         responseDTO.setJobTitle(updatedApp.getJobDescription().getTitle());
-        responseDTO.setSalary(updatedApp.getJobDescription().getSalaryMin().doubleValue());
+        responseDTO.setSalary(updatedApp.getJobDescription().getSalaryMin() != null
+                ? updatedApp.getJobDescription().getSalaryMin().doubleValue()
+                : 0.0);
         responseDTO.setContractDate(updatedApp.getJobDescription().getCreatedAt().toString());
         responseDTO.setStartDate(updatedApp.getJobDescription().getExpiredAt().toString());
 
@@ -210,6 +213,9 @@ public class JobApplicationService {
         responseDTO.setApplicationId(updatedApp.getId());
         responseDTO.setStatus(updatedApp.getStatus().name()); // Sẽ hiển thị là "REJECTED"
         responseDTO.setAppliedAt(updatedApp.getAppliedAt());
+        if (updatedApp.getJobDescription() != null) {
+            responseDTO.setJobTitle(updatedApp.getJobDescription().getTitle());
+        }
         if (updatedApp.getCandidate() != null) {
             responseDTO.setCandidateId(updatedApp.getCandidate().getId());
             

@@ -1,0 +1,198 @@
+{"kind":"deck","id":"pr/j2kgau","name":"Deck"}
+{"kind":"layout","layoutId":"e4bd8088-35c9-4f19-b7b5-c71b5191ab12","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"4545381e-4f14-49ce-81b4-78e94f300448","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/otkkq9","slide":1,"title":"Nền tảng hỗ trợ tuyển dụng","textShapes":7}
+{"kind":"textbox","id":"sh/7ih4fql0","slide":1,"text":"Nền tảng hỗ trợ tuyển dụng\nvà phân tích CV","textPreview":"Nền tảng hỗ trợ tuyển dụng | và phân tích CV","textChars":42,"textLines":2,"bbox":[72,120,820,150]}
+{"kind":"textbox","id":"sh/8jq5ov2l","slide":1,"text":"Giới thiệu sản phẩm, chức năng chính, dữ liệu và hướng phát triển","textPreview":"Giới thiệu sản phẩm, chức năng chính, dữ liệu và hướng phát triển","textChars":65,"textLines":1,"bbox":[76,302,730,34]}
+{"kind":"shape","id":"sh/9kz6h03q","slide":1,"bbox":[76,410,430,92]}
+{"kind":"textbox","id":"sh/yt8nilk3","slide":1,"text":"Mục tiêu","textPreview":"Mục tiêu","textChars":8,"textLines":1,"bbox":[98,430,120,24]}
+{"kind":"textbox","id":"sh/zuh4b6lo","slide":1,"text":"Kết nối ứng viên và nhà tuyển dụng\ntrong một quy trình web thống nhất.","textPreview":"Kết nối ứng viên và nhà tuyển dụng | trong một quy trình web thống nhất.","textChars":70,"textLines":2,"bbox":[98,458,370,42]}
+{"kind":"textbox","id":"sh/kfq5kb29","slide":1,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[1060,120,130,80]}
+{"kind":"textbox","id":"sh/lgzmdg3u","slide":1,"text":"Bản trình bày tổng quan","textPreview":"Bản trình bày tổng quan","textChars":23,"textLines":1,"bbox":[972,218,218,24]}
+{"kind":"shape","id":"sh/ipsnu5kn","slide":1,"bbox":[76,590,1128,2]}
+{"kind":"textbox","id":"sh/jq1onal8","slide":1,"text":"Tập trung vào những gì hệ thống đang làm được ở mức hiện tại.","textPreview":"Tập trung vào những gì hệ thống đang làm được ở mức hiện tại.","textChars":61,"textLines":1,"bbox":[76,608,900,26]}
+{"kind":"notes","id":"nt/otkkq9","slide":1,"text":""}
+{"kind":"slide","id":"sl/mkmmdt","slide":2,"title":"Nền tảng giải quyết bài toán nào?","textShapes":10}
+{"kind":"textbox","id":"sh/wv2d0rmh","slide":2,"text":"Nền tảng giải quyết bài toán nào?","textPreview":"Nền tảng giải quyết bài toán nào?","textChars":33,"textLines":1,"bbox":[72,44,1035,56]}
+{"kind":"textbox","id":"sh/vutcrm5w","slide":2,"text":"Tập trung vào việc làm cho thông tin tuyển dụng và hồ sơ dễ tìm, dễ theo dõi hơn.","textPreview":"Tập trung vào việc làm cho thông tin tuyển dụng và hồ sơ dễ tìm, dễ theo dõi hơn.","textChars":81,"textLines":1,"bbox":[74,108,1020,30]}
+{"kind":"shape","id":"sh/u90vy14b","slide":2,"bbox":[72,196,480,330]}
+{"kind":"textbox","id":"sh/98rupwnq","slide":2,"text":"Bối cảnh","textPreview":"Bối cảnh","textChars":8,"textLines":1,"bbox":[102,224,180,30]}
+{"kind":"textbox","id":"sh/87idwrml","slide":2,"text":"• Ứng viên có thể có nhiều CV và nhiều lần ứng tuyển.\n\n• Nhà tuyển dụng cần quản lý công việc, ứng viên và trạng thái xử lý.\n\n• CV thường chứa thông tin tự do, khó so sánh bằng cách thủ công.","textPreview":"• Ứng viên có thể có nhiều CV và nhiều lần ứng tuyển. |  | • Nhà tuyển dụng cần quản lý công việc, ứng viên và trạng thái xử lý. |  | • C...","textChars":191,"textLines":5,"bbox":[102,276,390,206]}
+{"kind":"shape","id":"sh/769cnm50","slide":2,"bbox":[646,196,560,330]}
+{"kind":"textbox","id":"sh/m50buh4f","slide":2,"text":"Vai trò của nền tảng","textPreview":"Vai trò của nền tảng","textChars":20,"textLines":1,"bbox":[678,224,300,30]}
+{"kind":"textbox","id":"sh/t4vu1g3a","slide":2,"text":"Một không gian chung để:","textPreview":"Một không gian chung để:","textChars":24,"textLines":1,"bbox":[678,278,420,28]}
+{"kind":"textbox","id":"sh/s3md8bmp","slide":2,"text":"1  Lưu hồ sơ, CV và tin tuyển dụng\n2  Kết nối ứng viên với công việc\n3  Hỗ trợ phân tích và gợi ý\n4  Theo dõi tiến trình ứng tuyển","textPreview":"1  Lưu hồ sơ, CV và tin tuyển dụng | 2  Kết nối ứng viên với công việc | 3  Hỗ trợ phân tích và gợi ý | 4  Theo dõi tiến trình ứng tuyển","textChars":130,"textLines":4,"bbox":[678,322,430,144]}
+{"kind":"textbox","id":"sh/e54ry1or","slide":2,"text":"AI đóng vai trò hỗ trợ tham khảo; quyết định cuối cùng vẫn thuộc về người dùng.","textPreview":"AI đóng vai trò hỗ trợ tham khảo; quyết định cuối cùng vẫn thuộc về người dùng.","textChars":79,"textLines":1,"bbox":[678,484,450,26]}
+{"kind":"shape","id":"sh/f6ds765c","slide":2,"bbox":[72,672,1136,2]}
+{"kind":"textbox","id":"sh/g7m90r6h","slide":2,"text":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textPreview":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textChars":47,"textLines":1,"bbox":[72,684,520,18]}
+{"kind":"textbox","id":"sh/18va9wn2","slide":2,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1150,684,58,18]}
+{"kind":"notes","id":"nt/mkmmdt","slide":2,"text":""}
+{"kind":"slide","id":"sl/mqgva4","slide":3,"title":"Hai nhóm người dùng, hai luồng sử dụng","textShapes":12}
+{"kind":"textbox","id":"sh/8ny5o7ql","slide":3,"text":"Hai nhóm người dùng, hai luồng sử dụng","textPreview":"Hai nhóm người dùng, hai luồng sử dụng","textChars":38,"textLines":1,"bbox":[72,44,1035,56]}
+{"kind":"textbox","id":"sh/nmpof2p0","slide":3,"text":"Cùng dùng một nền tảng nhưng có mục tiêu và màn hình khác nhau.","textPreview":"Cùng dùng một nền tảng nhưng có mục tiêu và màn hình khác nhau.","textChars":63,"textLines":1,"bbox":[74,108,1020,30]}
+{"kind":"textbox","id":"sh/mlgnmx8f","slide":3,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[583,310,80,48]}
+{"kind":"shape","id":"sh/hcr6lc72","slide":3,"bbox":[72,196,440,340]}
+{"kind":"shape","id":"sh/wbips7qh","slide":3,"bbox":[768,196,440,340]}
+{"kind":"textbox","id":"sh/vapoj2pw","slide":3,"text":"Ứng viên","textPreview":"Ứng viên","textChars":8,"textLines":1,"bbox":[104,228,260,38]}
+{"kind":"textbox","id":"sh/a9gnqx8b","slide":3,"text":"Mục tiêu: tìm việc và quản lý hồ sơ cá nhân","textPreview":"Mục tiêu: tìm việc và quản lý hồ sơ cá nhân","textChars":43,"textLines":1,"bbox":[104,278,350,28]}
+{"kind":"textbox","id":"sh/5gr6pc7y","slide":3,"text":"• Tạo/cập nhật hồ sơ\n• Tải lên và phân tích CV\n• Tìm kiếm, lưu và ứng tuyển việc làm\n• Theo dõi các đơn đã gửi","textPreview":"• Tạo/cập nhật hồ sơ | • Tải lên và phân tích CV | • Tìm kiếm, lưu và ứng tuyển việc làm | • Theo dõi các đơn đã gửi","textChars":110,"textLines":4,"bbox":[104,332,350,150]}
+{"kind":"textbox","id":"sh/4fipwrqt","slide":3,"text":"Nhà tuyển dụng / công ty","textPreview":"Nhà tuyển dụng / công ty","textChars":24,"textLines":1,"bbox":[800,228,370,38]}
+{"kind":"textbox","id":"sh/y5sfaxgj","slide":3,"text":"Mục tiêu: đăng tin và xử lý ứng viên","textPreview":"Mục tiêu: đăng tin và xử lý ứng viên","textChars":36,"textLines":1,"bbox":[800,278,350,28]}
+{"kind":"textbox","id":"sh/z61gj2x4","slide":3,"text":"• Quản lý hồ sơ công ty và nhân sự\n• Tạo, sửa, đóng tin tuyển dụng\n• Xem danh sách ứng viên\n• Cập nhật trạng thái xử lý","textPreview":"• Quản lý hồ sơ công ty và nhân sự | • Tạo, sửa, đóng tin tuyển dụng | • Xem danh sách ứng viên | • Cập nhật trạng thái xử lý","textChars":119,"textLines":4,"bbox":[800,332,350,150]}
+{"kind":"textbox","id":"sh/k7uxc7yp","slide":3,"text":"Một tài khoản có vai trò và trạng thái để kiểm soát quyền truy cập.","textPreview":"Một tài khoản có vai trò và trạng thái để kiểm soát quyền truy cập.","textChars":67,"textLines":1,"bbox":[72,580,950,28]}
+{"kind":"shape","id":"sh/l83ylcfu","slide":3,"bbox":[72,672,1136,2]}
+{"kind":"textbox","id":"sh/mtcfehgf","slide":3,"text":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textPreview":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textChars":47,"textLines":1,"bbox":[72,684,520,18]}
+{"kind":"textbox","id":"sh/7ulgnmx0","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1150,684,58,18]}
+{"kind":"notes","id":"nt/mqgva4","slide":3,"text":""}
+{"kind":"slide","id":"sl/t6xc1d","slide":4,"title":"Ứng viên có thể quản lý hồ sơ trong một quy trình","textShapes":17}
+{"kind":"textbox","id":"sh/ozit8nyh","slide":4,"text":"Ứng viên có thể quản lý hồ sơ trong một quy trình","textPreview":"Ứng viên có thể quản lý hồ sơ trong một quy trình","textChars":49,"textLines":1,"bbox":[72,44,1035,56]}
+{"kind":"textbox","id":"sh/ny9szixw","slide":4,"text":"Các chức năng tập trung vào CV, tìm việc và theo dõi ứng tuyển.","textPreview":"Các chức năng tập trung vào CV, tìm việc và theo dõi ứng tuyển.","textChars":63,"textLines":1,"bbox":[74,108,1020,30]}
+{"kind":"shape","id":"sh/mx0b6dgb","slide":4,"bbox":[72,210,245,280]}
+{"kind":"textbox","id":"sh/x4ba5sfy","slide":4,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[94,234,36,26]}
+{"kind":"textbox","id":"sh/w32tc7yd","slide":4,"text":"Hồ sơ cá nhân","textPreview":"Hồ sơ cá nhân","textChars":13,"textLines":1,"bbox":[94,278,200,34]}
+{"kind":"textbox","id":"sh/b29s32xs","slide":4,"text":"Thông tin liên hệ\nVị trí mong muốn\nKinh nghiệm\nLiên kết portfolio","textPreview":"Thông tin liên hệ | Vị trí mong muốn | Kinh nghiệm | Liên kết portfolio","textChars":65,"textLines":4,"bbox":[94,336,200,128]}
+{"kind":"shape","id":"sh/a10baxg7","slide":4,"bbox":[355,210,245,280]}
+{"kind":"textbox","id":"sh/lsbu9cfu","slide":4,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[377,234,36,26]}
+{"kind":"textbox","id":"sh/kr2tg7yp","slide":4,"text":"Quản lý CV","textPreview":"Quản lý CV","textChars":10,"textLines":1,"bbox":[377,278,200,34]}
+{"kind":"textbox","id":"sh/6p8fu947","slide":4,"text":"Tải CV PDF\nLưu nhiều phiên bản\nXem nội dung đã trích xuất\nXem kết quả phân tích","textPreview":"Tải CV PDF | Lưu nhiều phiên bản | Xem nội dung đã trích xuất | Xem kết quả phân tích","textChars":79,"textLines":4,"bbox":[377,336,200,128]}
+{"kind":"shape","id":"sh/7qhgne5s","slide":4,"bbox":[638,210,245,280]}
+{"kind":"textbox","id":"sh/8rqxwjmx","slide":4,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[660,234,36,26]}
+{"kind":"textbox","id":"sh/tszyponi","slide":4,"text":"Tìm việc","textPreview":"Tìm việc","textChars":8,"textLines":1,"bbox":[660,278,200,34]}
+{"kind":"textbox","id":"sh/ut8fy943","slide":4,"text":"Tìm theo từ khóa\nXem công ty và tin tuyển dụng\nLưu tin\nNhận gợi ý tham khảo","textPreview":"Tìm theo từ khóa | Xem công ty và tin tuyển dụng | Lưu tin | Nhận gợi ý tham khảo","textChars":75,"textLines":4,"bbox":[660,336,200,128]}
+{"kind":"shape","id":"sh/vuhgre5o","slide":4,"bbox":[921,210,245,280]}
+{"kind":"textbox","id":"sh/gvax0jm9","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[943,234,36,26]}
+{"kind":"textbox","id":"sh/hgjytonu","slide":4,"text":"Theo dõi","textPreview":"Theo dõi","textChars":8,"textLines":1,"bbox":[943,278,200,34]}
+{"kind":"textbox","id":"sh/axofmp4z","slide":4,"text":"Gửi đơn ứng tuyển\nXem trạng thái\nTheo dõi lịch sử\nCập nhật thông tin khi cần","textPreview":"Gửi đơn ứng tuyển | Xem trạng thái | Theo dõi lịch sử | Cập nhật thông tin khi cần","textChars":76,"textLines":4,"bbox":[943,336,200,128]}
+{"kind":"textbox","id":"sh/byxwfu5k","slide":4,"text":"Điểm nhấn AI: phân tích CV và gợi ý việc làm dựa trên nội dung hồ sơ.","textPreview":"Điểm nhấn AI: phân tích CV và gợi ý việc làm dựa trên nội dung hồ sơ.","textChars":69,"textLines":1,"bbox":[72,560,1060,30]}
+{"kind":"shape","id":"sh/z2tcnqlc","slide":4,"bbox":[72,672,1136,2]}
+{"kind":"textbox","id":"sh/e1kbulkr","slide":4,"text":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textPreview":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textChars":47,"textLines":1,"bbox":[72,684,520,18]}
+{"kind":"textbox","id":"sh/14bup032","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1150,684,58,18]}
+{"kind":"notes","id":"nt/t6xc1d","slide":4,"text":""}
+{"kind":"slide","id":"sl/7hlv1t","slide":5,"title":"Nhà tuyển dụng có một luồng xử lý ứng viên rõ ràng","textShapes":13}
+{"kind":"textbox","id":"sh/eto3y587","slide":5,"text":"Nhà tuyển dụng có một luồng xử lý ứng viên rõ ràng","textPreview":"Nhà tuyển dụng có một luồng xử lý ứng viên rõ ràng","textChars":50,"textLines":1,"bbox":[72,44,1035,56]}
+{"kind":"textbox","id":"sh/1wz29kry","slide":5,"text":"Từ đăng tin đến xem hồ sơ và cập nhật trạng thái.","textPreview":"Từ đăng tin đến xem hồ sơ và cập nhật trạng thái.","textChars":49,"textLines":1,"bbox":[74,108,1020,30]}
+{"kind":"textbox","id":"sh/0vql0fqd","slide":5,"text":"Tin tuyển dụng","textPreview":"Tin tuyển dụng","textChars":14,"textLines":1,"bbox":[86,216,230,34]}
+{"kind":"textbox","id":"sh/nyhkbu94","slide":5,"text":"Tạo / chỉnh sửa / đóng tin\nMô tả vị trí và kỹ năng yêu cầu\nGắn với công ty","textPreview":"Tạo / chỉnh sửa / đóng tin | Mô tả vị trí và kỹ năng yêu cầu | Gắn với công ty","textChars":74,"textLines":3,"bbox":[86,272,250,118]}
+{"kind":"textbox","id":"sh/2x832p8j","slide":5,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[350,278,60,44]}
+{"kind":"textbox","id":"sh/p0z2dkru","slide":5,"text":"Danh sách ứng viên","textPreview":"Danh sách ứng viên","textChars":18,"textLines":1,"bbox":[438,216,270,34]}
+{"kind":"textbox","id":"sh/ozql4fq9","slide":5,"text":"Xem các đơn đã gửi\nLọc / sắp xếp theo thông tin có sẵn\nCó thể chạy phân tích độ phù hợp","textPreview":"Xem các đơn đã gửi | Lọc / sắp xếp theo thông tin có sẵn | Có thể chạy phân tích độ phù hợp","textChars":87,"textLines":3,"bbox":[438,272,270,118]}
+{"kind":"textbox","id":"sh/b214fu90","slide":5,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[722,278,60,44]}
+{"kind":"textbox","id":"sh/a1836p8f","slide":5,"text":"Trạng thái xử lý","textPreview":"Trạng thái xử lý","textChars":16,"textLines":1,"bbox":[812,216,260,34]}
+{"kind":"textbox","id":"sh/cnipk3uh","slide":5,"text":"Mời phỏng vấn\nĐưa vào danh sách theo dõi\nTừ chối hoặc cập nhật trạng thái","textPreview":"Mời phỏng vấn | Đưa vào danh sách theo dõi | Từ chối hoặc cập nhật trạng thái","textChars":73,"textLines":3,"bbox":[812,272,280,118]}
+{"kind":"shape","id":"sh/xor6t8b2","slide":5,"bbox":[72,466,1136,90]}
+{"kind":"textbox","id":"sh/al07itcr","slide":5,"text":"AI chỉ hỗ trợ sắp xếp thông tin và đưa ra điểm tham khảo; người tuyển dụng vẫn xem hồ sơ và quyết định.","textPreview":"AI chỉ hỗ trợ sắp xếp thông tin và đưa ra điểm tham khảo; người tuyển dụng vẫn xem hồ sơ và quyết định.","textChars":103,"textLines":1,"bbox":[98,496,1080,28]}
+{"kind":"shape","id":"sh/bm9orydw","slide":5,"bbox":[72,672,1136,2]}
+{"kind":"textbox","id":"sh/kb2ponut","slide":5,"text":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textPreview":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textChars":47,"textLines":1,"bbox":[72,684,520,18]}
+{"kind":"textbox","id":"sh/lcbqxsbe","slide":5,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1150,684,58,18]}
+{"kind":"notes","id":"nt/7hlv1t","slide":5,"text":""}
+{"kind":"slide","id":"sl/ju5eav","slide":6,"title":"Pipeline AI biến CV tự do thành dữ liệu có cấu trúc","textShapes":16}
+{"kind":"textbox","id":"sh/alcra1g7","slide":6,"text":"Pipeline AI biến CV tự do thành dữ liệu có cấu trúc","textPreview":"Pipeline AI biến CV tự do thành dữ liệu có cấu trúc","textChars":51,"textLines":1,"bbox":[72,44,1035,56]}
+{"kind":"textbox","id":"sh/xonqlwfy","slide":6,"text":"Mục tiêu là hỗ trợ đọc, chuẩn hóa và so sánh — không phải tự động quyết định tuyển dụng.","textPreview":"Mục tiêu là hỗ trợ đọc, chuẩn hóa và so sánh — không phải tự động quyết định tuyển dụng.","textChars":88,"textLines":1,"bbox":[74,108,1020,30]}
+{"kind":"textbox","id":"sh/wne9cbyd","slide":6,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[260,324,62,46]}
+{"kind":"textbox","id":"sh/jq58n6x4","slide":6,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[520,324,62,46]}
+{"kind":"textbox","id":"sh/ipwre1gj","slide":6,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[780,324,62,46]}
+{"kind":"shape","id":"sh/5snqpgfu","slide":6,"bbox":[72,232,210,210]}
+{"kind":"textbox","id":"sh/kre9gby9","slide":6,"text":"1. Đọc CV","textPreview":"1. Đọc CV","textChars":9,"textLines":1,"bbox":[92,264,174,54]}
+{"kind":"textbox","id":"sh/7e58rqx0","slide":6,"text":"pypdf lấy văn bản\ntừ file PDF","textPreview":"pypdf lấy văn bản | từ file PDF","textChars":29,"textLines":2,"bbox":[92,338,170,70]}
+{"kind":"shape","id":"sh/6twrilgf","slide":6,"bbox":[332,232,210,210]}
+{"kind":"textbox","id":"sh/ozetwv6d","slide":6,"text":"2. Phân tích","textPreview":"2. Phân tích","textChars":12,"textLines":1,"bbox":[352,264,174,54]}
+{"kind":"textbox","id":"sh/p0nu507y","slide":6,"text":"Gemini trả về\nthông tin có cấu trúc","textPreview":"Gemini trả về | thông tin có cấu trúc","textChars":35,"textLines":2,"bbox":[352,338,170,70]}
+{"kind":"shape","id":"sh/2xcbulo7","slide":6,"bbox":[592,232,210,210]}
+{"kind":"textbox","id":"sh/nyls3qps","slide":6,"text":"3. Chuẩn hóa","textPreview":"3. Chuẩn hóa","textChars":12,"textLines":1,"bbox":[612,264,174,54]}
+{"kind":"textbox","id":"sh/cnet0f69","slide":6,"text":"SkillDetector +\nluật nghiệp vụ","textPreview":"SkillDetector + | luật nghiệp vụ","textChars":30,"textLines":2,"bbox":[612,338,170,70]}
+{"kind":"shape","id":"sh/xonu907u","slide":6,"bbox":[852,232,210,210]}
+{"kind":"textbox","id":"sh/a1wby5oj","slide":6,"text":"4. Tìm tương đồng","textPreview":"4. Tìm tương đồng","textChars":17,"textLines":1,"bbox":[872,264,174,54]}
+{"kind":"textbox","id":"sh/bm5c7apo","slide":6,"text":"Embedding + ChromaDB\ntìm hồ sơ/tin gần nhau","textPreview":"Embedding + ChromaDB | tìm hồ sơ/tin gần nhau","textChars":43,"textLines":2,"bbox":[872,338,170,70]}
+{"kind":"shape","id":"sh/kryt4f6l","slide":6,"bbox":[72,508,1136,74]}
+{"kind":"textbox","id":"sh/ls7udk76","slide":6,"text":"Đầu ra có thể hiển thị: thông tin CV, kỹ năng phù hợp/còn thiếu, điểm tham khảo và gợi ý việc làm.","textPreview":"Đầu ra có thể hiển thị: thông tin CV, kỹ năng phù hợp/còn thiếu, điểm tham khảo và gợi ý việc làm.","textChars":98,"textLines":1,"bbox":[96,532,1088,26]}
+{"kind":"shape","id":"sh/9wj21gvy","slide":6,"bbox":[72,672,1136,2]}
+{"kind":"textbox","id":"sh/8ba18bud","slide":6,"text":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textPreview":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textChars":47,"textLines":1,"bbox":[72,684,520,18]}
+{"kind":"textbox","id":"sh/7a1kz6ds","slide":6,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[1150,684,58,18]}
+{"kind":"notes","id":"nt/ju5eav","slide":6,"text":""}
+{"kind":"slide","id":"sl/pcaz1j","slide":7,"title":"Quan hệ database xoay quanh User, hồ sơ và tin tuyển dụng","textShapes":24}
+{"kind":"textbox","id":"sh/hor2t47m","slide":7,"text":"Quan hệ database xoay quanh User, hồ sơ và tin tuyển dụng","textPreview":"Quan hệ database xoay quanh User, hồ sơ và tin tuyển dụng","textChars":57,"textLines":1,"bbox":[72,44,1035,56]}
+{"kind":"textbox","id":"sh/ulg3ipov","slide":7,"text":"Sơ đồ giản lược theo các entity chính trong backend hiện tại.","textPreview":"Sơ đồ giản lược theo các entity chính trong backend hiện tại.","textChars":61,"textLines":1,"bbox":[74,108,1020,30]}
+{"kind":"textbox","id":"sh/fm9krupg","slide":7,"text":"1—1","textPreview":"1—1","textChars":3,"textLines":1,"bbox":[264,252,74,28]}
+{"kind":"textbox","id":"sh/4riloj6x","slide":7,"text":"1—N","textPreview":"1—N","textChars":3,"textLines":1,"bbox":[492,252,74,28]}
+{"kind":"textbox","id":"sh/pcr2xo7i","slide":7,"text":"1—N","textPreview":"1—N","textChars":3,"textLines":1,"bbox":[714,252,74,28]}
+{"kind":"textbox","id":"sh/2p03m9or","slide":7,"text":"N—N","textPreview":"N—N","textChars":3,"textLines":1,"bbox":[880,470,74,28]}
+{"kind":"textbox","id":"sh/3q9kvepc","slide":7,"text":"1—N","textPreview":"1—N","textChars":3,"textLines":1,"bbox":[300,490,74,28]}
+{"kind":"shape","id":"sh/kvy1cfqt","slide":7,"bbox":[72,210,190,108]}
+{"kind":"textbox","id":"sh/5w72lk7e","slide":7,"text":"users","textPreview":"users","textChars":5,"textLines":1,"bbox":[94,232,148,32]}
+{"kind":"textbox","id":"sh/xcvuhkva","slide":7,"text":"tài khoản · role · status","textPreview":"tài khoản · role · status","textChars":25,"textLines":1,"bbox":[94,274,150,20]}
+{"kind":"shape","id":"sh/wbmdofe5","slide":7,"bbox":[352,210,220,108]}
+{"kind":"textbox","id":"sh/bqdcfadk","slide":7,"text":"candidate_profiles","textPreview":"candidate_profiles","textChars":18,"textLines":1,"bbox":[372,232,180,32]}
+{"kind":"textbox","id":"sh/ap4vm5wz","slide":7,"text":"hồ sơ ứng viên","textPreview":"hồ sơ ứng viên","textChars":14,"textLines":1,"bbox":[372,274,150,20]}
+{"kind":"shape","id":"sh/lgfulkvm","slide":7,"bbox":[662,210,220,108]}
+{"kind":"textbox","id":"sh/kf6dsfu1","slide":7,"text":"resumes","textPreview":"resumes","textChars":7,"textLines":1,"bbox":[682,232,180,32]}
+{"kind":"textbox","id":"sh/jexcjadg","slide":7,"text":"file + dữ liệu CV","textPreview":"file + dữ liệu CV","textChars":17,"textLines":1,"bbox":[682,274,150,20]}
+{"kind":"shape","id":"sh/ydovq5wv","slide":7,"bbox":[972,210,220,108]}
+{"kind":"textbox","id":"sh/tkzep4vi","slide":7,"text":"companies","textPreview":"companies","textChars":9,"textLines":1,"bbox":[994,232,180,32]}
+{"kind":"textbox","id":"sh/8j6dwzux","slide":7,"text":"doanh nghiệp","textPreview":"doanh nghiệp","textChars":12,"textLines":1,"bbox":[994,274,150,20]}
+{"kind":"shape","id":"sh/snexs329","slide":7,"bbox":[352,420,220,108]}
+{"kind":"textbox","id":"sh/to7y183u","slide":7,"text":"job_applications","textPreview":"job_applications","textChars":16,"textLines":1,"bbox":[372,442,180,32]}
+{"kind":"textbox","id":"sh/6lwfqtk3","slide":7,"text":"đơn ứng tuyển + status","textPreview":"đơn ứng tuyển + status","textChars":22,"textLines":1,"bbox":[372,484,170,20]}
+{"kind":"shape","id":"sh/rm5wzylo","slide":7,"bbox":[662,420,220,108]}
+{"kind":"textbox","id":"sh/gryxwn2l","slide":7,"text":"jobs_depcription","textPreview":"jobs_depcription","textChars":16,"textLines":1,"bbox":[682,442,180,32]}
+{"kind":"textbox","id":"sh/1s7y583q","slide":7,"text":"tin tuyển dụng","textPreview":"tin tuyển dụng","textChars":14,"textLines":1,"bbox":[682,484,150,20]}
+{"kind":"shape","id":"sh/epgfudkf","slide":7,"bbox":[972,420,220,108]}
+{"kind":"textbox","id":"sh/fqpg3il0","slide":7,"text":"skills / job_skills","textPreview":"skills / job_skills","textChars":19,"textLines":1,"bbox":[992,442,180,32]}
+{"kind":"textbox","id":"sh/wvuxkj21","slide":7,"text":"kỹ năng và mức yêu cầu","textPreview":"kỹ năng và mức yêu cầu","textChars":22,"textLines":1,"bbox":[992,484,180,20]}
+{"kind":"textbox","id":"sh/hw3eto3m","slide":7,"text":"Sơ đồ chỉ mô tả quan hệ chính; các bảng như job_views, saved_job, file_uploads và job_fit_caches phục vụ các luồng phụ.","textPreview":"Sơ đồ chỉ mô tả quan hệ chính; các bảng như job_views, saved_job, file_uploads và job_fit_caches phục vụ các luồng phụ.","textChars":119,"textLines":1,"bbox":[72,588,1125,28]}
+{"kind":"shape","id":"sh/jmd8fq9g","slide":7,"bbox":[72,672,1136,2]}
+{"kind":"textbox","id":"sh/yl4rml8v","slide":7,"text":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textPreview":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textChars":47,"textLines":1,"bbox":[72,684,520,18]}
+{"kind":"textbox","id":"sh/lovahgrm","slide":7,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[1150,684,58,18]}
+{"kind":"notes","id":"nt/pcaz1j","slide":7,"text":""}
+{"kind":"slide","id":"sl/k6km8k","slide":8,"title":"Kiến trúc tách phần web, nghiệp vụ và AI","textShapes":16}
+{"kind":"textbox","id":"sh/2pszuh4v","slide":8,"text":"Kiến trúc tách phần web, nghiệp vụ và AI","textPreview":"Kiến trúc tách phần web, nghiệp vụ và AI","textChars":40,"textLines":1,"bbox":[72,44,1035,56]}
+{"kind":"textbox","id":"sh/pcjy5c3m","slide":8,"text":"Mỗi lớp có vai trò riêng để dễ phát triển trong phạm vi đồ án.","textPreview":"Mỗi lớp có vai trò riêng để dễ phát triển trong phạm vi đồ án.","textChars":62,"textLines":1,"bbox":[74,108,1020,30]}
+{"kind":"textbox","id":"sh/obahw7m1","slide":8,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[290,322,62,44]}
+{"kind":"textbox","id":"sh/fmhgz2l4","slide":8,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[576,322,62,44]}
+{"kind":"textbox","id":"sh/el8zqx4z","slide":8,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[862,322,62,44]}
+{"kind":"shape","id":"sh/1ojy1c3a","slide":8,"bbox":[72,220,220,230]}
+{"kind":"textbox","id":"sh/0nahs7mp","slide":8,"text":"Frontend","textPreview":"Frontend","textChars":8,"textLines":1,"bbox":[92,254,180,34]}
+{"kind":"textbox","id":"sh/zil0b6lo","slide":8,"text":"Next.js\nCác màn hình ứng viên\nvà nhà tuyển dụng","textPreview":"Next.js | Các màn hình ứng viên | và nhà tuyển dụng","textChars":47,"textLines":3,"bbox":[92,318,180,104]}
+{"kind":"shape","id":"sh/yhcz2143","slide":8,"bbox":[358,220,220,230]}
+{"kind":"textbox","id":"sh/sv2dg72p","slide":8,"text":"Backend","textPreview":"Backend","textChars":7,"textLines":1,"bbox":[378,254,180,34]}
+{"kind":"textbox","id":"sh/dwbepcja","slide":8,"text":"Spring Boot\nAuth, user, company, job\napplication và status","textPreview":"Spring Boot | Auth, user, company, job | application và status","textChars":58,"textLines":3,"bbox":[378,318,180,104]}
+{"kind":"shape","id":"sh/qt0vexkj","slide":8,"bbox":[644,220,220,230]}
+{"kind":"textbox","id":"sh/rutwn214","slide":8,"text":"AI service","textPreview":"AI service","textChars":10,"textLines":1,"bbox":[664,254,180,34]}
+{"kind":"textbox","id":"sh/4ridcn2d","slide":8,"text":"FastAPI + Python\nGemini, pypdf, embedding\nscoring và recommendation","textPreview":"FastAPI + Python | Gemini, pypdf, embedding | scoring và recommendation","textChars":67,"textLines":3,"bbox":[664,318,180,104]}
+{"kind":"shape","id":"sh/5srelsjy","slide":8,"bbox":[930,220,220,230]}
+{"kind":"textbox","id":"sh/i50vaxkn","slide":8,"text":"Lưu trữ / dịch vụ","textPreview":"Lưu trữ / dịch vụ","textChars":17,"textLines":1,"bbox":[950,254,180,34]}
+{"kind":"textbox","id":"sh/369wji1s","slide":8,"text":"PostgreSQL\nChromaDB\nGemini API","textPreview":"PostgreSQL | ChromaDB | Gemini API","textChars":30,"textLines":3,"bbox":[950,318,180,104]}
+{"kind":"shape","id":"sh/g3id8n2h","slide":8,"bbox":[72,520,1136,64]}
+{"kind":"textbox","id":"sh/h4rehsj2","slide":8,"text":"Hiện tại phù hợp với demo và quy mô nhỏ; chưa nên mô tả như một hệ thống production quy mô lớn.","textPreview":"Hiện tại phù hợp với demo và quy mô nhỏ; chưa nên mô tả như một hệ thống production quy mô lớn.","textChars":95,"textLines":1,"bbox":[96,542,1080,24]}
+{"kind":"shape","id":"sh/x8z2pk7e","slide":8,"bbox":[72,672,1136,2]}
+{"kind":"textbox","id":"sh/wnqlwfqt","slide":8,"text":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textPreview":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textChars":47,"textLines":1,"bbox":[72,684,520,18]}
+{"kind":"textbox","id":"sh/bmhk3apo","slide":8,"text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1150,684,58,18]}
+{"kind":"notes","id":"nt/k6km8k","slide":8,"text":""}
+{"kind":"slide","id":"sl/w5jcpt","slide":9,"title":"Hướng mở rộng nên đi theo từng bước","textShapes":11}
+{"kind":"textbox","id":"sh/ba50vutk","slide":9,"text":"Hướng mở rộng nên đi theo từng bước","textPreview":"Hướng mở rộng nên đi theo từng bước","textChars":35,"textLines":1,"bbox":[72,44,1035,56]}
+{"kind":"textbox","id":"sh/cbyh4za5","slide":9,"text":"Ưu tiên kiểm soát chất lượng và độ ổn định trước khi mở rộng quy mô.","textPreview":"Ưu tiên kiểm soát chất lượng và độ ổn định trước khi mở rộng quy mô.","textChars":68,"textLines":1,"bbox":[74,108,1020,30]}
+{"kind":"textbox","id":"sh/dc7ix4bq","slide":9,"text":"Gần","textPreview":"Gần","textChars":3,"textLines":1,"bbox":[86,205,120,30]}
+{"kind":"textbox","id":"sh/25wzypc3","slide":9,"text":"• OCR cho CV scan\n• Kiểm tra schema JSON chặt hơn\n• Retry, timeout, logging\n• Bộ CV mẫu để đánh giá","textPreview":"• OCR cho CV scan | • Kiểm tra schema JSON chặt hơn | • Retry, timeout, logging | • Bộ CV mẫu để đánh giá","textChars":99,"textLines":4,"bbox":[86,258,280,150]}
+{"kind":"textbox","id":"sh/3650ruto","slide":9,"text":"Tiếp theo","textPreview":"Tiếp theo","textChars":9,"textLines":1,"bbox":[462,205,160,30]}
+{"kind":"textbox","id":"sh/o7eh0za9","slide":9,"text":"• Công thức điểm rõ ràng hơn\n• Cache kết quả phân tích\n• Che dữ liệu nhạy cảm\n• Cải thiện trải nghiệm recruiter","textPreview":"• Công thức điểm rõ ràng hơn | • Cache kết quả phân tích | • Che dữ liệu nhạy cảm | • Cải thiện trải nghiệm recruiter","textChars":111,"textLines":4,"bbox":[462,258,300,150]}
+{"kind":"textbox","id":"sh/p8nit4bu","slide":9,"text":"Khi quy mô tăng","textPreview":"Khi quy mô tăng","textChars":15,"textLines":1,"bbox":[858,205,220,30]}
+{"kind":"textbox","id":"sh/m1gja9s7","slide":9,"text":"• PostgreSQL + pgvector hoặc hệ vector lớn hơn\n• Provider local khi cần offline/bảo mật\n• Theo dõi chi phí và chất lượng\n• Phân quyền, mã hóa, chính sách lưu trữ","textPreview":"• PostgreSQL + pgvector hoặc hệ vector lớn hơn | • Provider local khi cần offline/bảo mật | • Theo dõi chi phí và chất lượng | • Phân quy...","textChars":161,"textLines":4,"bbox":[858,258,315,180]}
+{"kind":"shape","id":"sh/n2903ets","slide":9,"bbox":[72,500,1136,82]}
+{"kind":"textbox","id":"sh/nmtwjq50","slide":9,"text":"Nguyên tắc: mở rộng dựa trên nhu cầu thực tế và kết quả đánh giá, không mở rộng chỉ vì công nghệ.","textPreview":"Nguyên tắc: mở rộng dựa trên nhu cầu thực tế và kết quả đánh giá, không mở rộng chỉ vì công nghệ.","textChars":97,"textLines":1,"bbox":[98,528,1080,26]}
+{"kind":"shape","id":"sh/21kfqlof","slide":9,"bbox":[72,672,1136,2]}
+{"kind":"textbox","id":"sh/pobel0n6","slide":9,"text":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textPreview":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textChars":47,"textLines":1,"bbox":[72,684,520,18]}
+{"kind":"textbox","id":"sh/on2xsv6l","slide":9,"text":"09","textPreview":"09","textChars":2,"textLines":1,"bbox":[1150,684,58,18]}
+{"kind":"notes","id":"nt/w5jcpt","slide":9,"text":""}
+{"kind":"slide","id":"sl/lrz173","slide":10,"title":"Tóm lại: nền tảng đang làm tốt vai trò hỗ trợ","textShapes":9}
+{"kind":"textbox","id":"sh/hcju1cbi","slide":10,"text":"Tóm lại: nền tảng đang làm tốt vai trò hỗ trợ","textPreview":"Tóm lại: nền tảng đang làm tốt vai trò hỗ trợ","textChars":45,"textLines":1,"bbox":[72,44,1035,56]}
+{"kind":"textbox","id":"sh/u9svqhs7","slide":10,"text":"Giá trị chính nằm ở quy trình kết nối dữ liệu và cách hiển thị kết quả dễ kiểm tra.","textPreview":"Giá trị chính nằm ở quy trình kết nối dữ liệu và cách hiển thị kết quả dễ kiểm tra.","textChars":83,"textLines":1,"bbox":[74,108,1020,30]}
+{"kind":"shape","id":"sh/va1czmtc","slide":10,"bbox":[72,210,520,280]}
+{"kind":"textbox","id":"sh/4fadwra9","slide":10,"text":"Điểm chính","textPreview":"Điểm chính","textChars":10,"textLines":1,"bbox":[104,242,180,30]}
+{"kind":"textbox","id":"sh/5g3u5wbu","slide":10,"text":"• Có luồng riêng cho ứng viên và nhà tuyển dụng\n• Có dữ liệu hồ sơ, CV, công việc và đơn ứng tuyển\n• AI hỗ trợ phân tích, chuẩn hóa và gợi ý\n• Quan hệ dữ liệu đủ rõ để mở rộng tiếp","textPreview":"• Có luồng riêng cho ứng viên và nhà tuyển dụng | • Có dữ liệu hồ sơ, CV, công việc và đơn ứng tuyển | • AI hỗ trợ phân tích, chuẩn hóa v...","textChars":180,"textLines":4,"bbox":[104,300,430,152]}
+{"kind":"shape","id":"sh/idsvuhs3","slide":10,"bbox":[650,210,558,280]}
+{"kind":"textbox","id":"sh/3e1c3mto","slide":10,"text":"Cách trình bày an toàn","textPreview":"Cách trình bày an toàn","textChars":22,"textLines":1,"bbox":[682,242,300,30]}
+{"kind":"textbox","id":"sh/s3ud0ba5","slide":10,"text":"Đây là nền tảng hỗ trợ tuyển dụng ở mức demo/đồ án.\n\nKết quả AI là tham khảo, phụ thuộc dữ liệu đầu vào và cần con người kiểm tra trước khi ra quyết định.","textPreview":"Đây là nền tảng hỗ trợ tuyển dụng ở mức demo/đồ án. |  | Kết quả AI là tham khảo, phụ thuộc dữ liệu đầu vào và cần con người kiểm tra trư...","textChars":154,"textLines":3,"bbox":[682,300,470,130]}
+{"kind":"textbox","id":"sh/d43e9gbq","slide":10,"text":"Cảm ơn — sẵn sàng trao đổi về luồng chức năng và thiết kế dữ liệu.","textPreview":"Cảm ơn — sẵn sàng trao đổi về luồng chức năng và thiết kế dữ liệu.","textChars":66,"textLines":1,"bbox":[72,560,1080,30]}
+{"kind":"shape","id":"sh/xsbit0fm","slide":10,"bbox":[72,672,1136,2]}
+{"kind":"textbox","id":"sh/wr2hkvy1","slide":10,"text":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textPreview":"Nền tảng hỗ trợ tuyển dụng — phạm vi đồ án/demo","textChars":47,"textLines":1,"bbox":[72,684,520,18]}
+{"kind":"textbox","id":"sh/bqt0rqxg","slide":10,"text":"10","textPreview":"10","textChars":2,"textLines":1,"bbox":[1150,684,58,18]}
+{"kind":"notes","id":"nt/lrz173","slide":10,"text":""}
