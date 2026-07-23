@@ -32,13 +32,22 @@ export default function CandidateRecommendations() {
 
       let vectorQueryPayload = {};
 
+      const vectorIds = JSON.parse(localStorage.getItem("aiResumeVectorIds") || "{}");
+
       if (profile.resumes && profile.resumes.length > 0) {
         // Find primary CV or first CV
         const primaryResume = profile.resumes.find((r: any) => r.isPrimary) || profile.resumes[0];
-        vectorQueryPayload = { resume_id: String(primaryResume.id) };
+        const vectorId = vectorIds[String(primaryResume.id)];
+        if (vectorId) {
+          vectorQueryPayload = { candidate_id: vectorId };
+        } else if (profile.isOnboarded) {
+          // CVs uploaded before this integration may not have a vector-id mapping.
+          const text = `Vị trí hiện tại: ${profile.currentPosition || ""}\nVị trí mong muốn: ${profile.targetPosition || ""}\nĐịa điểm: ${profile.address || ""}\nMức lương kỳ vọng: ${profile.expectedSalary || ""}`;
+          vectorQueryPayload = { onboarding_text: text };
+        }
       } else if (profile.isOnboarded) {
         // Use onboarding data
-        const text = `Title: ${profile.targetPosition || ""}\nDescription: ${profile.currentPosition || ""}\nRequirements: ${profile.address || ""}\nResponsibilities: ${profile.expectedSalary || ""}`;
+        const text = `Vị trí hiện tại: ${profile.currentPosition || ""}\nVị trí mong muốn: ${profile.targetPosition || ""}\nĐịa điểm: ${profile.address || ""}\nMức lương kỳ vọng: ${profile.expectedSalary || ""}`;
         vectorQueryPayload = { onboarding_text: text };
       } else {
         // Neither CV nor Onboarding data available

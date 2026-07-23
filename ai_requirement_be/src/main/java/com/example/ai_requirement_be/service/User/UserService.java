@@ -32,15 +32,43 @@ public class UserService {
     public List<UserPendingResponseDTO> findAllPendingUsers() {
        List<User> pendingUsers = userRepository.findByStatus(UserStatus.PENDING);
 
-       return pendingUsers.stream().map(user -> new UserPendingResponseDTO(
+       return pendingUsers.stream().map(user -> {
+           String companyName = null;
+           String companyDescription = null;
+           String industry = null;
+           String companySize = null;
+           String website = null;
+           String location = null;
+           String logoUrl = null;
+
+           if (user.getRole() == UserRole.COMPANY && user.getCompanies() != null) {
+               Companies companies = user.getCompanies();
+               companyName = companies.getName();
+               companyDescription = companies.getDescription();
+               industry = companies.getIndustry();
+               companySize = companies.getCompanySize();
+               website = companies.getWebsite();
+               location = companies.getLocation();
+               logoUrl = companies.getLogoUrl();
+           }
+
+           return new UserPendingResponseDTO(
                user.getId(),
                user.getEmail(),
                user.getRole(),
                user.getProvider(),
                user.getStatus(),
                user.getCreatedAt(),
-               user.getUpdatedAt()
-       )).collect(Collectors.toList());
+               user.getUpdatedAt(),
+               companyName,
+               companyDescription,
+               industry,
+               companySize,
+               website,
+               location,
+               logoUrl
+           );
+       }).collect(Collectors.toList());
     }
    @Transactional(readOnly = true)
     public List<UserResponseDTO> getRecruitersInSameCompany(String email) {

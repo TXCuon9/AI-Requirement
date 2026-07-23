@@ -106,7 +106,7 @@ function CvBuilderContent() {
       setFormData({
         cvName: "CV Của Tôi",
         fullName: profileData.fullName || "",
-        targetPosition: profileData.currentPosition || "",
+        targetPosition: profileData.targetPosition || profileData.currentPosition || "",
         email: "email@example.com", // Dummy email as it's not in profile
         phone: profileData.phone || "",
         address: profileData.address || "",

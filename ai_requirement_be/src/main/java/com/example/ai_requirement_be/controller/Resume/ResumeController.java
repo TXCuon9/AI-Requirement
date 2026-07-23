@@ -45,6 +45,15 @@ public class ResumeController {
         return ResponseEntity.ok("Lưu kết quả phân tích AI thành công!");
     }
 
+    @PatchMapping("/{id}/target-position")
+    public ResponseEntity<String> updateTargetPosition(
+            @PathVariable Long id,
+            Principal principal,
+            @RequestBody java.util.Map<String, String> request) {
+        resumeService.updateTargetPosition(id, request.get("targetPosition"), principal.getName());
+        return ResponseEntity.ok("Cập nhật vị trí mong muốn thành công!");
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteResume(@PathVariable Long id, Principal principal) {
         resumeService.deleteResume(id , principal.getName());

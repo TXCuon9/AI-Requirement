@@ -95,8 +95,7 @@ export default function Navbar() {
                     <div>
                       <h3 className="text-[#0b1c47] font-bold text-lg mb-4">Việc của tôi</h3>
                       <ul className="space-y-2">
-                        <li><Link href="/saved-jobs" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Việc đã lưu</Link></li>
-                        <li><Link href="/profile" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Việc đã ứng tuyển</Link></li>
+                        <li><Link href="/saved-jobs" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Việc làm của bạn</Link></li>
                         <li><Link href="/profile" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Thông báo việc làm</Link></li>
                         <li><Link href="/profile" className="block py-1.5 text-[15px] text-slate-700 hover:text-[var(--vw-blue)] hover:bg-slate-50 rounded px-2 -mx-2 transition-colors">Việc dành cho bạn</Link></li>
                       </ul>

@@ -5,12 +5,17 @@ class EmbeddingService:
     @classmethod
     def generate(cls, text: str):
         api_key = os.getenv("GEMINI_API_KEY")
-        if api_key:
-            genai.configure(api_key=api_key)
-            
+        if not api_key:
+            raise ValueError("Missing GEMINI_API_KEY")
+
+        genai.configure(api_key=api_key)
+
         result = genai.embed_content(
-            model="models/embedding-001",
+            # Keep the 384 dimensions used by the existing Chroma collections.
+            # `gemini-embedding-2` is not a valid Gemini model name.
+            model=os.getenv("GEMINI_EMBEDDING_MODEL", "models/gemini-embedding-001"),
             content=text,
-            task_type="retrieval_document"
+            task_type="retrieval_document",
+            output_dimensionality=384,
         )
         return result['embedding']

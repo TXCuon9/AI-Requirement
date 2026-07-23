@@ -46,7 +46,14 @@ public class JobApplicationService {
 
         CandidateProfile candidateProfile = candidateRepository.findByUserId(user.getId()).orElseThrow(() -> new IllegalArgumentException("Hồ sơ ứng viên của bạn chưa được khởi tạo!"));
 
-        JobDescription jobDescription = jobdepRepository.findById(jobId).orElseThrow(() -> new IllegalArgumentException("Bài đăng tuyển dụng không tồn tại hoặc đã đóng!"));
+        JobDescription jobDescription = jobdepRepository.findById(jobId).orElseThrow(() -> new IllegalArgumentException("Bài đăng tuyển dụng không tồn tại hoặc đã bị xóa!"));
+
+        if (!com.example.ai_requirement_be.entity.RecruiterManager.JobStatus.OPEN.equals(jobDescription.getStatus())) {
+            throw new IllegalArgumentException("Bài đăng tuyển dụng này đã đóng, không thể ứng tuyển.");
+        }
+        if (jobDescription.getExpiredAt() != null && jobDescription.getExpiredAt().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Bài đăng tuyển dụng này đã hết hạn, không thể ứng tuyển.");
+        }
 
         Resume resume = resumeRepository.findById(requestDTO.getResumeId())
                 .orElseThrow(() -> new IllegalArgumentException("Bản CV lựa chọn không tồn tại!"));
@@ -395,5 +402,15 @@ public class JobApplicationService {
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Trạng thái không hợp lệ!");
         }
+    }
+
+    public List<com.example.ai_requirement_be.dto.RecruiterDto.JobResponseDTO> getAppliedJobs(String candidateEmail) {
+        User user = userRepository.findByEmail(candidateEmail).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tài khoản người dùng!"));
+        CandidateProfile candidateProfile = candidateRepository.findByUserId(user.getId()).orElseThrow(() -> new IllegalArgumentException("Hồ sơ ứng viên chưa khởi tạo!"));
+        
+        List<JobApplication> applications = jobApplicationRepository.findByCandidateId(candidateProfile.getId());
+        return applications.stream()
+                .map(app -> new com.example.ai_requirement_be.dto.RecruiterDto.JobResponseDTO(app.getJobDescription()))
+                .collect(java.util.stream.Collectors.toList());
     }
 }

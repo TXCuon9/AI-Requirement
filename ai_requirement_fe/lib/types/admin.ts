@@ -6,4 +6,11 @@ export interface UserPendingResponse {
     status: string;
     createdAt: string;
     updatedAt: string;
+    companyName?: string;
+    companyDescription?: string;
+    industry?: string;
+    companySize?: string;
+    website?: string;
+    location?: string;
+    logoUrl?: string;
 }

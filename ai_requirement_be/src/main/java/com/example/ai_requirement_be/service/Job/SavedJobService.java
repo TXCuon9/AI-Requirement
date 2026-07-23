@@ -46,6 +46,13 @@ public class SavedJobService {
         // Kiểm tra bài đăng công việc Job gừi lên xem có tồn tại thực tế không
        JobDescription job = jobdepRepository.findById(jobId).orElseThrow(() -> new IllegalArgumentException("Bài đăng tuyển dụng không tồn tại hoặc đã bị xóa"));
 
+       if (!com.example.ai_requirement_be.entity.RecruiterManager.JobStatus.OPEN.equals(job.getStatus())) {
+           throw new IllegalArgumentException("Bài đăng tuyển dụng này đã đóng, không thể lưu.");
+       }
+       if (job.getExpiredAt() != null && job.getExpiredAt().isBefore(java.time.LocalDateTime.now())) {
+           throw new IllegalArgumentException("Bài đăng tuyển dụng này đã hết hạn, không thể lưu.");
+       }
+
        // Kiểm tra trùng lặp
        if(savedJobRepository.existsByCandidateProfileIdAndJobDescriptionId(candidateProfile.getId(), job.getId())){
               throw new IllegalArgumentException("Bạn đã lưu bài đăng tuyển dụng trước đó rồi");
@@ -72,5 +79,18 @@ public class SavedJobService {
        responseDTO.setSavedAt(savedRecord.getCreatedAt());
 
        return responseDTO;
+   }
+
+   public java.util.List<com.example.ai_requirement_be.dto.RecruiterDto.JobResponseDTO> getSavedJobs(String email) {
+       User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tài khoản người dùng"));
+       if(!UserRole.CANDIDATE.equals(user.getRole())){
+           throw new IllegalArgumentException("Bạn không phải tài khoản Ứng viên");
+       }
+       CandidateProfile candidateProfile = candidateRepository.findByUserId(user.getId()).orElseThrow( () -> new IllegalArgumentException("Hồ sơ ứng viên chưa khởi tạo!"));
+       
+       java.util.List<SaveJob> savedJobs = savedJobRepository.findByCandidateProfileId(candidateProfile.getId());
+       return savedJobs.stream()
+               .map(saveJob -> new com.example.ai_requirement_be.dto.RecruiterDto.JobResponseDTO(saveJob.getJobDescription()))
+               .collect(java.util.stream.Collectors.toList());
    }
 }

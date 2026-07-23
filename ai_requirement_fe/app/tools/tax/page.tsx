@@ -58,10 +58,10 @@ export default function TaxCalculatorPage() {
     const personalDeduction = 11000000;
     const dependentDeduction = 4400000 * dependents;
     
-    let taxableIncome = Math.max(0, incomeBeforeTax - personalDeduction - dependentDeduction);
+    const taxableIncome = Math.max(0, incomeBeforeTax - personalDeduction - dependentDeduction);
     let remainingTaxable = taxableIncome;
     let tax = 0;
-    let taxBreakdown = [];
+    const taxBreakdown = [];
 
     // Brackets
     const brackets = [

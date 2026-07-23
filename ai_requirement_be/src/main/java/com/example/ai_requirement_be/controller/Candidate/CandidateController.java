@@ -18,9 +18,16 @@ import java.security.Principal;
 @RequestMapping("/api/candidate")
 public class CandidateController {
     private final CandidateService candidateService;
+    private final com.example.ai_requirement_be.service.Job.SavedJobService savedJobService;
+    private final com.example.ai_requirement_be.service.Job.JobApplicationService jobApplicationService;
+
     @Autowired
-    public CandidateController(CandidateService candidateService) {
+    public CandidateController(CandidateService candidateService,
+                               com.example.ai_requirement_be.service.Job.SavedJobService savedJobService,
+                               com.example.ai_requirement_be.service.Job.JobApplicationService jobApplicationService) {
         this.candidateService = candidateService;
+        this.savedJobService = savedJobService;
+        this.jobApplicationService = jobApplicationService;
     }
 
     @GetMapping("/profile")
@@ -41,5 +48,17 @@ public class CandidateController {
         }
         candidateService.saveOnboarding(principal.getName(), dto);
         return ResponseEntity.ok("Lưu thông tin khảo sát thành công");
+    }
+
+    @GetMapping("/saved-jobs")
+    public ResponseEntity<java.util.List<com.example.ai_requirement_be.dto.RecruiterDto.JobResponseDTO>> getSavedJobs(Principal principal) {
+        if (principal == null) return ResponseEntity.status(401).build();
+        return ResponseEntity.ok(savedJobService.getSavedJobs(principal.getName()));
+    }
+
+    @GetMapping("/applied-jobs")
+    public ResponseEntity<java.util.List<com.example.ai_requirement_be.dto.RecruiterDto.JobResponseDTO>> getAppliedJobs(Principal principal) {
+        if (principal == null) return ResponseEntity.status(401).build();
+        return ResponseEntity.ok(jobApplicationService.getAppliedJobs(principal.getName()));
     }
 }

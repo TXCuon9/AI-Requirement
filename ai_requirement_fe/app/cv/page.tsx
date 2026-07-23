@@ -101,7 +101,14 @@ export default function CVManagementPage() {
       });
 
       if (!parseRes.ok) {
-        throw new Error("Lỗi khi AI đọc CV.");
+        let message = "Lỗi khi AI đọc CV.";
+        try {
+          const errorData = await parseRes.json();
+          message = errorData.detail || errorData.message || message;
+        } catch (_) {
+          // Keep the friendly fallback when the AI service returns no JSON.
+        }
+        throw new Error(message);
       }
       const parsedData = await parseRes.json();
 
@@ -133,6 +140,7 @@ export default function CVManagementPage() {
           email: parsedData.personal_info?.email || "",
           phone: parsedData.personal_info?.phone || "",
           address: parsedData.personal_info?.address || "",
+          targetPosition: parsedData.personal_info?.targetPosition || parsedData.targetPosition || "",
           skills: (parsedData.skills || []).map((s: any) => typeof s === 'string' ? `Kỹ năng: ${s}` : `${s.normalized || 'Kỹ năng'}: ${s.original || ''}`),
           experienceItems: (parsedData.experience || parsedData.experiences || []).map((exp: any) => typeof exp === 'string' ? { companyName: exp, position: "", startDate: "", endDate: "", description: "" } : exp),
           educationItems: (parsedData.education || []).map((edu: any) => typeof edu === 'string' ? { schoolName: edu, major: "", startDate: "", endDate: "", description: "" } : edu),
@@ -142,7 +150,16 @@ export default function CVManagementPage() {
 
       // 4. Refresh resumes
       const updatedResumes = await fetchApi("/resume");
-      if (Array.isArray(updatedResumes)) setResumes(updatedResumes);
+      if (Array.isArray(updatedResumes)) {
+        setResumes(updatedResumes);
+        // The Java endpoint returns a message instead of the created record.
+        const savedResume = [...updatedResumes].reverse().find((r: any) => r.cvName === file.name);
+        if (savedResume?.id && parsedData.candidate_id) {
+          const vectorIds = JSON.parse(localStorage.getItem("aiResumeVectorIds") || "{}");
+          vectorIds[String(savedResume.id)] = parsedData.candidate_id;
+          localStorage.setItem("aiResumeVectorIds", JSON.stringify(vectorIds));
+        }
+      }
 
     } catch (err: any) {
       setUploadError(err.message || "Tải lên thất bại. Vui lòng thử lại.");

@@ -45,6 +45,9 @@ async def analyze_cv(cv_data: CVData):
             edu_str = f"- {school}"
             if degree:
                 edu_str += f" ({degree})"
+            edu_time = f" ({edu.get('startDate', '')} - {edu.get('endDate', '')})".strip()
+            if edu_time != "(-)":
+                edu_str += edu_time
             if edu.get('major'):
                 edu_str += f" - Chuyên ngành: {edu.get('major')}"
             if gpa:
@@ -55,11 +58,15 @@ async def analyze_cv(cv_data: CVData):
             
         cv_text_representation += "Kinh nghiệm làm việc:\n"
         for exp in (cv_data.experiences or []):
-            cv_text_representation += f"- {exp.get('position') or ''} tại {exp.get('companyName') or ''}: {exp.get('description') or ''}\n"
+            exp_time = f" ({exp.get('startDate', '')} - {exp.get('endDate', '')})".strip()
+            if exp_time == "(-)": exp_time = ""
+            cv_text_representation += f"- {exp.get('position') or ''} tại {exp.get('companyName') or ''}{exp_time}: {exp.get('description') or ''}\n"
             
         cv_text_representation += "Dự án:\n"
         for proj in (cv_data.projectItems or []):
-            cv_text_representation += f"- {proj.get('projectName') or ''} ({proj.get('role') or ''}): {proj.get('description') or ''}\n"
+            proj_time = f" ({proj.get('startDate', '')} - {proj.get('endDate', '')})".strip()
+            if proj_time == "(-)": proj_time = ""
+            cv_text_representation += f"- {proj.get('projectName') or ''} ({proj.get('role') or ''}){proj_time}: {proj.get('description') or ''}\n"
 
         prompt = f"""
                 Bạn là một Chuyên gia Tuyển dụng (Recruitment Expert) cực kỳ khắt khe và có tiêu chuẩn rất cao. Hãy đánh giá chi tiết CV dưới đây dựa trên các tiêu chí: tính đầy đủ của thông tin, sự rõ ràng, tính chuyên nghiệp, và sự phù hợp với vị trí ứng tuyển.
@@ -112,11 +119,15 @@ async def analyze_job_fit(request_data: JobFitRequest):
         
         cv_text_representation += "Kinh nghiệm làm việc:\n"
         for exp in (cv_data.experiences or []):
-            cv_text_representation += f"- {exp.get('position') or ''} tại {exp.get('companyName') or ''}: {exp.get('description') or ''}\n"
+            exp_time = f" ({exp.get('startDate', '')} - {exp.get('endDate', '')})".strip()
+            if exp_time == "(-)": exp_time = ""
+            cv_text_representation += f"- {exp.get('position') or ''} tại {exp.get('companyName') or ''}{exp_time}: {exp.get('description') or ''}\n"
             
         cv_text_representation += "Dự án:\n"
         for proj in (cv_data.projectItems or []):
-            cv_text_representation += f"- {proj.get('projectName') or ''} ({proj.get('role') or ''}): {proj.get('description') or ''}\n"
+            proj_time = f" ({proj.get('startDate', '')} - {proj.get('endDate', '')})".strip()
+            if proj_time == "(-)": proj_time = ""
+            cv_text_representation += f"- {proj.get('projectName') or ''} ({proj.get('role') or ''}){proj_time}: {proj.get('description') or ''}\n"
 
         # Format Job Text
         job_text_representation = f"Chức danh: {job_data.title}\n"

@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Fragment } from "react";
 import { fetchApi } from "../../../lib/api";
-import { Loader2, Contact, Mail, FileText, CheckCircle2, Clock, Sparkles } from "lucide-react";
+import { Loader2, Contact, Mail, FileText, CheckCircle2, Clock, Sparkles, ChevronDown, AlertCircle } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { customConfirm } from "@/lib/customConfirm";
@@ -27,6 +27,9 @@ export default function ApplicationsManagementPage() {
   const [invitingId, setInvitingId] = useState<number | null>(null);
   const [isRanking, setIsRanking] = useState(false);
   const [rankingProgress, setRankingProgress] = useState({ current: 0, total: 0 });
+  const [expandedRows, setExpandedRows] = useState<number[]>([]);
+  const [jobFitDetails, setJobFitDetails] = useState<Record<number, any>>({});
+  const [loadingDetails, setLoadingDetails] = useState<Record<number, boolean>>({});
 
   const searchParams = useSearchParams();
   const jobIdParam = searchParams.get("jobId");
@@ -74,6 +77,26 @@ export default function ApplicationsManagementPage() {
   }, [applications, loading, autorankParam]);
 
   const [updatingId, setUpdatingId] = useState<number | null>(null);
+
+  const toggleExpand = async (appId: number, resumeId: number, jobId: number) => {
+    const isExpanded = expandedRows.includes(appId);
+    if (isExpanded) {
+      setExpandedRows(expandedRows.filter(id => id !== appId));
+    } else {
+      setExpandedRows([...expandedRows, appId]);
+      if (!jobFitDetails[appId]) {
+        setLoadingDetails(prev => ({ ...prev, [appId]: true }));
+        try {
+          const details = await fetchApi(`/job-fit-cache?resumeId=${resumeId}&jobId=${jobId}`);
+          setJobFitDetails(prev => ({ ...prev, [appId]: details }));
+        } catch (e) {
+          console.error("Failed to fetch job fit details", e);
+        } finally {
+          setLoadingDetails(prev => ({ ...prev, [appId]: false }));
+        }
+      }
+    }
+  };
 
   const handleStatusChange = async (id: number, status: string, actionName: string) => {
     if (!(await customConfirm(`Bạn chắc chắn muốn ${actionName.toLowerCase()} ứng viên này?`))) return;
@@ -252,7 +275,8 @@ export default function ApplicationsManagementPage() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {applications.map((app) => (
-                  <tr key={app.applicationId} className="hover:bg-slate-50/50 transition-colors group">
+                  <Fragment key={app.applicationId}>
+                  <tr className="hover:bg-slate-50/50 transition-colors group">
                     <td className="p-4 pl-6">
                       <div className="flex items-center gap-3">
                         <div className="size-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
@@ -276,11 +300,14 @@ export default function ApplicationsManagementPage() {
                         <FileText className="size-4" /> {app.resumeTitle || 'Xem CV'}
                       </a>
                     </td>
-                    <td className="p-4 text-center">
+                    <td className="p-4 text-center cursor-pointer hover:bg-slate-100/50 transition-colors" onClick={() => app.matchScore != null && toggleExpand(app.applicationId, app.resumeId, app.jobId)}>
                       {app.matchScore != null ? (
-                        <span className={`inline-flex items-center justify-center size-10 rounded-full font-bold text-sm border-2 ${app.matchScore >= 80 ? 'border-emerald-500 text-emerald-600 bg-emerald-50' : app.matchScore >= 50 ? 'border-amber-500 text-amber-600 bg-amber-50' : 'border-rose-500 text-rose-600 bg-rose-50'}`}>
-                          {app.matchScore}
-                        </span>
+                        <div className="flex items-center justify-center gap-1.5" title="Nhấn để xem chi tiết">
+                          <span className={`inline-flex items-center justify-center size-10 rounded-full font-bold text-sm border-2 ${app.matchScore >= 80 ? 'border-emerald-500 text-emerald-600 bg-emerald-50' : app.matchScore >= 50 ? 'border-amber-500 text-amber-600 bg-amber-50' : 'border-rose-500 text-rose-600 bg-rose-50'}`}>
+                            {app.matchScore}
+                          </span>
+                          <ChevronDown className={`size-4 text-slate-400 transition-transform ${expandedRows.includes(app.applicationId) ? 'rotate-180' : ''}`} />
+                        </div>
                       ) : (
                         <span className="text-xs text-slate-400 font-medium bg-slate-100 px-2 py-1 rounded-md">Chưa phân tích</span>
                       )}
@@ -341,6 +368,41 @@ export default function ApplicationsManagementPage() {
                       )}
                     </td>
                   </tr>
+                  {expandedRows.includes(app.applicationId) && (
+                    <tr className="bg-blue-50/30 border-b border-slate-200">
+                      <td colSpan={6} className="p-0">
+                        <div className="px-6 py-5 border-l-4 border-blue-500 animate-in fade-in slide-in-from-top-2">
+                          {loadingDetails[app.applicationId] ? (
+                            <div className="flex items-center gap-2 text-slate-500 text-sm">
+                              <Loader2 className="size-4 animate-spin" /> Đang tải chi tiết phân tích...
+                            </div>
+                          ) : jobFitDetails[app.applicationId] ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                              <div>
+                                <h4 className="font-semibold text-emerald-700 mb-3 flex items-center gap-2"><CheckCircle2 className="size-4" /> Điểm phù hợp</h4>
+                                <ul className="space-y-2 text-sm text-slate-700">
+                                  {jobFitDetails[app.applicationId].pros?.map((pro: string, i: number) => (
+                                    <li key={i} className="flex gap-2 items-start"><span className="text-emerald-500 mt-0.5">•</span> <span>{pro}</span></li>
+                                  ))}
+                                </ul>
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-rose-700 mb-3 flex items-center gap-2"><AlertCircle className="size-4" /> Điểm chưa phù hợp</h4>
+                                <ul className="space-y-2 text-sm text-slate-700">
+                                  {jobFitDetails[app.applicationId].cons?.map((con: string, i: number) => (
+                                    <li key={i} className="flex gap-2 items-start"><span className="text-rose-500 mt-0.5">•</span> <span>{con}</span></li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="text-sm text-slate-500 italic">Không tìm thấy chi tiết phân tích. Hãy thử chạy lại Xếp hạng AI.</div>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                  </Fragment>
                 ))}
               </tbody>
             </table>

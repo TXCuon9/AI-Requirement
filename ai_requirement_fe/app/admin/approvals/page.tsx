@@ -11,6 +11,7 @@ export default function ApprovalsPage() {
   const [users, setUsers] = useState<UserPendingResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoadingId, setActionLoadingId] = useState<number | null>(null);
+  const [selectedUser, setSelectedUser] = useState<UserPendingResponse | null>(null);
 
   const loadPendingUsers = async () => {
     setLoading(true);
@@ -109,7 +110,13 @@ export default function ApprovalsPage() {
                         <AlertCircle className="size-3.5" /> {user.status}
                       </span>
                     </td>
-                    <td className="p-4 pr-6 text-right">
+                    <td className="p-4 pr-6 text-right space-x-2">
+                      <button
+                        onClick={() => setSelectedUser(user)}
+                        className="inline-flex items-center justify-center px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-lg transition-colors shadow-sm"
+                      >
+                        Chi tiết
+                      </button>
                       <button
                         onClick={() => handleApprove(user.id)}
                         disabled={actionLoadingId === user.id}
@@ -129,6 +136,65 @@ export default function ApprovalsPage() {
           </div>
         )}
       </div>
+
+      {selectedUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-slate-900">Chi tiết công ty</h2>
+              <button onClick={() => setSelectedUser(null)} className="p-2 hover:bg-slate-100 rounded-full text-slate-500 flex items-center justify-center">
+                ✕
+              </button>
+            </div>
+            <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-sm text-slate-500 mb-1">Email</div>
+                  <div className="font-semibold text-slate-900">{selectedUser.email}</div>
+                </div>
+                <div>
+                  <div className="text-sm text-slate-500 mb-1">Tên công ty</div>
+                  <div className="font-semibold text-slate-900">{selectedUser.companyName || 'Chưa cập nhật'}</div>
+                </div>
+                <div>
+                  <div className="text-sm text-slate-500 mb-1">Quy mô</div>
+                  <div className="font-semibold text-slate-900">{selectedUser.companySize || 'Chưa cập nhật'}</div>
+                </div>
+                <div>
+                  <div className="text-sm text-slate-500 mb-1">Ngành nghề</div>
+                  <div className="font-semibold text-slate-900">{selectedUser.industry || 'Chưa cập nhật'}</div>
+                </div>
+                <div>
+                  <div className="text-sm text-slate-500 mb-1">Địa điểm</div>
+                  <div className="font-semibold text-slate-900">{selectedUser.location || 'Chưa cập nhật'}</div>
+                </div>
+                <div>
+                  <div className="text-sm text-slate-500 mb-1">Website</div>
+                  <div className="font-semibold text-blue-600">{selectedUser.website ? <a href={selectedUser.website} target="_blank" rel="noreferrer">{selectedUser.website}</a> : 'Chưa cập nhật'}</div>
+                </div>
+                <div className="col-span-2">
+                  <div className="text-sm text-slate-500 mb-1">Mô tả</div>
+                  <div className="text-slate-900 whitespace-pre-wrap">{selectedUser.companyDescription || 'Chưa cập nhật'}</div>
+                </div>
+              </div>
+            </div>
+            <div className="p-6 border-t border-slate-100 bg-slate-50 flex justify-end gap-3">
+              <button onClick={() => setSelectedUser(null)} className="px-4 py-2 font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50">
+                Đóng
+              </button>
+              <button 
+                onClick={() => {
+                  setSelectedUser(null);
+                  handleApprove(selectedUser.id);
+                }}
+                className="px-4 py-2 font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+              >
+                Duyệt công ty này
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

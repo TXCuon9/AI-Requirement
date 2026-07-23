@@ -27,6 +27,5 @@ class VectorBuilder:
             else:
                 text.append(str(exp))
 
-        # Filter out empty strings
         text = [t for t in text if t and t.strip()]
         return " ".join(text)

@@ -24,7 +24,8 @@ public interface IJobdepRepository extends JpaRepository<JobDescription, Long> {
            "(:experienceLevelIsNull = true OR j.experienceLevel = :experienceLevel) AND " +
            "(:jobTypeIsNull = true OR j.jobType = :jobType) AND " +
            "(:salaryMinIsNull = true OR j.salaryMin >= :salaryMin OR j.salaryMax >= :salaryMin) AND " +
-           "j.status = 'OPEN'")
+           "j.status = 'OPEN' AND " +
+           "(j.expiredAt IS NULL OR j.expiredAt > CURRENT_TIMESTAMP)")
     List<JobDescription> searchJobs(
             @Param("keyword") String keyword, @Param("keywordIsNull") boolean keywordIsNull,
             @Param("location") String location, @Param("locationIsNull") boolean locationIsNull,

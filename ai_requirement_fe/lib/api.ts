@@ -11,7 +11,7 @@ export const fetchApi = async (endpoint: string, options: RequestInit = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
   console.log("Fetching API URL:", url, "Method:", options.method || "GET");
   
-  let headers: Record<string, string> = {
+  const headers: Record<string, string> = {
     ...options.headers as Record<string, string>,
   };
 

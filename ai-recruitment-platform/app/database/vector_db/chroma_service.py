@@ -1,9 +1,12 @@
+import os
 import chromadb
 
 
 class ChromaService:
 
-    client = chromadb.PersistentClient(path="./chroma_db")
+    # Resolve from this file so local runs use the same DB regardless of cwd.
+    default_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../chroma_db"))
+    client = chromadb.PersistentClient(path=os.getenv("CHROMA_DB_PATH", default_path))
 
 
     collection = client.get_or_create_collection(name="candidates")

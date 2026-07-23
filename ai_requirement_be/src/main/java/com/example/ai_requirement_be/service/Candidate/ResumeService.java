@@ -72,6 +72,21 @@ public class ResumeService {
     }
 
     @Transactional
+    public void updateTargetPosition(Long resumeId, String targetPosition, String candidateEmail) {
+        CandidateProfile candidateProfile = getCandidateByEmail(candidateEmail);
+        Resume resume = resumeRepository.findById(resumeId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy CV yêu cầu!"));
+
+        if (!resume.getCandidateId().getId().equals(candidateProfile.getId())) {
+            throw new RuntimeException("Bạn không có quyền chỉnh sửa CV của người khác");
+        }
+
+        resume.setTargetPosition(targetPosition == null ? "" : targetPosition.trim());
+        resume.setAiAnalysisResult(null);
+        resumeRepository.save(resume);
+    }
+
+    @Transactional
     public void deleteResume(Long resumeId , String candidateEmail) {
        CandidateProfile candidateProfile = getCandidateByEmail(candidateEmail);
 
@@ -116,25 +131,25 @@ public class ResumeService {
     }
 
     private void mapDtoToEntity(SaveResumeDTO dto , Resume resume){
-        resume.setFileUrl(dto.getFileUrl());
-        resume.setCvName(dto.getCvName());
-        resume.setParsedText(dto.getParsedText());
-        resume.setSummary(dto.getSummary());
-        resume.setVersion(dto.getVersion());
-        resume.setSkills(dto.getSkills());
-        resume.setExperiences(dto.getExperienceItems());
-        resume.setEducationItemDTOS(dto.getEducationItems());
-        resume.setProjectItems(dto.getProjectItems());
-        resume.setFullName(dto.getFullName());
-        resume.setEmail(dto.getEmail());
-        resume.setPhone(dto.getPhone());
-        resume.setAddress(dto.getAddress());
-        resume.setTargetPosition(dto.getTargetPosition());
-        resume.setAvatarUrl(dto.getAvatarUrl());
-        resume.setGithubUrl(dto.getGithubUrl());
-        resume.setLinkedinUrl(dto.getLinkedinUrl());
-        resume.setDob(dto.getDob());
-        resume.setGender(dto.getGender());
-        resume.setHobbies(dto.getHobbies());
+        if (dto.getFileUrl() != null) resume.setFileUrl(dto.getFileUrl());
+        if (dto.getCvName() != null) resume.setCvName(dto.getCvName());
+        if (dto.getParsedText() != null) resume.setParsedText(dto.getParsedText());
+        if (dto.getSummary() != null) resume.setSummary(dto.getSummary());
+        if (dto.getVersion() != null) resume.setVersion(dto.getVersion());
+        if (dto.getSkills() != null) resume.setSkills(dto.getSkills());
+        if (dto.getExperienceItems() != null) resume.setExperiences(dto.getExperienceItems());
+        if (dto.getEducationItems() != null) resume.setEducationItemDTOS(dto.getEducationItems());
+        if (dto.getProjectItems() != null) resume.setProjectItems(dto.getProjectItems());
+        if (dto.getFullName() != null) resume.setFullName(dto.getFullName());
+        if (dto.getEmail() != null) resume.setEmail(dto.getEmail());
+        if (dto.getPhone() != null) resume.setPhone(dto.getPhone());
+        if (dto.getAddress() != null) resume.setAddress(dto.getAddress());
+        if (dto.getTargetPosition() != null) resume.setTargetPosition(dto.getTargetPosition());
+        if (dto.getAvatarUrl() != null) resume.setAvatarUrl(dto.getAvatarUrl());
+        if (dto.getGithubUrl() != null) resume.setGithubUrl(dto.getGithubUrl());
+        if (dto.getLinkedinUrl() != null) resume.setLinkedinUrl(dto.getLinkedinUrl());
+        if (dto.getDob() != null) resume.setDob(dto.getDob());
+        if (dto.getGender() != null) resume.setGender(dto.getGender());
+        if (dto.getHobbies() != null) resume.setHobbies(dto.getHobbies());
     }
 }

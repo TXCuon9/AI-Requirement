@@ -15,6 +15,13 @@ function RegisterContent() {
   const [type, setType] = useState<"candidate" | "company">(initialType);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [industry, setIndustry] = useState("");
+  const [companySize, setCompanySize] = useState("");
+  const [location, setLocation] = useState("");
+  const [website, setWebsite] = useState("");
+  const [description, setDescription] = useState("");
+  
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -27,10 +34,20 @@ function RegisterContent() {
     setSuccess("");
 
     try {
+      const bodyPayload: any = { email, password };
+      if (type === "company") {
+        bodyPayload.companyName = companyName;
+        bodyPayload.industry = industry;
+        bodyPayload.companySize = companySize;
+        bodyPayload.location = location;
+        bodyPayload.website = website;
+        bodyPayload.description = description;
+      }
+
       const endpoint = type === "candidate" ? "/auth/register" : "/auth/register/company";
       const response = await fetchApi(endpoint, {
         method: "POST",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(bodyPayload),
       });
       
       // Response is a string message from the backend
@@ -49,8 +66,8 @@ function RegisterContent() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-zinc-950 p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-zinc-950 p-4 py-12">
+      <div className={`w-full ${type === "company" ? "max-w-2xl" : "max-w-md"} transition-all duration-300`}>
         {/* Logo/Brand */}
         <div className="flex justify-center mb-8">
           <Link href="/" className="flex items-center gap-2 group">
@@ -109,29 +126,102 @@ function RegisterContent() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-1.5">Email address</label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none transition-all dark:text-white"
-                placeholder="you@example.com"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-1.5">Password</label>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none transition-all dark:text-white"
-                placeholder="••••••••"
-                minLength={6}
-              />
+            <div className={`grid gap-5 ${type === "company" ? "md:grid-cols-2" : "grid-cols-1"}`}>
+              <div className={type === "company" ? "md:col-span-2" : ""}>
+                <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-1.5">Email address</label>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none transition-all dark:text-white"
+                  placeholder="you@example.com"
+                />
+              </div>
+              
+              <div className={type === "company" ? "md:col-span-2" : ""}>
+                <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-1.5">Password</label>
+                <input
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none transition-all dark:text-white"
+                  placeholder="••••••••"
+                  minLength={6}
+                />
+              </div>
+
+              {type === "company" && (
+                <>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-1.5">Company Name</label>
+                    <input
+                      type="text"
+                      required
+                      value={companyName}
+                      onChange={(e) => setCompanyName(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 dark:focus:border-purple-500 outline-none transition-all dark:text-white"
+                      placeholder="Acme Corp"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-1.5">Industry</label>
+                    <input
+                      type="text"
+                      value={industry}
+                      onChange={(e) => setIndustry(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 outline-none transition-all dark:text-white"
+                      placeholder="Technology, Finance..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-1.5">Company Size</label>
+                    <input
+                      type="text"
+                      value={companySize}
+                      onChange={(e) => setCompanySize(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 outline-none transition-all dark:text-white"
+                      placeholder="10-50 employees"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-1.5">Location</label>
+                    <input
+                      type="text"
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 outline-none transition-all dark:text-white"
+                      placeholder="City, Country"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-1.5">Website</label>
+                    <input
+                      type="url"
+                      value={website}
+                      onChange={(e) => setWebsite(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 outline-none transition-all dark:text-white"
+                      placeholder="https://example.com"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-1.5">Description</label>
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      rows={3}
+                      className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 outline-none transition-all dark:text-white resize-none"
+                      placeholder="Brief description of your company..."
+                    />
+                  </div>
+                </>
+              )}
             </div>
 
             <button

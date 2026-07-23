@@ -14,18 +14,43 @@ export default function AIAnalyzePage() {
   const [aiResult, setAiResult] = useState<any>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [error, setError] = useState("");
+  const [targetPositionInput, setTargetPositionInput] = useState("");
 
   const loadData = (forceReEvaluate: boolean = false) => {
     if (!id) return;
     setIsAnalyzing(true);
     setError("");
 
-    fetchApi(`/resume/${id}`)
-      .then(resume => {
-        setFormData(resume);
+    Promise.all([
+      fetchApi(`/resume/${id}`),
+      fetchApi("/candidate/profile").catch(() => null)
+    ])
+      .then(([resume, profile]) => {
+        const targetPosition =
+          resume.targetPosition ||
+          profile?.targetPosition ||
+          "";
+        const enrichedResume = { ...resume, targetPosition };
+        const targetPositionWasAdded = !resume.targetPosition && !!targetPosition;
+
+        setFormData(enrichedResume);
+        setTargetPositionInput(targetPosition);
+
+        if (targetPositionWasAdded) {
+          fetchApi(`/resume/${id}/target-position`, {
+            method: "PATCH",
+            body: JSON.stringify({ targetPosition })
+          }).catch(err => console.error("Failed to save target position:", err));
+        }
+
+        if (!targetPosition) {
+          setError("Chưa xác định được vị trí mong muốn. Vui lòng nhập chức danh trước khi chấm CV.");
+          setIsAnalyzing(false);
+          return null;
+        }
 
         // Use cache if available and not forcing re-evaluation
-        if (!forceReEvaluate && resume.aiAnalysisResult) {
+        if (!forceReEvaluate && resume.aiAnalysisResult && !targetPositionWasAdded) {
           setAiResult(resume.aiAnalysisResult);
           setIsAnalyzing(false);
           return null;
@@ -36,7 +61,7 @@ export default function AIAnalyzePage() {
         return fetch(`${aiApiUrl}/api/v1/analysis/cv`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(resume)
+          body: JSON.stringify(enrichedResume)
         });
       })
       .then(res => {
@@ -66,6 +91,31 @@ export default function AIAnalyzePage() {
         setError(err.message || "Không thể phân tích CV lúc này. Vui lòng thử lại sau.");
         setIsAnalyzing(false);
       });
+  };
+
+  const saveTargetPositionAndAnalyze = async () => {
+    const targetPosition = targetPositionInput.trim();
+    if (!targetPosition || !formData || !id) {
+      setError("Vui lòng nhập vị trí mong muốn trước khi chấm CV.");
+      return;
+    }
+
+    setIsAnalyzing(true);
+    setError("");
+    setAiResult(null);
+
+    try {
+      const updatedResume = { ...formData, targetPosition };
+      await fetchApi(`/resume/${id}/target-position`, {
+        method: "PATCH",
+        body: JSON.stringify({ targetPosition })
+      });
+      setFormData(updatedResume);
+      loadData(true);
+    } catch (err: any) {
+      setError(err.message || "Không thể lưu vị trí mong muốn.");
+      setIsAnalyzing(false);
+    }
   };
 
   useEffect(() => {
@@ -116,6 +166,29 @@ export default function AIAnalyzePage() {
                 AI Phân tích CV
               </h2>
               <p className="text-sm text-slate-500 font-medium">Chuyên gia Tuyển dụng</p>
+            </div>
+          </div>
+
+          <div className="mb-6 p-4 bg-blue-50 border border-blue-100 rounded-xl">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
+              Vị trí mong muốn
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={targetPositionInput}
+                onChange={(event) => setTargetPositionInput(event.target.value)}
+                placeholder="VD: Frontend Developer"
+                className="min-w-0 flex-1 px-3 py-2 rounded-lg border border-slate-300 bg-white text-sm outline-none focus:border-blue-500"
+              />
+              <button
+                type="button"
+                onClick={saveTargetPositionAndAnalyze}
+                disabled={isAnalyzing || !targetPositionInput.trim()}
+                className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold disabled:opacity-50"
+              >
+                Lưu & chấm
+              </button>
             </div>
           </div>
 

@@ -14,10 +14,19 @@ public class UserPendingResponseDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    // Company specific fields
+    private String companyName;
+    private String companyDescription;
+    private String industry;
+    private String companySize;
+    private String website;
+    private String location;
+    private String logoUrl;
+
    public UserPendingResponseDTO() {
 
    }
-    public UserPendingResponseDTO(Long id, String email, UserRole role, String provider, UserStatus status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public UserPendingResponseDTO(Long id, String email, UserRole role, String provider, UserStatus status, LocalDateTime createdAt, LocalDateTime updatedAt, String companyName, String companyDescription, String industry, String companySize, String website, String location, String logoUrl) {
         this.id = id;
         this.email = email;
         this.role = role;
@@ -25,6 +34,13 @@ public class UserPendingResponseDTO {
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.companyName = companyName;
+        this.companyDescription = companyDescription;
+        this.industry = industry;
+        this.companySize = companySize;
+        this.website = website;
+        this.location = location;
+        this.logoUrl = logoUrl;
     }
 
     public Long getId() {
@@ -81,5 +97,61 @@ public class UserPendingResponseDTO {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getCompanyDescription() {
+        return companyDescription;
+    }
+
+    public void setCompanyDescription(String companyDescription) {
+        this.companyDescription = companyDescription;
+    }
+
+    public String getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(String industry) {
+        this.industry = industry;
+    }
+
+    public String getCompanySize() {
+        return companySize;
+    }
+
+    public void setCompanySize(String companySize) {
+        this.companySize = companySize;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getLogoUrl() {
+        return logoUrl;
+    }
+
+    public void setLogoUrl(String logoUrl) {
+        this.logoUrl = logoUrl;
     }
 }

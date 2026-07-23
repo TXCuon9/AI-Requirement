@@ -12,6 +12,8 @@ import java.util.List;
 public interface IJobApplicationRepository extends JpaRepository<JobApplication,Long> {
     boolean existsByCandidateIdAndJobDescriptionId(Long candidateId, Long jobId);
     boolean existsByResumeIdAndJobDescriptionCompanyId(Long resumeId, Long companyId);
+    
+    List<JobApplication> findByCandidateId(Long candidateId);
     @Query("SELECT ja FROM JobApplication ja " +
             "JOIN ja.jobDescription  j " +
             "WHERE j.company.id = :companyId " +

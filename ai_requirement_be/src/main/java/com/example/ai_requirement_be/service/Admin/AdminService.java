@@ -42,6 +42,11 @@ public class AdminService {
             throw new RuntimeException("Tài khoản này đã được kích hoạt hoặc không ở trạng thái chờ duyệt!");
         }
         user.setStatus(UserStatus.ACTIVE);
+        
+        if (user.getRole() == com.example.ai_requirement_be.entity.UserManager.UserRole.COMPANY && user.getCompanies() != null) {
+            user.getCompanies().setVerified(true);
+        }
+        
         userRepository.save(user);
     }
 
@@ -87,10 +92,11 @@ public class AdminService {
                 dto.setIndustry(user.getCompanies().getIndustry());
                 dto.setCompanySize(user.getCompanies().getCompanySize());
                 dto.setLocation(user.getCompanies().getLocation());
-                dto.setVerified(user.getCompanies().getVerified());
+                boolean isVerified = Boolean.TRUE.equals(user.getCompanies().getVerified()) || user.getStatus() == UserStatus.ACTIVE;
+                dto.setVerified(isVerified);
             } else {
                 dto.setName("Chưa cập nhật");
-                dto.setVerified(false);
+                dto.setVerified(user.getStatus() == UserStatus.ACTIVE);
             }
             return dto;
         }).collect(Collectors.toList());

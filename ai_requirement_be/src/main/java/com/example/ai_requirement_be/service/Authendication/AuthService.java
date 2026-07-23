@@ -84,7 +84,7 @@ public class AuthService {
         return "Bạn đã đăng ký tài khoản hr thành công";
     }
 
-    public String registerCompany(RegisterRequestDTO dto) {
+    public String registerCompany(CompanyRegisterRequestDTO dto) {
         if (userRepository.existsByEmail(dto.getEmail())) {
             throw new RuntimeException("Email công ty đã tồn tại trên hệ thống");
         }
@@ -96,7 +96,14 @@ public class AuthService {
 
         Companies companies = new Companies();
         companies.setUser(user);
-        companies.setName("Công ty mới đăng ký");
+        companies.setName(dto.getCompanyName() != null ? dto.getCompanyName() : "Công ty mới đăng ký");
+        companies.setDescription(dto.getDescription());
+        companies.setIndustry(dto.getIndustry());
+        companies.setCompanySize(dto.getCompanySize());
+        companies.setWebsite(dto.getWebsite());
+        companies.setLocation(dto.getLocation());
+        companies.setLogoUrl(dto.getLogoUrl());
+        
         user.setCompanies(companies);
 
         userRepository.save(user);

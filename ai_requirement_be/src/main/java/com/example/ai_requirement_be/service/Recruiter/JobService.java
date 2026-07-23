@@ -34,8 +34,10 @@ public class JobService {
     public List<JobResponseDTO> getAllJobs() {
         // 1. Lấy toàn bộ thực thể dưới DB lên
         List<JobDescription> jobs = jobdepRepository.findAll();
+        java.time.LocalDateTime now = java.time.LocalDateTime.now();
 
         return jobs.stream()
+                .filter(job -> com.example.ai_requirement_be.entity.RecruiterManager.JobStatus.OPEN.equals(job.getStatus()) && (job.getExpiredAt() == null || job.getExpiredAt().isAfter(now)))
                 .map(job -> new JobResponseDTO(job)) // hoặc dùng Method Reference: JobResponseDTO::new
                 .toList();
     }
@@ -73,7 +75,9 @@ public class JobService {
                 jobType, typeIsNull,
                 salaryMin, salaryIsNull
         );
+        java.time.LocalDateTime now = java.time.LocalDateTime.now();
         return jobs.stream()
+                .filter(job -> com.example.ai_requirement_be.entity.RecruiterManager.JobStatus.OPEN.equals(job.getStatus()) && (job.getExpiredAt() == null || job.getExpiredAt().isAfter(now)))
                 .map(job -> new JobResponseDTO(job))
                 .toList();
     }
